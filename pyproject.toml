@@ -1,0 +1,68 @@
+[tool.poetry]
+name = "tifa"
+version = "0.1.0"
+description = ""
+authors = ["twocucao <twocucao@gmail.com>"]
+include = ["tifa/templates/", "tifa/static/"]
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = 'https://mirrors.aliyun.com/pypi/simple/'
+default = true
+
+[tool.poetry.dependencies]
+python = "^3.9"
+ipython = "*"
+markdown = "*"
+sqlalchemy = "*"
+xlsxwriter = "*"
+xlwt = "*"
+fastapi = "*"
+uvicorn = "*"
+typer = "*"
+jwt = "*"
+aiofiles = "*"
+orjson = "*"
+python-dotenv = "^0.12.0"
+asyncpg = "*"
+aioredis = "*"
+aiokafka = "*"
+prometheus_client = "*"
+devtools = "*"
+alembic = "^1.6.2"
+python-socketio = {extras = ["asyncio_client"], version = "^5.2.1"}
+jinja2 = "^3.0.0"
+requests = "^2.25.1"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+autoflake = "*"
+coverage = "*"
+"flake8" = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+fabric = "*"
+pre-commit = "*"
+
+[tool.black]
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+[tool.poetry.scripts]
+fastcli = 'tifa.cli:cli'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
