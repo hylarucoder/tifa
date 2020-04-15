@@ -1,0 +1,60 @@
+[tool.poetry]
+name = "tifa"
+version = "0.1.0"
+description = ""
+authors = ["twocucao <twocucao@gmail.com>"]
+include = ["tifa/templates/", "tifa/static/"]
+
+[[tool.poetry.source]]
+name = "aliyun"
+url = 'https://mirrors.aliyun.com/pypi/simple/'
+
+[tool.poetry.dependencies]
+python = "^3.7"
+celery = "*"
+ipython = "*"
+markdown = "*"
+sqlalchemy = "*"
+xlsxwriter = "*"
+xlwt = "*"
+fastapi = "^0.54.1"
+uvicorn = "^0.11.3"
+typer = "^0.1.1"
+jwt = "^1.0.0"
+alembic = "^1.4.2"
+psycopg2-binary = "^2.8.5"
+requests = "^2.23.0"
+
+[tool.poetry.dev-dependencies]
+black = "^19.10b0"
+autoflake = "*"
+coverage = "*"
+"flake8" = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+fabric = "*"
+pre-commit = "*"
+
+[tool.black]
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+[tool.poetry.scripts]
+tifa-cli = 'tifa.cli:cli'
+fastapi-cli = 'tifa.cli:cli'
+
+[build-system]
+requires = ["poetry>=0.12"]
+build-backend = "poetry.masonry.api"
+
