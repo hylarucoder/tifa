@@ -1,23 +1,27 @@
 from functools import lru_cache
-from typing import List
-
-from pydantic import BaseSettings
+from pydantic import BaseSettings, PostgresDsn
 
 
 class TifaSettings(BaseSettings):
-    api_v1_route: str = "/api/v1"
-    openapi_route: str = "/api/v1/openapi.json"
+    TITLE: str = "Tifa Lockhart"
+    DESCRIPTION: str = "Yet another opinionated fastapi-start-kit with best practice"
+    API_V1_ROUTE: str = "/api/v1"
+    OPED_API_ROUTE: str = "/api/v1/openapi.json"
 
-    settings: str = ""
-    static_mount_path: str = ""
-    static_dir: str = ""
+    STATIC_PATH: str = "/static"
+    STATIC_DIR: str = "static"
 
-    debug: bool = False
+    DEBUG: bool = False
+    ENV: str = "LOCAL"
+
+    POSTGRES_DATABASE_URI: PostgresDsn = 'postgres://tifa:tifa@localhost:5432/tifa'
 
     class Config:
-        env_prefix = ""
+        case_sensitive = True
+        env_prefix = "TIFA_"
 
 
 @lru_cache()
 def get_settings() -> TifaSettings:
-    return TifaSettings()  # reads variables from environment
+    # override if required
+    return TifaSettings(_env_file=".env")

@@ -18,7 +18,7 @@ fileConfig(config.config_file_name)
 from tifa.app import current_app
 
 config.set_main_option('sqlalchemy.url', current_app.settings.POSTGRES_DATABASE_URI)
-target_metadata = current_app.plugins['sqlalchemy'].metadata
+target_metadata = current_app.plugins['sqlalchemy'].db.metadata
 
 
 # other values from the config, defined by the needs of env.py,
