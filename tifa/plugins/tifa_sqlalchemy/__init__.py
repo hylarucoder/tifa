@@ -34,7 +34,7 @@ class CustomBaseModel(object):
 
 
 class Settings(BaseSettings):
-    DATABASE_URI: PostgresDsn = 'postgres://tifa:tifa@localhost:5432/tifa'
+    DATABASE_URI: PostgresDsn = 'postgresql://tifa:tifa@localhost:5432/tifa'
 
 
 class Plugin:

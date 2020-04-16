@@ -82,7 +82,7 @@ def setup_middleware(app: FastAPI):
         """
         from tifa.globals import db
 
-        request.state.db_session = db.Session()
+        request.state.db_session = db.session
         response = await call_next(request)
         request.state.db_session.close()
         return response
