@@ -1,7 +1,7 @@
 from pydantic import BaseSettings, PostgresDsn
 from sqlalchemy import create_engine
 from sqlalchemy.engine.base import Engine
-from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy.orm import scoped_session, sessionmaker, Session
 from sqlalchemy.ext.declarative import declarative_base, declared_attr
 
 from tifa.api import TifaFastApi
@@ -48,6 +48,7 @@ class TifaSQLAlchemyPlugin:
     """
     engine: Engine
     Model = declarative_base(cls=CustomBaseModel, name="Model", metadata=None)
+    session: Session
 
     def __init__(self):
         pass
@@ -55,7 +56,7 @@ class TifaSQLAlchemyPlugin:
     def setup_plugin(self, app: TifaFastApi):
         app.plugins["sqlalchemy"] = self
         self.engine: Engine = create_engine(app.settings.POSTGRES_DATABASE_URI, pool_pre_ping=True)
-        print("setup plugins")
+        self.session = self.create_scoped_session()
 
     @property
     def metadata(self):
