@@ -105,7 +105,7 @@ def setup_static_files(app: FastAPI, settings: TifaSettings):
     app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
 
-def setup_all_db_models(app):
+def setup_db_models(app):
     from tifa import models
     pass
 
@@ -116,14 +116,17 @@ def create_app(settings: TifaSettings):
         title=settings.TITLE,
         description=settings.DESCRIPTION,
     )
-
-    print("db.setup_plugin(app)")
+    # 初始化数据库相关 model
     db.setup_plugin(app)
-    setup_all_db_models(app)
+    setup_db_models(app)
+    # 初始化路由
     setup_routers(app)
     setup_static_files(app, settings)
+    # 初始化全局 error_handler
     setup_error_handlers(app)
+    # 初始化全局 middleware
     setup_middleware(app)
+    # 初始化全局 middleware
     setup_cli(app)
     setup_logging(app)
     return app

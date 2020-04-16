@@ -1,9 +1,13 @@
+import importlib
+
 import typer
 import uvicorn
 
 from tifa.cli.auth import group_auth
 from tifa.cli.db import group_db
 from tifa.cli.scaffold import group_scaffold
+from tifa.app import current_app
+from tifa.globals import db
 
 banner = """
 
@@ -52,7 +56,27 @@ def runserver():
 
 @cli.command()
 def shell_plus():
-    typer.echo(f"shell_plus")
+    # lazy import these modules as they are only used in the shell context
+    from IPython import embed, InteractiveShell
+    import cProfile
+    import pdb
+
+    main = importlib.import_module("__main__")
+
+    from tifa import models
+
+    ctx = main.__dict__
+    ctx.update(
+        {
+            **models.__dict__,
+            "session": db.session,
+            "pdb": pdb,
+            "cProfile": cProfile,
+        }
+    )
+
+    InteractiveShell.colors = "Neutral"
+    embed(user_ns=ctx, banner2=banner)
 
 
 cli.add_typer(group_scaffold, name="g")
