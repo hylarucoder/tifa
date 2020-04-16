@@ -24,7 +24,8 @@ flake8:
 	poetry run flake8 app
 
 test: ## test
-	pytest
+	python -m pytest tests
+
 
 publish: ## publish package to pypi
 	poetry publish --build
