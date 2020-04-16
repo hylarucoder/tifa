@@ -1,7 +1,6 @@
 import typer
 import uvicorn
 
-from tifa.app import current_app
 from tifa.cli.auth import group_auth
 from tifa.cli.db import group_db
 from tifa.cli.scaffold import group_scaffold
@@ -37,9 +36,6 @@ cli = typer.Typer()
 
 def builtin_runserver():
     uvicorn.run("tifa.app:current_app", port=8000, reload=True, access_log=False)
-
-
-print(current_app)
 
 
 @cli.command()

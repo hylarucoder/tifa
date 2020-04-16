@@ -17,10 +17,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 from tifa.app import current_app
 
-config.set_main_option(
-    'sqlalchemy.url', current_app.config.get(
-        'SQLALCHEMY_DATABASE_URI').replace('%', '%%'))
-target_metadata = current_app.extensions['migrate'].db.metadata
+config.set_main_option('sqlalchemy.url', current_app.settings.POSTGRES_DATABASE_URI)
+target_metadata = current_app.plugins['sqlalchemy'].db.metadata
 
 
 # other values from the config, defined by the needs of env.py,

@@ -26,6 +26,11 @@ def alembic_init():
     command.init(alembic_cfg, "migrations")
 
 
+@group_db.command("generate")
+def alembic_generate():
+    command.revision(alembic_cfg, autogenerate=True)
+
+
 @group_db.command("upgrade")
 def alembic_upgrade():
     command.upgrade(alembic_cfg, "head")

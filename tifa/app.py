@@ -29,6 +29,7 @@ import traceback
 # async def get_token_header(x_token: str = Header(...)):
 #     if x_token != "fake-super-secret-token":
 #         raise HTTPException(status_code=400, detail="X-Token header invalid")
+from tifa.globals import db
 from tifa.settings import TifaSettings, get_settings
 
 
@@ -79,9 +80,9 @@ def setup_middleware(app: FastAPI):
         TODO: weired , polish later
         per_session for per request
         """
-        from tifa.db import Session
+        from tifa.globals import db
 
-        request.state.db_session = Session()
+        request.state.db_session = db.Session()
         response = await call_next(request)
         request.state.db_session.close()
         return response
@@ -104,6 +105,11 @@ def setup_static_files(app: FastAPI, settings: TifaSettings):
     app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
 
+def setup_all_db_models(app):
+    from tifa import models
+    pass
+
+
 def create_app(settings: TifaSettings):
     app = TifaFastApi(
         debug=settings.DEBUG,
@@ -111,6 +117,9 @@ def create_app(settings: TifaSettings):
         description=settings.DESCRIPTION,
     )
 
+    print("db.setup_plugin(app)")
+    db.setup_plugin(app)
+    setup_all_db_models(app)
     setup_routers(app)
     setup_static_files(app, settings)
     setup_error_handlers(app)
@@ -121,5 +130,3 @@ def create_app(settings: TifaSettings):
 
 
 current_app = create_app(settings=get_settings())
-
-from tifa.db import *  # noqa
