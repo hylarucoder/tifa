@@ -29,23 +29,19 @@ class CustomBaseModel(object):
         if identity is None:
             pk = "(transient {})".format(id(self))
         else:
-            pk = ', '.join(str(value) for value in identity)
-        return '<{} {}>'.format(type(self).__name__, pk)
+            pk = ", ".join(str(value) for value in identity)
+        return "<{} {}>".format(type(self).__name__, pk)
 
 
 class Settings(BaseSettings):
-    DATABASE_URI: PostgresDsn = 'postgresql://tifa:tifa@localhost:5432/tifa'
-
-
-class Plugin:
-    def __init__(self, db):
-        self.db = db
+    DATABASE_URI: PostgresDsn = "postgresql://tifa:tifa@localhost:5432/tifa"
 
 
 class TifaSQLAlchemyPlugin:
     """
     inspired by flask-sqlalchemy
     """
+
     engine: Engine
     Model = declarative_base(cls=CustomBaseModel, name="Model", metadata=None)
     session: Session
@@ -55,7 +51,9 @@ class TifaSQLAlchemyPlugin:
 
     def setup_plugin(self, app: TifaFastApi):
         app.plugins["sqlalchemy"] = self
-        self.engine: Engine = create_engine(app.settings.POSTGRES_DATABASE_URI, pool_pre_ping=True)
+        self.engine: Engine = create_engine(
+            app.settings.POSTGRES_DATABASE_URI, pool_pre_ping=True
+        )
         self.session = self.create_scoped_session()
 
     @property

@@ -107,14 +107,13 @@ def setup_static_files(app: FastAPI, settings: TifaSettings):
 
 def setup_db_models(app):
     from tifa import models
+
     pass
 
 
 def create_app(settings: TifaSettings):
     app = TifaFastApi(
-        debug=settings.DEBUG,
-        title=settings.TITLE,
-        description=settings.DESCRIPTION,
+        debug=settings.DEBUG, title=settings.TITLE, description=settings.DESCRIPTION,
     )
     # 初始化数据库相关 model
     db.setup_plugin(app)

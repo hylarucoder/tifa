@@ -67,12 +67,7 @@ def shell_plus():
 
     ctx = main.__dict__
     ctx.update(
-        {
-            **models.__dict__,
-            "session": db.session,
-            "pdb": pdb,
-            "cProfile": cProfile,
-        }
+        {**models.__dict__, "session": db.session, "pdb": pdb, "cProfile": cProfile,}
     )
 
     InteractiveShell.colors = "Neutral"
