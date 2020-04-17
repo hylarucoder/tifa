@@ -10,29 +10,15 @@ from tifa.app import current_app
 from tifa.globals import db
 
 banner = """
+  _______   _    __         
+ |__   __| (_)  / _|        
+    | |     _  | |_    __ _ 
+    | |    | | |  _|  / _` |
+    | |    | | | |   | (_| |
+    |_|    |_| |_|    \__,_|
 
-                                                                    
-                                                                    
-         tttt            iiii     ffffffffffffffff                  
-      ttt:::t           i::::i   f::::::::::::::::f                 
-      t:::::t            iiii   f::::::::::::::::::f                
-      t:::::t                   f::::::fffffff:::::f                
-ttttttt:::::ttttttt    iiiiiii  f:::::f       ffffffaaaaaaaaaaaaa   
-t:::::::::::::::::t    i:::::i  f:::::f             a::::::::::::a  
-t:::::::::::::::::t     i::::i f:::::::ffffff       aaaaaaaaa:::::a 
-tttttt:::::::tttttt     i::::i f::::::::::::f                a::::a 
-      t:::::t           i::::i f::::::::::::f         aaaaaaa:::::a 
-      t:::::t           i::::i f:::::::ffffff       aa::::::::::::a 
-      t:::::t           i::::i  f:::::f            a::::aaaa::::::a 
-      t:::::t    tttttt i::::i  f:::::f           a::::a    a:::::a 
-      t::::::tttt:::::ti::::::if:::::::f          a::::a    a:::::a 
-      tt::::::::::::::ti::::::if:::::::f          a:::::aaaa::::::a 
-        tt:::::::::::tti::::::if:::::::f           a::::::::::aa:::a
-          ttttttttttt  iiiiiiiifffffffff            aaaaaaaaaa  aaaa
-                                                                    
-
-            A opinionated fastapi starter since 2020.04.15 by @twocucao
-
+    An opinionated fastapi starter-kit 
+                     by @twocucao
 """
 
 cli = typer.Typer()
@@ -54,7 +40,7 @@ def runserver():
     builtin_runserver()
 
 
-@cli.command()
+@cli.command("shell_plus")
 def shell_plus():
     # lazy import these modules as they are only used in the shell context
     from IPython import embed, InteractiveShell
@@ -67,12 +53,7 @@ def shell_plus():
 
     ctx = main.__dict__
     ctx.update(
-        {
-            **models.__dict__,
-            "session": db.session,
-            "pdb": pdb,
-            "cProfile": cProfile,
-        }
+        {**models.__dict__, "session": db.session, "pdb": pdb, "cProfile": cProfile, }
     )
 
     InteractiveShell.colors = "Neutral"

@@ -17,8 +17,8 @@ fileConfig(config.config_file_name)
 # for 'autogenerate' support
 from tifa.app import current_app
 
-config.set_main_option('sqlalchemy.url', current_app.settings.POSTGRES_DATABASE_URI)
-target_metadata = current_app.plugins['sqlalchemy'].db.metadata
+config.set_main_option("sqlalchemy.url", current_app.settings.POSTGRES_DATABASE_URI)
+target_metadata = current_app.plugins["sqlalchemy"].db.metadata
 
 
 # other values from the config, defined by the needs of env.py,
@@ -65,9 +65,7 @@ def run_migrations_online():
     )
 
     with connectable.connect() as connection:
-        context.configure(
-            connection=connection, target_metadata=target_metadata
-        )
+        context.configure(connection=connection, target_metadata=target_metadata)
 
         with context.begin_transaction():
             context.run_migrations()

@@ -14,7 +14,7 @@ class TifaSettings(BaseSettings):
     DEBUG: bool = False
     ENV: str = "LOCAL"
 
-    POSTGRES_DATABASE_URI: PostgresDsn = 'postgresql://tifa:tifa@localhost:5432/tifa'
+    POSTGRES_DATABASE_URI: PostgresDsn = "postgresql://tifa:tifa@localhost:5432/tifa"
 
     class Config:
         case_sensitive = True

@@ -26,6 +26,12 @@ flake8:
 test: ## test
 	python -m pytest tests
 
-
 publish: ## publish package to pypi
 	poetry publish --build
+
+test: ## test
+	python -m pytest tests
+
+format: ## publish package to pypi
+	black tifa
+	black tests

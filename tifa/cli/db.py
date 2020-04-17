@@ -11,7 +11,9 @@ alembic_ini_path = "./"
 alembic_cfg = AlembicConfig(os.path.join(alembic_ini_path, "alembic.ini"))
 alembic_cfg.set_main_option("script_location", "migrations")
 # 本可放在 migrations/env.py 里，但考虑到 migrations 生产环境和测试环境应该尽量保持一致，故在这里进行配置
-alembic_cfg.set_main_option('sqlalchemy.url', current_app.settings.POSTGRES_DATABASE_URI)
+alembic_cfg.set_main_option(
+    "sqlalchemy.url", current_app.settings.POSTGRES_DATABASE_URI
+)
 
 group_db = typer.Typer()
 
@@ -34,5 +36,6 @@ def alembic_generate():
 @group_db.command("upgrade")
 def alembic_upgrade():
     command.upgrade(alembic_cfg, "head")
+
 
 # TODO: 包装一下
