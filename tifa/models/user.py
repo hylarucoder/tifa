@@ -1,10 +1,10 @@
 from sqlalchemy import Boolean, Column, Integer, String
 from sqlalchemy.orm import relationship
 
-from tifa.globals import db
+from tifa.models.base import Model
 
 
-class User(db.Model):
+class User(Model):
     id = Column(Integer, primary_key=True, index=True)
     full_name = Column(String, index=True)
     email = Column(String, unique=True, index=True)
