@@ -15,6 +15,9 @@ class TifaSettings(BaseSettings):
     ENV: str = "LOCAL"
 
     POSTGRES_DATABASE_URI: PostgresDsn = "postgresql://tifa:tifa@localhost:5432/tifa"
+    KAFKA_BOOTSTRAP_SERVERS: str = "http://localhost:9091"
+    KAFKA_TOPIC: str = "tifa.message"
+    REDIS_CACHE_URI: str = "redis"
 
     class Config:
         case_sensitive = True

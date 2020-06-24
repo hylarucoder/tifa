@@ -29,29 +29,22 @@ import traceback
 # async def get_token_header(x_token: str = Header(...)):
 #     if x_token != "fake-super-secret-token":
 #         raise HTTPException(status_code=400, detail="X-Token header invalid")
-from tifa.globals import db
 from tifa.settings import TifaSettings, get_settings
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import admin
+    from tifa.apps import user, admin
 
-    app.include_router(admin.bp, prefix="/admin", tags=["entry_point admin"])
+    app.include_router(admin.bp, prefix="/admin", tags=["admin"])
+    app.include_router(user.bp, prefix="/user", tags=["user"])
+    from prometheus_client import make_asgi_app
 
-    from tifa.apps import user
+    prometheus_app = make_asgi_app()
+    app.mount("/metrics", app=prometheus_app, name="prometheus_metrics")  # noqa
 
-    app.include_router(
-        user.bp,
-        prefix="/user",
-        tags=["entry_point user"],
-        # dependencies=[Depends(get_token_header)],
-        dependencies=[],
-        responses={404: {"description": "Not found"}},
-    )
 
-    @app.get("/", include_in_schema=False)
-    def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
-        return response
+def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
+    return response
 
 
 def setup_error_handlers(app: FastAPI):
@@ -75,20 +68,6 @@ def setup_logging(app: FastAPI):
 
 
 def setup_middleware(app: FastAPI):
-    async def db_session_middleware(request: Request, call_next):
-        """
-        TODO: weired , polish later
-        per_session for per request
-        """
-        from tifa.globals import db
-
-        request.state.db_session = db.session
-        response = await call_next(request)
-        request.state.db_session.close()
-        return response
-
-    app.add_middleware(BaseHTTPMiddleware, dispatch=db_session_middleware)
-
     async def add_process_time_header(request: Request, call_next):
         start_time = time.time()
         response = await call_next(request)
@@ -115,8 +94,6 @@ def create_app(settings: TifaSettings):
     app = TifaFastApi(
         debug=settings.DEBUG, title=settings.TITLE, description=settings.DESCRIPTION,
     )
-    # 初始化数据库相关 model
-    db.setup_plugin(app)
     setup_db_models(app)
     # 初始化路由
     setup_routers(app)
