@@ -6,6 +6,12 @@ Yet another **opinionated** fastapi-start-kit with best practice
 
 for my goddess -- Tifa
 
+## Quick Setup
+
+```
+poetry install
+```
+
 ## credits
 
 1. https://github.com/ryanwang520/create-flask-skeleton
