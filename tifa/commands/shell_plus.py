@@ -15,6 +15,6 @@ def ishell():
 
     ctx = main.__dict__
     ctx.update(
-        {**models.__dict__, "pdb": pdb, "cProfile": cProfile,}
+        {**models.__dict__, "ipdb": pdb, "cProfile": cProfile, }
     )
     embed(user_ns=ctx, banner2="", using="asyncio")
