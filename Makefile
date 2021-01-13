@@ -18,7 +18,7 @@ help:
 
 
 start:
-	uvicorn tifa.app:app --reload
+	uvicorn tifa.app:current_app --reload
 
 flake8:
 	poetry run flake8 app

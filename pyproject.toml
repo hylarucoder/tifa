@@ -31,6 +31,10 @@ asyncpg = "*"
 aioredis = "*"
 aiokafka = "*"
 prometheus_client = "*"
+jedi = "0.17.2"
+parso = "0.7.1"
+devtools = "^0.6.1"
+aerich = "^0.4.3"
 
 [tool.poetry.dev-dependencies]
 black = "*"
