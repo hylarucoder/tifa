@@ -1,5 +1,7 @@
 import importlib
 
+from devtools import debug
+
 from tifa.commands import cli
 
 
@@ -10,11 +12,12 @@ def ishell():
     import pdb
 
     main = importlib.import_module("__main__")
-
-    from tifa import models
+    from tifa.app import current_app
+    from tifa.models.base import BaseModel
+    models = {cls.__name__: cls for cls in BaseModel.__subclasses__()}
 
     ctx = main.__dict__
     ctx.update(
-        {**models.__dict__, "pdb": pdb, "cProfile": cProfile,}
+        {**models, "ipdb": pdb, "cProfile": cProfile, }
     )
     embed(user_ns=ctx, banner2="", using="asyncio")

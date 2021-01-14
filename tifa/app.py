@@ -1,10 +1,15 @@
 import os
+import pkgutil
 import time
 
+import devtools
+from devtools import debug
 from fastapi import FastAPI, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
+from tortoise.contrib.fastapi import register_tortoise
+
 from tifa.api import TifaFastApi
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
 import traceback
@@ -30,6 +35,7 @@ import traceback
 #     if x_token != "fake-super-secret-token":
 #         raise HTTPException(status_code=400, detail="X-Token header invalid")
 from tifa.settings import TifaSettings, get_settings
+from tifa.utils.pkg import import_submodules
 
 
 def setup_routers(app: FastAPI):
@@ -85,9 +91,15 @@ def setup_static_files(app: FastAPI, settings: TifaSettings):
 
 
 def setup_db_models(app):
-    from tifa import models
-
-    pass
+    m = import_submodules("tifa.models")
+    register_tortoise(
+        app,
+        db_url='postgres://postgres:qwerty123@localhost:5432/events',
+        modules={
+            "models": ["tifa.models"],
+        },
+        generate_schemas=True
+    )
 
 
 def create_app(settings: TifaSettings):
