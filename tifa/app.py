@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
+from tortoise import Tortoise
 from tortoise.contrib.fastapi import register_tortoise
 
 from tifa.api import TifaFastApi
@@ -99,7 +100,16 @@ def setup_db_models(app):
             "models": ["tifa.models"],
         },
     )
-    app.TORTOISE_ORM = TORTOISE_ORM
+
+
+async def register_tortoise_async():
+    m = import_submodules("tifa.models")
+    await Tortoise.init(
+        db_url=get_settings().POSTGRES_DATABASE_URI,
+        modules={
+            "models": list(m.keys()),
+        },
+    )
 
 
 def create_app(settings: TifaSettings):
@@ -121,6 +131,3 @@ def create_app(settings: TifaSettings):
 
 
 current_app = create_app(settings=get_settings())
-
-TORTOISE_ORM = current_app.TORTOISE_ORM
-print(TORTOISE_ORM)
