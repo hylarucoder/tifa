@@ -94,12 +94,12 @@ def setup_db_models(app):
     m = import_submodules("tifa.models")
     register_tortoise(
         app,
-        db_url='postgres://postgres:qwerty123@localhost:5432/events',
+        db_url=get_settings().POSTGRES_DATABASE_URI,
         modules={
             "models": ["tifa.models"],
         },
-        generate_schemas=True
     )
+    app.TORTOISE_ORM = TORTOISE_ORM
 
 
 def create_app(settings: TifaSettings):
@@ -121,3 +121,6 @@ def create_app(settings: TifaSettings):
 
 
 current_app = create_app(settings=get_settings())
+
+TORTOISE_ORM = current_app.TORTOISE_ORM
+print(TORTOISE_ORM)
