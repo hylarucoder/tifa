@@ -8,6 +8,7 @@ from fastapi import FastAPI, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
+from tortoise import Tortoise
 from tortoise.contrib.fastapi import register_tortoise
 
 from tifa.api import TifaFastApi
@@ -94,11 +95,20 @@ def setup_db_models(app):
     m = import_submodules("tifa.models")
     register_tortoise(
         app,
-        db_url='postgres://postgres:qwerty123@localhost:5432/events',
+        db_url=get_settings().POSTGRES_DATABASE_URI,
         modules={
             "models": ["tifa.models"],
         },
-        generate_schemas=True
+    )
+
+
+async def register_tortoise_async():
+    m = import_submodules("tifa.models")
+    await Tortoise.init(
+        db_url=get_settings().POSTGRES_DATABASE_URI,
+        modules={
+            "models": list(m.keys()),
+        },
     )
 
 

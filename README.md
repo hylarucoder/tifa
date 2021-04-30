@@ -10,6 +10,11 @@ for my goddess -- Tifa
 
 ```
 poetry install
+createuser tifa
+createdb tifa
+psql -c "alter user tifa with encrypted password 'tifa123';"
+psql -c "alter user tifa with superuser;"
+# aerich init -t tifa.app.current_app.TORTOISE_ORM
 ```
 
 ## credits

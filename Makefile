@@ -15,16 +15,11 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-
-
-start:
+start: ## start
 	uvicorn tifa.app:current_app --reload
 
-flake8:
-	poetry run flake8 app
-
-test: ## test
-	python -m pytest tests
+flake8: ## lint
+	poetry run flake8 tifa
 
 publish: ## publish package to pypi
 	poetry publish --build

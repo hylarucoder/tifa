@@ -1,3 +1,5 @@
+import logging
+
 import aioredis
 
 from tifa.settings import get_settings

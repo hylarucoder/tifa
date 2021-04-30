@@ -14,7 +14,7 @@ class TifaSettings(BaseSettings):
     DEBUG: bool = False
     ENV: str = "LOCAL"
 
-    POSTGRES_DATABASE_URI: PostgresDsn = "postgresql://tifa:tifa@localhost:5432/tifa"
+    POSTGRES_DATABASE_URI: PostgresDsn = "postgres://tifa:tifa123@localhost:5432/tifa"
     KAFKA_BOOTSTRAP_SERVERS: str = "http://localhost:9091"
     KAFKA_TOPIC: str = "tifa.message"
     REDIS_CACHE_URI: str = "redis"
@@ -28,3 +28,14 @@ class TifaSettings(BaseSettings):
 def get_settings() -> TifaSettings:
     # override if required
     return TifaSettings(_env_file=".env")
+
+
+TORTOISE_ORM = {
+    "connections": {"default": get_settings().POSTGRES_DATABASE_URI},
+    "apps": {
+        "models": {
+            "models": ["tifa.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}
