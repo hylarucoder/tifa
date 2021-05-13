@@ -1,4 +1,6 @@
 from functools import lru_cache
+from typing import Optional
+
 from pydantic import BaseSettings, PostgresDsn
 
 import pathlib
@@ -12,8 +14,12 @@ class TifaSettings(BaseSettings):
     API_V1_ROUTE: str = "/api/v1"
     OPED_API_ROUTE: str = "/api/v1/openapi.json"
 
+    TEMPLATE_PATH: str = f"{ROOT}/templates"
+
     STATIC_PATH: str = "/static"
     STATIC_DIR: str = f"{ROOT}/static"
+
+    SENTRY_DSN: Optional[str]
 
     DEBUG: bool = False
     ENV: str = "LOCAL"
@@ -22,6 +28,7 @@ class TifaSettings(BaseSettings):
     KAFKA_BOOTSTRAP_SERVERS: str = "http://localhost:9091"
     KAFKA_TOPIC: str = "tifa.message"
     REDIS_CACHE_URI: str = "redis"
+    WHITEBOARD_URI: str = "redis://localhost/1"
 
     class Config:
         case_sensitive = True

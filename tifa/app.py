@@ -11,17 +11,30 @@ from tifa.contrib.globals import GlobalsMiddleware
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
 from tifa.settings import TifaSettings, get_settings
 from tifa.utils.pkg import import_submodules
+import socketio
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import user, admin
+    from tifa.apps import user, admin, whiteboard
 
     app.include_router(admin.bp, prefix="/admin", tags=["admin"])
     app.include_router(user.bp, prefix="/user", tags=["user"])
+    app.include_router(whiteboard.bp, prefix="/whiteboard", tags=["whiteboard"])
     from prometheus_client import make_asgi_app
 
     prometheus_app = make_asgi_app()
     app.mount("/metrics", app=prometheus_app, name="prometheus_metrics")  # noqa
+
+    # 正在注册 - socket.io 路由"
+    from .apps.whiteboard import sio as whiteboard_router
+    app.mount(
+        "/whiteboard/",
+        app=socketio.ASGIApp(
+            socketio_server=whiteboard_router,
+            socketio_path="/socket.io"
+        ),
+        name="whiteboard socket.io"
+    )  # noqa
 
 
 def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
@@ -77,6 +90,14 @@ def setup_db_models(app):
     import_submodules("tifa.models")
 
 
+def setup_sentry(app):
+    import sentry_sdk
+
+    sentry_sdk.init(
+        "sentry_sdk",
+    )
+
+
 def create_app(settings: TifaSettings):
     app = TifaFastApi(
         debug=settings.DEBUG,
@@ -89,12 +110,17 @@ def create_app(settings: TifaSettings):
     setup_db_models(app)
     # 初始化路由
     setup_routers(app)
+    # 初始化静态资源路径
     setup_static_files(app, settings)
     # 初始化全局 middleware
     setup_middleware(app)
     # 初始化全局 middleware
     setup_logging(app)
+    # 初始化全局 error handling
     setup_error_handlers(app)
+    # 初始化 sentry
+    if settings.SENTRY_DSN:
+        setup_sentry(app)
 
     return app
 
