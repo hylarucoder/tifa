@@ -9,16 +9,16 @@ for my goddess -- Tifa
 ## Feature
 
 1. Async! Async! Async!
-  - web framework by fastapi
-  - socket.io by python-socketio
-  - async orm by sqlalchemy/alembic migration
+	- web framework by fastapi
+	- socket.io by python-socketio
+	- async orm by sqlalchemy/alembic migration
 2. Much Less History Burden
 	- newer sdk
 	- newer python (3.9+)
 3. Best Practice
-  - try automate every boring stuff
-  - type hint
-  - build with poetry
+	- try automate every boring stuff
+	- type hint
+	- build with poetry
 
 ## Quick Setup
 
