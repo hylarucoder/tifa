@@ -2,7 +2,8 @@
 
 Yet another **opinionated** fastapi-start-kit with best practice
 
-![](./docs/images/tifa.gif)
+![tifa](https://user-images.githubusercontent.com/5625783/118087406-19244200-b3f8-11eb-839d-f8faf3044f2d.gif)
+
 
 for my goddess -- Tifa
 
