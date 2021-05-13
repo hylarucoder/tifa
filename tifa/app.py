@@ -95,7 +95,9 @@ def setup_db_models(app):
 
 def create_app(settings: TifaSettings):
     app = TifaFastApi(
-        debug=settings.DEBUG, title=settings.TITLE, description=settings.DESCRIPTION,
+        debug=settings.DEBUG,
+        title=settings.TITLE,
+        description=settings.DESCRIPTION,
     )
     # 注册 db models
     setup_db_models(app)

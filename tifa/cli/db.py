@@ -23,12 +23,14 @@ def pg_version():
 @group_db.command("init")
 def db_init():
     from tifa.app import current_app
+
     asyncio.run(init_models())
 
 
 @group_db.command("migrate")
 def db_upgrade():
     from tifa.app import current_app
+
     alembic_cfg = get_alembic_config()
     command.upgrade(alembic_cfg, "head")
 
@@ -36,12 +38,14 @@ def db_upgrade():
 @group_db.command("makemigration")
 def db_make_migrations():
     from tifa.app import current_app
+
     alembic_cfg = get_alembic_config()
     command.revision(alembic_cfg, autogenerate=True)
 
 
 def get_alembic_config():
     from alembic.config import Config
+
     alembic_cfg = Config("./migration/alembic.ini")
     alembic_cfg.set_main_option("script_location", "./migration")
     alembic_cfg.set_main_option("sqlalchemy.url", get_settings().POSTGRES_DATABASE_URI)

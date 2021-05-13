@@ -12,6 +12,7 @@ def ishell():
     import pdb
     from tifa.models.base import BaseModel
     from tifa.models.user import User, SysUser
+
     models = {cls.__name__: cls for cls in BaseModel.__subclasses__()}
     main = importlib.import_module("__main__")
     ctx = main.__dict__

@@ -11,7 +11,7 @@ class Globals:
     _vars: dict[str, ContextVar]
 
     def __init__(self) -> None:
-        object.__setattr__(self, '_vars', {})
+        object.__setattr__(self, "_vars", {})
 
     def reset(self) -> None:
         for _name, var in self._vars.items():

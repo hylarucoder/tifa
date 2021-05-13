@@ -5,6 +5,7 @@ from tifa.settings import get_settings
 
 print(get_settings().POSTGRES_DATABASE_URI)
 
+
 class SQLAlchemy:
     def __init__(self):
         self.Model = declarative_base()
