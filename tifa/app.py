@@ -10,6 +10,7 @@ from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
 
 from tifa.api import TifaFastApi
+from tifa.contrib.globals import GlobalsMiddleware
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
 import traceback
 
@@ -99,6 +100,8 @@ def create_app(settings: TifaSettings):
         title=settings.TITLE,
         description=settings.DESCRIPTION,
     )
+    # thread local just flask like g
+    app.add_middleware(GlobalsMiddleware)
     # 注册 db models
     setup_db_models(app)
     # 初始化路由
