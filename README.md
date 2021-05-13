@@ -16,8 +16,9 @@ for my goddess -- Tifa
 	- newer sdk
 	- newer python (3.9+)
 3. Best Practice
-  - Python Type Hint
-  - Build With Poetry
+  - try automate every boring stuff
+  - type hint
+  - build with poetry
 
 ## Quick Setup
 
