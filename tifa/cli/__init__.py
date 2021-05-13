@@ -1,8 +1,8 @@
 import typer
 
-from tifa.commands.auth import group_auth
-from tifa.commands.db import group_db
-from tifa.commands.scaffold import group_scaffold
+from tifa.cli.auth import group_auth
+from tifa.cli.db import group_db
+from tifa.cli.scaffold import group_scaffold
 
 banner = """
   _______   _    __         

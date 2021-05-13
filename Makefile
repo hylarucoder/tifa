@@ -30,3 +30,6 @@ test: ## test
 format: ## publish package to pypi
 	black tifa
 	black tests
+
+dbinit:
+	alembic init -t async ./migration

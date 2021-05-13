@@ -8,8 +8,6 @@ from fastapi import FastAPI, HTTPException, Request
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import RedirectResponse
 from starlette.staticfiles import StaticFiles
-from tortoise import Tortoise
-from tortoise.contrib.fastapi import register_tortoise
 
 from tifa.api import TifaFastApi
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
@@ -92,30 +90,14 @@ def setup_static_files(app: FastAPI, settings: TifaSettings):
 
 
 def setup_db_models(app):
-    m = import_submodules("tifa.models")
-    register_tortoise(
-        app,
-        db_url=get_settings().POSTGRES_DATABASE_URI,
-        modules={
-            "models": ["tifa.models"],
-        },
-    )
-
-
-async def register_tortoise_async():
-    m = import_submodules("tifa.models")
-    await Tortoise.init(
-        db_url=get_settings().POSTGRES_DATABASE_URI,
-        modules={
-            "models": list(m.keys()),
-        },
-    )
+    import_submodules("tifa.models")
 
 
 def create_app(settings: TifaSettings):
     app = TifaFastApi(
         debug=settings.DEBUG, title=settings.TITLE, description=settings.DESCRIPTION,
     )
+    # 注册 db models
     setup_db_models(app)
     # 初始化路由
     setup_routers(app)

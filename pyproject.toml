@@ -21,20 +21,15 @@ fastapi = "*"
 uvicorn = "*"
 typer = "*"
 jwt = "*"
-psycopg2-binary = "^2.8.5"
-requests = "^2.23.0"
 aiofiles = "*"
 orjson = "*"
 python-dotenv = "^0.12.0"
-tortoise-orm = "*"
 asyncpg = "*"
 aioredis = "*"
 aiokafka = "*"
 prometheus_client = "*"
-jedi = "0.17.2"
-parso = "0.7.1"
-devtools = "^0.6.1"
-aerich = "^0.5.3"
+devtools = "*"
+alembic = "^1.6.2"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -62,7 +57,7 @@ exclude = '''
 )/
 '''
 [tool.poetry.scripts]
-fastcli = 'tifa.commands:cli'
+fastcli = 'tifa.cli:cli'
 
 [build-system]
 requires = ["poetry>=0.12"]
