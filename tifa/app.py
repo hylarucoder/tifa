@@ -1,39 +1,14 @@
-import os
-import pkgutil
 import time
 
-import devtools
-from devtools import debug
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, Request
+from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import RedirectResponse
+from starlette.responses import RedirectResponse, JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from tifa.api import TifaFastApi
 from tifa.contrib.globals import GlobalsMiddleware
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
-import traceback
-
-#
-#
-# class UnicornException(Exception):
-#     def __init__(self, name: str):
-#         self.name = name
-#
-#
-# @app.exception_handler(UnicornException)
-# async def unicorn_exception_handler(request: Request, exc: UnicornException):
-#     return JSONResponse(
-#         status_code=418,
-#         content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
-#     )
-#
-#
-
-
-# async def get_token_header(x_token: str = Header(...)):
-#     if x_token != "fake-super-secret-token":
-#         raise HTTPException(status_code=400, detail="X-Token header invalid")
 from tifa.settings import TifaSettings, get_settings
 from tifa.utils.pkg import import_submodules
 
@@ -56,13 +31,22 @@ def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
 def setup_error_handlers(app: FastAPI):
     app.add_exception_handler(UnicornException, unicorn_exception_handler)
 
+    app.add_exception_handler(ApiException, lambda request, err: err.to_result())
+
+    async def http_exception_handler(request: Request, exc: HTTPException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={
+                "message": exc.detail
+            },
+        )
+
+    app.add_exception_handler(HTTPException, http_exception_handler)
+
     def handle_exc(request: Request, exc):
-        if isinstance(exc, HTTPException):
-            return exc
         raise exc
 
     app.add_exception_handler(Exception, handle_exc)
-    app.add_exception_handler(ApiException, lambda request, err: err.to_result())
 
 
 def setup_cli(app: FastAPI):
@@ -85,7 +69,6 @@ def setup_middleware(app: FastAPI):
 
 
 def setup_static_files(app: FastAPI, settings: TifaSettings):
-    return  # noqa
     static_files_app = StaticFiles(directory=settings.STATIC_DIR)
     app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
@@ -107,13 +90,12 @@ def create_app(settings: TifaSettings):
     # 初始化路由
     setup_routers(app)
     setup_static_files(app, settings)
-    # 初始化全局 error_handler
-    setup_error_handlers(app)
     # 初始化全局 middleware
     setup_middleware(app)
     # 初始化全局 middleware
-    setup_cli(app)
     setup_logging(app)
+    setup_error_handlers(app)
+
     return app
 
 

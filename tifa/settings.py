@@ -1,6 +1,10 @@
 from functools import lru_cache
 from pydantic import BaseSettings, PostgresDsn
 
+import pathlib
+
+ROOT = pathlib.Path(__file__).parent.absolute()
+
 
 class TifaSettings(BaseSettings):
     TITLE: str = "Tifa Lockhart"
@@ -9,7 +13,7 @@ class TifaSettings(BaseSettings):
     OPED_API_ROUTE: str = "/api/v1/openapi.json"
 
     STATIC_PATH: str = "/static"
-    STATIC_DIR: str = "static"
+    STATIC_DIR: str = f"{ROOT}/static"
 
     DEBUG: bool = False
     ENV: str = "LOCAL"
