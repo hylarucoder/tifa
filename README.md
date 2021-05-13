@@ -4,8 +4,20 @@ Yet another **opinionated** fastapi-start-kit with best practice
 
 ![tifa](https://user-images.githubusercontent.com/5625783/118087406-19244200-b3f8-11eb-839d-f8faf3044f2d.gif)
 
-
 for my goddess -- Tifa
+
+## Feature
+
+1. Async! Async! Async!
+  - web framework by fastapi
+	- socket.io by python-socketio
+  - async orm by sqlalchemy/alembic migration
+2. Much Less History Burden
+	- newer sdk
+	- newer python (3.9+)
+3. Best Practice
+  - Python Type Hint
+  - Build With Poetry
 
 ## Quick Setup
 
