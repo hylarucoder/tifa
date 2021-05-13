@@ -10,7 +10,7 @@ for my goddess -- Tifa
 
 1. Async! Async! Async!
   - web framework by fastapi
-	- socket.io by python-socketio
+  - socket.io by python-socketio
   - async orm by sqlalchemy/alembic migration
 2. Much Less History Burden
 	- newer sdk
@@ -32,7 +32,7 @@ psql -c "alter user tifa with encrypted password 'tifa123';"
 psql -c "alter user tifa with superuser;"
 ```
 
-## credits
+## Credits
 
 1. https://github.com/ryanwang520/create-flask-skeleton
 2. https://github.com/tiangolo/full-stack-fastapi-postgresql
