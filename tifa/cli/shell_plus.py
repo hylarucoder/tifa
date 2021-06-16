@@ -10,7 +10,7 @@ def ishell():
     import cProfile
     import pdb
     from tifa.models.base import BaseModelMixin
-
+    from tifa.models.user import User, SysUser
     models = {cls.__name__: cls for cls in BaseModelMixin.__subclasses__()}
     main = importlib.import_module("__main__")
     ctx = main.__dict__
