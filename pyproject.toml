@@ -37,6 +37,7 @@ ariadne = "^0.13.0"
 elasticsearch = "^7.13.1"
 aiohttp = "^3.7.4"
 graphene = "v3.0.0b7"
+casbin = "^1.1.2"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -49,6 +50,7 @@ pytest-cov = "*"
 fabric = "*"
 pre-commit = "*"
 sqlalchemy2-stubs = "0.0.2a2"
+pytest-asyncio = "^0.15.1"
 
 [tool.black]
 exclude = '''

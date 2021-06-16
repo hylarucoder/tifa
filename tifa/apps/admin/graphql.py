@@ -32,10 +32,13 @@ def post_by_id(id: gr.Int):
 
 @router.list("posts", output=TPost)
 def posts():
-    return [{
-        "id": i,
-        "name": "testName",
-    } for i in range(10)]
+    return [
+        {
+            "id": i,
+            "name": "testName",
+        }
+        for i in range(10)
+    ]
 
 
 class PPostPagination(gr.InputObjectType):
@@ -45,10 +48,13 @@ class PPostPagination(gr.InputObjectType):
 @router.pagination("post_pagination", output=TPost)
 def posts_pagination(params: PPostPagination):
     return {
-        "items": [{
-            "id": i,
-            "name": "testName",
-        } for i in range(10)],
+        "items": [
+            {
+                "id": i,
+                "name": "testName",
+            }
+            for i in range(10)
+        ],
         "per_page": 10,
         "page": 1,
     }
@@ -67,7 +73,9 @@ def create_post(params: ParamsCreatePost):
     )
 
 
-graphql_app = GraphQLApp(schema=gr.Schema(
-    query=router.build_query(),
-    mutation=router.build_mutation(),
-))
+graphql_app = GraphQLApp(
+    schema=gr.Schema(
+        query=router.build_query(),
+        mutation=router.build_mutation(),
+    )
+)
