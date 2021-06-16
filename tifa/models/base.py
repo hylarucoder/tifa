@@ -4,7 +4,7 @@ import sqlalchemy as sa
 from tifa.globals import db
 
 
-class BaseModel:
+class BaseModelMixin:
     created_at = sa.Column(
         sa.DateTime,
     )
@@ -13,10 +13,10 @@ class BaseModel:
     )
 
     @classmethod
-    async def create(cls, **kwargs) -> BaseModel:
-        obj = cls(**kwargs)
+    async def create(cls, **kwargs) -> BaseModelMixin:
+        obj = cls(**kwargs)  # type: ignore
         return obj
 
     @classmethod
-    async def all(cls, **kwargs) -> list[BaseModel]:
-        return obj
+    async def all(cls, **kwargs) -> list[BaseModelMixin]:
+        return []

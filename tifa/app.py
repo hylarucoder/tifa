@@ -44,10 +44,6 @@ def setup_routers(app: FastAPI):
     )  # noqa
 
 
-def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
-    return response
-
-
 def setup_error_handlers(app: FastAPI):
     app.add_exception_handler(UnicornException, unicorn_exception_handler)
 

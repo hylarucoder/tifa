@@ -45,6 +45,7 @@ pytest = "*"
 pytest-cov = "*"
 fabric = "*"
 pre-commit = "*"
+sqlalchemy2-stubs = "0.0.2a2"
 
 [tool.black]
 exclude = '''

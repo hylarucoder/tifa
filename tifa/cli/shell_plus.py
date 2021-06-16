@@ -1,4 +1,3 @@
-import asyncio
 import importlib
 
 from tifa.cli import cli
@@ -10,10 +9,9 @@ def ishell():
     from IPython import embed
     import cProfile
     import pdb
-    from tifa.models.base import BaseModel
-    from tifa.models.user import User, SysUser
+    from tifa.models.base import BaseModelMixin
 
-    models = {cls.__name__: cls for cls in BaseModel.__subclasses__()}
+    models = {cls.__name__: cls for cls in BaseModelMixin.__subclasses__()}
     main = importlib.import_module("__main__")
     ctx = main.__dict__
     ctx.update(

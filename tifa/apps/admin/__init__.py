@@ -70,7 +70,7 @@ mutation = MutationType()
 
 
 @mutation.field("login")
-def resolve_person_fullname(*_):
+def resolve_login(*_):
     return [
         {"firstName": "John", "lastName": "Doe", "age": 21},
         {"firstName": "Bob", "lastName": "Boberson", "age": 24},

@@ -1,10 +1,14 @@
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import declarative_base, sessionmaker, DeclarativeMeta
 
 from tifa.settings import get_settings
+# import typing as t
 
 
 class SQLAlchemy:
+    session: AsyncSession
+    # Model: Base
+
     def __init__(self):
         self.Model = declarative_base()
         self.engine = self.create_engine()
