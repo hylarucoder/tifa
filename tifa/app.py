@@ -35,7 +35,7 @@ def setup_routers(app: FastAPI):
         ),
         name="whiteboard socket.io",
     )  # noqa
-    from .apps.admin import graphql_app as graphql_app_admin
+    from tifa.apps.admin.graphql import graphql_app as graphql_app_admin
 
     app.mount(
         "/admin/graphql",

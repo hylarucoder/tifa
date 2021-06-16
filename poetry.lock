@@ -91,6 +91,19 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
+name = "aniso8601"
+version = "8.1.1"
+description = "A library for parsing ISO 8601 strings."
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
 name = "appdirs"
 version = "1.4.4"
 description = "A small Python module for determining appropriate platform-specific dirs, e.g. a \"user data dir\"."
@@ -576,12 +589,50 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
+name = "graphene"
+version = "3.0b7"
+description = "GraphQL Framework for Python"
+category = "main"
+optional = false
+python-versions = "*"
+
+[package.dependencies]
+aniso8601 = ">=8,<9"
+graphql-core = ">=3.1.2,<4"
+graphql-relay = ">=3.0,<4"
+
+[package.extras]
+dev = ["black (==19.10b0)", "flake8 (>=3.7,<4)", "pytest (>=5.3,<6)", "pytest-benchmark (>=3.2,<4)", "pytest-cov (>=2.8,<3)", "pytest-mock (>=2,<3)", "pytest-asyncio (>=0.10,<2)", "snapshottest (>=0.5,<1)", "coveralls (>=1.11,<2)", "promise (>=2.3,<3)", "mock (>=4.0,<5)", "pytz (==2019.3)", "iso8601 (>=0.1,<2)"]
+test = ["pytest (>=5.3,<6)", "pytest-benchmark (>=3.2,<4)", "pytest-cov (>=2.8,<3)", "pytest-mock (>=2,<3)", "pytest-asyncio (>=0.10,<2)", "snapshottest (>=0.5,<1)", "coveralls (>=1.11,<2)", "promise (>=2.3,<3)", "mock (>=4.0,<5)", "pytz (==2019.3)", "iso8601 (>=0.1,<2)"]
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
 name = "graphql-core"
 version = "3.1.5"
 description = "GraphQL implementation for Python, a port of GraphQL.js, the JavaScript reference implementation for GraphQL."
 category = "main"
 optional = false
 python-versions = ">=3.6,<4"
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
+name = "graphql-relay"
+version = "3.1.0"
+description = "Relay library for graphql-core"
+category = "main"
+optional = false
+python-versions = ">=3.6,<4"
+
+[package.dependencies]
+graphql-core = ">=3.1"
 
 [package.source]
 type = "legacy"
@@ -1738,7 +1789,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "944d42f67879e5623d698727fc80b4bef9a66af21b109f40352b3cd00f59567b"
+content-hash = "ba087000e2444b2abbf20fe610685c9ef8cea65e0e87e9e6d63382a5319f5f8c"
 
 [metadata.files]
 aiofiles = [
@@ -1822,6 +1873,10 @@ aioredis = [
 alembic = [
     {file = "alembic-1.6.5-py2.py3-none-any.whl", hash = "sha256:e78be5b919f5bb184e3e0e2dd1ca986f2362e29a2bc933c446fe89f39dbe4e9c"},
     {file = "alembic-1.6.5.tar.gz", hash = "sha256:a21fedebb3fb8f6bbbba51a11114f08c78709377051384c9c5ead5705ee93a51"},
+]
+aniso8601 = [
+    {file = "aniso8601-8.1.1-py2.py3-none-any.whl", hash = "sha256:f59914762c5049ffd956cad037aa82fe0cabf8baf51900e2af24026761090b0b"},
+    {file = "aniso8601-8.1.1.tar.gz", hash = "sha256:be08b19c19ca527af722f2d4ba4dc569db292ec96f7de963746df4bb0bff9250"},
 ]
 appdirs = [
     {file = "appdirs-1.4.4-py2.py3-none-any.whl", hash = "sha256:a841dacd6b99318a741b166adb07e19ee71a274450e68237b4650ca1055ab128"},
@@ -2051,9 +2106,17 @@ flake8 = [
     {file = "flake8-3.9.2-py2.py3-none-any.whl", hash = "sha256:bf8fd333346d844f616e8d47905ef3a3384edae6b4e9beb0c5101e25e3110907"},
     {file = "flake8-3.9.2.tar.gz", hash = "sha256:07528381786f2a6237b061f6e96610a4167b226cb926e2aa2b6b1d78057c576b"},
 ]
+graphene = [
+    {file = "graphene-3.0b7-py2.py3-none-any.whl", hash = "sha256:70293cd3cd301eb8ab69f43b18bff0223bbb458ed74904bd3dffa69f802bf6ef"},
+    {file = "graphene-3.0b7.tar.gz", hash = "sha256:03e1cb640ad48669eaf5a4228be216f7dce72b6ca3e9b1dd568e429001897642"},
+]
 graphql-core = [
     {file = "graphql-core-3.1.5.tar.gz", hash = "sha256:a755635d1d364a17e8d270347000722351aaa03f1ab7d280878aae82fc68b1f3"},
     {file = "graphql_core-3.1.5-py3-none-any.whl", hash = "sha256:91d96ef0e86665777bb7115d3bbb6b0326f43dc7dbcdd60da5486a27a50cfb11"},
+]
+graphql-relay = [
+    {file = "graphql-relay-3.1.0.tar.gz", hash = "sha256:70d5a7ee5995ea7c2a9a37e51227663b1a464f1f40e98fdde950be5415dfe0b4"},
+    {file = "graphql_relay-3.1.0-py3-none-any.whl", hash = "sha256:2cda0ac0199dd56c28ca4f6e0381cdcf5787809c06d1507df3c2a738f9ad846f"},
 ]
 greenlet = [
     {file = "greenlet-1.1.0-cp27-cp27m-macosx_10_14_x86_64.whl", hash = "sha256:60848099b76467ef09b62b0f4512e7e6f0a2c977357a036de602b653667f5f4c"},
