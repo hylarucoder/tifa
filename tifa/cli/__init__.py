@@ -1,8 +1,7 @@
-import typer
-
 from tifa.cli.auth import group_auth
 from tifa.cli.db import group_db
 from tifa.cli.scaffold import group_scaffold
+from .base import cli
 
 banner = """
   _______   _    __         
@@ -15,8 +14,6 @@ banner = """
     An opinionated fastapi starter-kit 
                      by @twocucao
 """
-
-cli = typer.Typer()
 
 cli.add_typer(group_scaffold, name="g")
 cli.add_typer(group_auth, name="auth")

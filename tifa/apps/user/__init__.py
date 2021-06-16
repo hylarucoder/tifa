@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from fastapi import APIRouter, Query, Path
 from pydantic import BaseModel
@@ -24,10 +24,10 @@ def v2_one_plus_one(result: int):
 
 @bp.get("/collections/{col_id}/posts")
 def collections_posts(
-    col_id: int,
-    q: str = Query(None, min_length=3, max_length=50),
-    page: int = 1,
-    per_page: int = 10,
+        col_id: int,
+        q: str = Query(None, min_length=3, max_length=50),
+        page: int = 1,
+        per_page: int = 10,
 ):
     return {
         col_id,
@@ -44,7 +44,7 @@ class WeiboImage(BaseModel):
 
 class Weibo(BaseModel):
     name: str
-    description: str = None
+    description: Optional[str] = None
     price: float
     images: List[WeiboImage]
 

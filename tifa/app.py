@@ -27,18 +27,21 @@ def setup_routers(app: FastAPI):
 
     # 正在注册 - socket.io 路由"
     from .apps.whiteboard import sio as whiteboard_router
+
     app.mount(
         "/whiteboard/",
         app=socketio.ASGIApp(
-            socketio_server=whiteboard_router,
-            socketio_path="/socket.io"
+            socketio_server=whiteboard_router, socketio_path="/socket.io"
         ),
-        name="whiteboard socket.io"
+        name="whiteboard socket.io",
     )  # noqa
+    from tifa.apps.admin.graphql import graphql_app as graphql_app_admin
 
-
-def redirect_to_docs(response=RedirectResponse("/docs")) -> RedirectResponse:
-    return response
+    app.mount(
+        "/admin/graphql",
+        app=graphql_app_admin,
+        name="graphql_app_admin",
+    )  # noqa
 
 
 def setup_error_handlers(app: FastAPI):
@@ -49,9 +52,7 @@ def setup_error_handlers(app: FastAPI):
     async def http_exception_handler(request: Request, exc: HTTPException):
         return JSONResponse(
             status_code=exc.status_code,
-            content={
-                "message": exc.detail
-            },
+            content={"message": exc.detail},
         )
 
     app.add_exception_handler(HTTPException, http_exception_handler)

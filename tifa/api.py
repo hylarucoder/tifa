@@ -21,8 +21,6 @@ class ApiResult:
 
 
 class TifaFastApi(FastAPI):
-    plugins = {}
-
     @property
     def settings(self) -> TifaSettings:
         return get_settings()
