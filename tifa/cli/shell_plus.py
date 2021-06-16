@@ -10,14 +10,18 @@ def ishell():
     import cProfile
     import pdb
     from tifa.models.base import ModelMixin
-    from tifa.models.user import User, SysUser
+
+    # TODO: dynamic import
+    from tifa.models.user import User
+    from tifa.models.sys_account import SysUser
+
     models = {cls.__name__: cls for cls in ModelMixin.__subclasses__()}
     main = importlib.import_module("__main__")
     ctx = main.__dict__
     ctx.update(
         {
             **models,
-            "session": db.session,
+            "async_session": db.async_session,
             "db": db,
             "ipdb": pdb,
             "cProfile": cProfile,

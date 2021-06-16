@@ -44,7 +44,7 @@ def parse_resolver(resolver_function, name):
         parameters=resolver_function_sig.parameters,
         has_root=has_root,
         has_info=has_info,
-        params=param_items
+        params=param_items,
     )
 
 
@@ -60,11 +60,7 @@ class ResolverResult(t.NamedTuple):
         kwargs = {}
         params_type = self.parameters["params"].annotation
         kwargs["Arguments"] = type(
-            "Arguments",
-            (),
-            {
-                "params": params_type(required=True)
-            }
+            "Arguments", (), {"params": params_type(required=True)}
         )
         return kwargs
 
@@ -111,9 +107,7 @@ class GQLRouter:
             field = gr.Field(
                 type(
                     f"Pagination{name}",
-                    (
-                        gr.ObjectType,
-                    ),
+                    (gr.ObjectType,),
                     {
                         "page": gr.Int(required=True),
                         "perPage": gr.Int(required=True),
@@ -143,9 +137,7 @@ class GQLRouter:
                     },
                     **resolver_result.get_mutation_args(),
                 ),
-            ).Field(
-                description=resolver_function.__doc__
-            )
+            ).Field(description=resolver_function.__doc__)
             self.mutation_fields[f"{name}"] = field
             return field
 
