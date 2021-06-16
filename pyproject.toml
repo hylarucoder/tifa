@@ -33,6 +33,7 @@ alembic = "^1.6.2"
 python-socketio = {extras = ["asyncio_client"], version = "^5.2.1"}
 jinja2 = "^3.0.0"
 requests = "^2.25.1"
+ariadne = "^0.13.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"
