@@ -1,7 +1,7 @@
 import graphene as gr
-from starlette.graphql import GraphQLApp
 
 from tifa.contrib.graphql import GQLRouter
+from tifa.contrib.graphqlapp import GraphQLApp
 
 router = GQLRouter()
 
@@ -45,7 +45,7 @@ class PPostPagination(gr.InputObjectType):
     q = gr.String()
 
 
-@router.pagination("post_pagination", output=TPost)
+@router.pagination("posts2", output=TPost)
 def posts_pagination(params: PPostPagination):
     return {
         "items": [
@@ -73,9 +73,7 @@ def create_post(params: ParamsCreatePost):
     )
 
 
-graphql_app = GraphQLApp(
-    schema=gr.Schema(
-        query=router.build_query(),
-        mutation=router.build_mutation(),
-    )
+graphql_schema = gr.Schema(
+    query=router.build_query(),
+    mutation=router.build_mutation(),
 )
