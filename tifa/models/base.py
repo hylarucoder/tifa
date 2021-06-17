@@ -12,11 +12,7 @@ class ModelMixin:
         sa.DateTime,
     )
 
-    @classmethod
-    async def create(cls, **kwargs) -> ModelMixin:
-        obj = cls(**kwargs)  # type: ignore
-        return obj
 
-    @classmethod
-    async def all(cls, **kwargs) -> list[ModelMixin]:
-        return []
+class ContentTypeMixin:
+    object_type = sa.Column(sa.String(255))
+    object_id = sa.Column(sa.BigInteger)

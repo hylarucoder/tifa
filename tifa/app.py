@@ -9,7 +9,7 @@ from starlette.staticfiles import StaticFiles
 from tifa.api import TifaFastApi
 from tifa.contrib.globals import GlobalsMiddleware
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
-from tifa.settings import TifaSettings, get_settings
+from tifa.settings import BasicSettings, get_settings
 from tifa.utils.pkg import import_submodules
 import socketio
 
@@ -34,13 +34,6 @@ def setup_routers(app: FastAPI):
             socketio_server=whiteboard_router, socketio_path="/socket.io"
         ),
         name="whiteboard socket.io",
-    )  # noqa
-    from tifa.apps.admin.graphql import graphql_app as graphql_app_admin
-
-    app.mount(
-        "/admin/graphql",
-        app=graphql_app_admin,
-        name="graphql_app_admin",
     )  # noqa
 
 
@@ -82,7 +75,7 @@ def setup_middleware(app: FastAPI):
     app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
 
 
-def setup_static_files(app: FastAPI, settings: TifaSettings):
+def setup_static_files(app: FastAPI, settings: BasicSettings):
     static_files_app = StaticFiles(directory=settings.STATIC_DIR)
     app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
@@ -99,7 +92,7 @@ def setup_sentry(app):
     )
 
 
-def create_app(settings: TifaSettings):
+def create_app(settings: BasicSettings):
     app = TifaFastApi(
         debug=settings.DEBUG,
         title=settings.TITLE,

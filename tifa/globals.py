@@ -1,5 +1,31 @@
+from __future__ import annotations
+
+from sqlalchemy.future import select
+from sqlalchemy.orm import as_declarative
+
 from tifa.contrib.db import SQLAlchemy
 from tifa.contrib.globals import glb
 
 g = glb
-db = SQLAlchemy()
+
+
+@as_declarative()
+class BaseModel:
+    __mapper_args__ = {"eager_defaults": True}
+
+    # @declared_attr
+    # def __tablename__(cls):
+    #     return cls.__name__.lower()
+
+    @classmethod
+    async def add(cls, **kwargs) -> BaseModel:
+        obj = cls(**kwargs)
+        db.session.add(obj)
+        return obj
+
+    @classmethod
+    async def all(cls, **kwargs) -> list[BaseModel]:
+        return (await db.session.execute(select(cls).where(**kwargs))).scalars().all()
+
+
+db = SQLAlchemy(BaseModel)
