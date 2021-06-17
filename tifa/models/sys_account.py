@@ -42,9 +42,9 @@ class SysUserRole(ModelMixin, db.Model):
     __tablename__ = "sys_user_role"
 
     name = sa.Column(sa.String(255))
-    user_id = sa.Column(sa.BigInteger, sa.ForeignKey('sys_user.id'), primary_key=True)
+    user_id = sa.Column(sa.BigInteger, sa.ForeignKey("sys_user.id"), primary_key=True)
     user = relationship(SysUser)
-    role_id = sa.Column(sa.BigInteger, sa.ForeignKey('sys_role.id'), primary_key=True)
+    role_id = sa.Column(sa.BigInteger, sa.ForeignKey("sys_role.id"), primary_key=True)
     role = relationship(SysRole)
 
 
@@ -59,5 +59,3 @@ class SysUserAudit(ModelMixin, ContentTypeMixin, db.Model):
 
     id = sa.Column(sa.BigInteger, primary_key=True)
     content = sa.Column(sa.JSON(), default=dict)
-
-

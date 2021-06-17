@@ -68,29 +68,15 @@ async def handle_graphql(request: Request):
             status_code=status.HTTP_400_BAD_REQUEST,
         )
 
-    context = {
-        "request": request
-    }
+    context = {"request": request}
 
     result = await graphql_schema.execute_async(
-
-        query,
-        variables=variables,
-        context=context,
-        operation_name=operation_name
+        query, variables=variables, context=context, operation_name=operation_name
     )
-    error_data = (
-        [format_error(err) for err in result.errors]
-        if result.errors
-        else None
-    )
+    error_data = [format_error(err) for err in result.errors] if result.errors else None
     response_data = {"data": result.data}
     if error_data:
         response_data["errors"] = error_data
-    status_code = (
-        status.HTTP_400_BAD_REQUEST if result.errors else status.HTTP_200_OK
-    )
+    status_code = status.HTTP_400_BAD_REQUEST if result.errors else status.HTTP_200_OK
 
-    return JSONResponse(
-        response_data, status_code=status_code
-    )
+    return JSONResponse(response_data, status_code=status_code)

@@ -32,7 +32,9 @@ class BasicSettings(BaseSettings):
 
 
 class TestSettings(BasicSettings):
-    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa_test"
+    POSTGRES_DATABASE_URI: str = (
+        "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa_test"
+    )
 
 
 class ProdSettings(BasicSettings):
