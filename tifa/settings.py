@@ -8,7 +8,7 @@ import pathlib
 ROOT = pathlib.Path(__file__).parent.absolute()
 
 
-class TifaSettings(BaseSettings):
+class BasicSettings(BaseSettings):
     TITLE: str = "Tifa Lockhart"
     DESCRIPTION: str = "Yet another opinionated fastapi-start-kit with best practice"
     API_V1_ROUTE: str = "/api/v1"
@@ -30,12 +30,20 @@ class TifaSettings(BaseSettings):
     REDIS_CACHE_URI: str = "redis"
     WHITEBOARD_URI: str = "redis://localhost/1"
 
-    class Config:
-        case_sensitive = True
-        env_prefix = "TIFA_"
+
+class TestSettings(BasicSettings):
+    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa_test"
 
 
-@lru_cache()
-def get_settings() -> TifaSettings:
-    # override if required
-    return TifaSettings(_env_file=".env")
+class ProdSettings(BasicSettings):
+    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa"
+
+
+test_settings = TestSettings()
+prod_settings = ProdSettings()
+
+
+def get_settings(env: str = None) -> BasicSettings:
+    if env == "test":
+        return test_settings
+    return prod_settings

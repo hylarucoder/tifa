@@ -3,7 +3,7 @@ import json
 from fastapi import FastAPI
 from fastapi.responses import Response
 
-from tifa.settings import TifaSettings, get_settings
+from tifa.settings import BasicSettings, get_settings
 
 
 class ApiResult:
@@ -22,5 +22,5 @@ class ApiResult:
 
 class TifaFastApi(FastAPI):
     @property
-    def settings(self) -> TifaSettings:
+    def settings(self) -> BasicSettings:
         return get_settings()
