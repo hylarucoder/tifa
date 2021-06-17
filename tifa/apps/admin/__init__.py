@@ -1,10 +1,8 @@
 import json
 
-from fastapi import APIRouter
-from fastapi import FastAPI, Request
+from fastapi import APIRouter, Request
 from graphql import format_error
 from starlette import status
-from starlette.background import BackgroundTasks
 from starlette.responses import HTMLResponse, JSONResponse
 
 from tifa.apps.admin.graphql import graphql_schema

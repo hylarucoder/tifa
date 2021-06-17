@@ -1,7 +1,6 @@
 import graphene as gr
 
 from tifa.contrib.graphql import GQLRouter
-from tifa.contrib.graphqlapp import GraphQLApp
 
 router = GQLRouter()
 
