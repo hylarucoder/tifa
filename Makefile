@@ -22,14 +22,14 @@ publish: ## publish package to pypi
 	poetry publish --build
 
 test: ## test
-	python -m pytest tests
+	docker compose run --rm tifa-toolbox bash -c "python -m pytest tests"
 
 format: ## publish package to pypi
 	black tifa
 	black tests
 
 dbinit:
-	alembic init -t async ./migration
+	docker compose run --rm tifa-toolbox bash -c "alembic init -t async ./migration"
 
 docker-build: ## build and compose up
 	docker compose build && docker-compose up
