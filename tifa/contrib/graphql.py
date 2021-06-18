@@ -3,6 +3,8 @@ import typing as t
 
 import graphene as gr
 
+from tifa.globals import tracer
+
 
 def get_typed_signature(call: t.Callable) -> inspect.Signature:
     signature = inspect.signature(call)
@@ -34,9 +36,13 @@ def parse_resolver(resolver_function, name):
             extra_kwargs["info"] = info
         if has_root:
             extra_kwargs["root"] = root
-        # for k in param_items:
-        #     extra_kwargs[k] = kwargs[k]
-        return resolver_function(*args, **kwargs, **extra_kwargs)
+        with tracer.start_as_current_span(
+                "gql_router",
+                attributes={
+                    "grl_router_name": name
+                }
+        ):
+            return resolver_function(*args, **kwargs, **extra_kwargs)
 
     return ResolverResult(
         name=name,

@@ -73,6 +73,8 @@ def setup_middleware(app: FastAPI):
         return response
 
     app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
+    # from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware
+    # app.add_middleware(OpenTelemetryMiddleware)
 
 
 def setup_static_files(app: FastAPI, settings: BasicSettings):

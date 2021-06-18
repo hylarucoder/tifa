@@ -1,4 +1,10 @@
 from __future__ import annotations
+from opentelemetry import trace
+from opentelemetry.sdk.trace import TracerProvider
+from opentelemetry.sdk.trace.export import (
+    ConsoleSpanExporter,
+    SimpleSpanProcessor,
+)
 
 from sqlalchemy.future import select
 from sqlalchemy.orm import as_declarative
@@ -29,3 +35,10 @@ class BaseModel:
 
 
 db = SQLAlchemy(BaseModel)
+
+trace.set_tracer_provider(TracerProvider())
+provider = trace.get_tracer_provider()
+provider.add_span_processor(
+    SimpleSpanProcessor(ConsoleSpanExporter("tifa"))
+)
+tracer = trace.get_tracer(__name__)
