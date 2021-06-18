@@ -1,9 +1,11 @@
 from __future__ import annotations
 from opentelemetry import trace
+from opentelemetry.exporter.jaeger.thrift import JaegerExporter
+from opentelemetry.sdk.resources import Resource, SERVICE_NAME
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     ConsoleSpanExporter,
-    SimpleSpanProcessor,
+    SimpleSpanProcessor, BatchSpanProcessor,
 )
 
 from sqlalchemy.future import select
@@ -36,9 +38,23 @@ class BaseModel:
 
 db = SQLAlchemy(BaseModel)
 
-trace.set_tracer_provider(TracerProvider())
-provider = trace.get_tracer_provider()
-provider.add_span_processor(
-    SimpleSpanProcessor(ConsoleSpanExporter("tifa"))
-)
 tracer = trace.get_tracer(__name__)
+
+jaeger_exporter = JaegerExporter(
+    agent_host_name='jaeger',
+    agent_port=6831,
+)
+
+span_processor = BatchSpanProcessor(jaeger_exporter)
+
+trace.set_tracer_provider(
+    TracerProvider(
+        resource=Resource.create(
+            {
+                SERVICE_NAME: "tifa"
+            }
+        )
+    )
+)
+provider = trace.get_tracer_provider()
+provider.add_span_processor(span_processor)

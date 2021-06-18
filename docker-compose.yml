@@ -43,6 +43,12 @@ services:
       - '9200:9200'
       - '9100:9100'
 
+  jaeger:
+    image: jaegertracing/all-in-one:latest
+    ports:
+      - "6831:6831/udp"
+      - "16686:16686"
+
   tifa-web:
     <<: *tifa-common
     command: [ "tifa-cli", "web", "start" ]
