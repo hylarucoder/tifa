@@ -1,17 +1,16 @@
 import time
 
+import socketio
 from fastapi import FastAPI, Request
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import RedirectResponse, JSONResponse
+from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
-from tifa.api import TifaFastApi
 from tifa.contrib.globals import GlobalsMiddleware
 from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
-from tifa.settings import BasicSettings, get_settings
+from tifa.settings import settings
 from tifa.utils.pkg import import_submodules
-import socketio
 
 
 def setup_routers(app: FastAPI):
@@ -73,9 +72,11 @@ def setup_middleware(app: FastAPI):
         return response
 
     app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
+    # from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware
+    # app.add_middleware(OpenTelemetryMiddleware)
 
 
-def setup_static_files(app: FastAPI, settings: BasicSettings):
+def setup_static_files(app: FastAPI):
     static_files_app = StaticFiles(directory=settings.STATIC_DIR)
     app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
@@ -92,8 +93,8 @@ def setup_sentry(app):
     )
 
 
-def create_app(settings: BasicSettings):
-    app = TifaFastApi(
+def create_app():
+    app = FastAPI(
         debug=settings.DEBUG,
         title=settings.TITLE,
         description=settings.DESCRIPTION,
@@ -105,7 +106,7 @@ def create_app(settings: BasicSettings):
     # 初始化路由
     setup_routers(app)
     # 初始化静态资源路径
-    setup_static_files(app, settings)
+    setup_static_files(app)
     # 初始化全局 middleware
     setup_middleware(app)
     # 初始化全局 middleware
@@ -119,4 +120,4 @@ def create_app(settings: BasicSettings):
     return app
 
 
-current_app = create_app(settings=get_settings())
+current_app = create_app()

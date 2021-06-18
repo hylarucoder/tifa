@@ -2,7 +2,7 @@ import logging
 
 import aioredis
 
-from tifa.settings import get_settings
+from tifa.settings import settings
 
 logger = logging.getLogger(__name__)
 
@@ -19,4 +19,4 @@ class MyRedis:
         return self._pool
 
 
-redis = MyRedis(get_settings().REDIS_CACHE_URI)
+redis = MyRedis(settings.REDIS_CACHE_URI)

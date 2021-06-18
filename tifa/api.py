@@ -1,9 +1,6 @@
 import json
 
-from fastapi import FastAPI
 from fastapi.responses import Response
-
-from tifa.settings import BasicSettings, get_settings
 
 
 class ApiResult:
@@ -18,9 +15,3 @@ class ApiResult:
             status_code=self.status_code,
             # mimetype="application/json",
         )
-
-
-class TifaFastApi(FastAPI):
-    @property
-    def settings(self) -> BasicSettings:
-        return get_settings()

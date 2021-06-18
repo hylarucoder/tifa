@@ -1,11 +1,9 @@
 import pytest
-
-
-from tifa.app import create_app
-from tifa.settings import get_settings
 from fastapi.testclient import TestClient
 
-app = create_app(settings=get_settings())
+from tifa.app import create_app
+
+app = create_app()
 
 client = TestClient(app)
 
