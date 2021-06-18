@@ -5,9 +5,8 @@ import pytest
 from tifa.app import create_app
 from tifa.globals import db
 from tifa.models.sys_account import SysUser
-from tifa.settings import get_settings
 
-current_app = create_app(settings=get_settings(env="test"))
+current_app = create_app()
 
 
 @pytest.fixture(scope='session')

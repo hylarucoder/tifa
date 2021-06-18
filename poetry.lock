@@ -130,20 +130,20 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "ariadne"
-version = "0.13.0"
-description = "Ariadne is a Python library for implementing GraphQL servers."
+name = "arq"
+version = "0.20"
+description = "Job queues in python with asyncio and redis"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">=3.6"
 
 [package.dependencies]
-graphql-core = ">=3.1.0"
-starlette = "<0.15"
-typing-extensions = ">=3.6.0"
+aioredis = ">=1.1.0"
+click = ">=6.7"
+pydantic = ">=1"
 
 [package.extras]
-asgi-file-uploads = ["python-multipart (>=0.0.5)"]
+watch = ["watchgod (>=0.4)"]
 
 [package.source]
 type = "legacy"
@@ -320,36 +320,6 @@ colorama = ["colorama (>=0.4.3)"]
 d = ["aiohttp (>=3.6.0)", "aiohttp-cors (>=0.4.0)"]
 python2 = ["typed-ast (>=1.4.2)"]
 uvloop = ["uvloop (>=0.15.2)"]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
-name = "bracex"
-version = "2.1.1"
-description = "Bash style brace expander."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
-name = "casbin"
-version = "1.1.2"
-description = "An authorization library that supports access control models like ACL, RBAC, ABAC in Python"
-category = "main"
-optional = false
-python-versions = ">=3.3"
-
-[package.dependencies]
-simpleeval = ">=0.9.10"
-wcmatch = ">=8.1.2"
 
 [package.source]
 type = "legacy"
@@ -1101,30 +1071,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "opentelemetry-instrumentation-fastapi"
-version = "0.22b0"
-description = "OpenTelemetry FastAPI Instrumentation"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-opentelemetry-api = "1.3.0"
-opentelemetry-instrumentation = "0.22b0"
-opentelemetry-instrumentation-asgi = "0.22b0"
-opentelemetry-semantic-conventions = "0.22b0"
-opentelemetry-util-http = "0.22b0"
-
-[package.extras]
-instruments = ["fastapi (>=0.58.1,<0.59.0)"]
-test = ["opentelemetry-test (==0.22b0)", "requests (>=2.23.0,<2.24.0)", "fastapi (>=0.58.1,<0.59.0)"]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "opentelemetry-sdk"
 version = "1.3.0"
 description = "OpenTelemetry Python SDK"
@@ -1148,27 +1094,6 @@ description = "OpenTelemetry Semantic Conventions"
 category = "main"
 optional = false
 python-versions = ">=3.6"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
-name = "opentelemetry-util-http"
-version = "0.22b0"
-description = "Web util for OpenTelemetry"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-asgiref = ">=3.0,<4.0"
-opentelemetry-api = "1.3.0"
-opentelemetry-instrumentation = "0.22b0"
-
-[package.extras]
-test = ["opentelemetry-test (==0.22b0)"]
 
 [package.source]
 type = "legacy"
@@ -1705,19 +1630,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "simpleeval"
-version = "0.9.10"
-description = "A simple, safe single expression evaluator library."
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "six"
 version = "1.16.0"
 description = "Python 2 and 3 compatibility utilities"
@@ -1929,22 +1841,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "wcmatch"
-version = "8.2"
-description = "Wildcard/glob file name matcher."
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-bracex = ">=2.1.1"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "wcwidth"
 version = "0.2.5"
 description = "Measures the displayed width of unicode strings in a terminal"
@@ -2029,7 +1925,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "bf1d65a646ce35c480a0054950d376376692e50aec1af1611f99203f3c00bd9f"
+content-hash = "d92d33207f07505bdfd203748963d4847911549025b17ab4ac4d923eeb22bdc4"
 
 [metadata.files]
 aiofiles = [
@@ -2126,9 +2022,9 @@ appnope = [
     {file = "appnope-0.1.2-py2.py3-none-any.whl", hash = "sha256:93aa393e9d6c54c5cd570ccadd8edad61ea0c4b9ea7a01409020c9aa019eb442"},
     {file = "appnope-0.1.2.tar.gz", hash = "sha256:dd83cd4b5b460958838f6eb3000c660b1f9caf2a5b1de4264e941512f603258a"},
 ]
-ariadne = [
-    {file = "ariadne-0.13.0-py3-none-any.whl", hash = "sha256:56bc3609a0512920f06e9312f8ea6db3c8e4a7cd77f31fbed388f5dba6d589c0"},
-    {file = "ariadne-0.13.0.tar.gz", hash = "sha256:e00abd7eb5869b59a638f1e3a7743445bf387236048cf1b0eb9d7c506dcd37c5"},
+arq = [
+    {file = "arq-0.20-py3-none-any.whl", hash = "sha256:6883a3048672a69264e23263ae62c1e4559594d7e0d46bd8d4b832b1b6ede840"},
+    {file = "arq-0.20.tar.gz", hash = "sha256:340dbc6e47159978714285f4c3fab7ad1c66c65fa26945b5b42f8f0584ed1a84"},
 ]
 asgiref = [
     {file = "asgiref-3.3.4-py3-none-any.whl", hash = "sha256:92906c611ce6c967347bbfea733f13d6313901d54dcca88195eaeb52b2a8e8ee"},
@@ -2186,14 +2082,6 @@ bidict = [
 black = [
     {file = "black-21.6b0-py3-none-any.whl", hash = "sha256:dfb8c5a069012b2ab1e972e7b908f5fb42b6bbabcba0a788b86dc05067c7d9c7"},
     {file = "black-21.6b0.tar.gz", hash = "sha256:dc132348a88d103016726fe360cb9ede02cecf99b76e3660ce6c596be132ce04"},
-]
-bracex = [
-    {file = "bracex-2.1.1-py3-none-any.whl", hash = "sha256:64e2a6d14de9c8e022cf40539ac8468ba7c4b99550a2b05fc87fd20e392e568f"},
-    {file = "bracex-2.1.1.tar.gz", hash = "sha256:01f715cd0ed7a622ec8b32322e715813f7574de531f09b70f6f3b2c10f682425"},
-]
-casbin = [
-    {file = "casbin-1.1.2-py3-none-any.whl", hash = "sha256:976217edb0524ffa483d9289adc6ff10eda6771361372f48a13825b1d954fe54"},
-    {file = "casbin-1.1.2.tar.gz", hash = "sha256:38b0a5e7119893013d60c3e522349f84fc9db52318e0e7056c83ec95542c2b2f"},
 ]
 certifi = [
     {file = "certifi-2021.5.30-py2.py3-none-any.whl", hash = "sha256:50b1e4f8446b06f41be7dd6338db18e0990601dce795c2b1686458aa7e8fa7d8"},
@@ -2644,10 +2532,6 @@ opentelemetry-instrumentation-asgi = [
     {file = "opentelemetry-instrumentation-asgi-0.22b0.tar.gz", hash = "sha256:f6dc46b5daa4f95b9cbe9b1b241cd14fe673ef13d4abcb3493e8706b4e819478"},
     {file = "opentelemetry_instrumentation_asgi-0.22b0-py3-none-any.whl", hash = "sha256:17962937d3aee27fa348f8a52d4244465cd2540c2d43e0436293e0ce1327ab9c"},
 ]
-opentelemetry-instrumentation-fastapi = [
-    {file = "opentelemetry-instrumentation-fastapi-0.22b0.tar.gz", hash = "sha256:b7600bcffd33fa1f4a00c4967cb2da4bd005a84fcc7ec0ac352fd374e27a13d7"},
-    {file = "opentelemetry_instrumentation_fastapi-0.22b0-py3-none-any.whl", hash = "sha256:761c85649f6e249c432bbff798d2f4d84448a71c56cd14a24e4b05fb4c410bfc"},
-]
 opentelemetry-sdk = [
     {file = "opentelemetry-sdk-1.3.0.tar.gz", hash = "sha256:aaac04af32d9ac3bcc0bdc2acf9f4c65328e981d587986797e8161e3a416a669"},
     {file = "opentelemetry_sdk-1.3.0-py3-none-any.whl", hash = "sha256:41955c83a5b0c00ea30e9bec233e3a83b6058d19834a3922b7b0f5b525e84ee8"},
@@ -2655,10 +2539,6 @@ opentelemetry-sdk = [
 opentelemetry-semantic-conventions = [
     {file = "opentelemetry-semantic-conventions-0.22b0.tar.gz", hash = "sha256:2cd53edf7e939d98543ed563102967931509c0bd34bdf7b5a85fc9e78e4cb7ee"},
     {file = "opentelemetry_semantic_conventions-0.22b0-py3-none-any.whl", hash = "sha256:eac94b67bee3b758ed2652ed5fc1d5f667ebe4bc0f04a1878ed8e4e0e07d8c76"},
-]
-opentelemetry-util-http = [
-    {file = "opentelemetry-util-http-0.22b0.tar.gz", hash = "sha256:da520c77895489102418b0003bf8c8ecc07bec18a9b91b26af94974cfa08f214"},
-    {file = "opentelemetry_util_http-0.22b0-py3-none-any.whl", hash = "sha256:24cad7fa8aeec2c4a527e73c242e577020bb591edfc0102633dfb24b52aab38e"},
 ]
 orjson = [
     {file = "orjson-3.5.3-cp36-cp36m-macosx_10_7_x86_64.whl", hash = "sha256:f22e2b3a1686a0f90aca920a522033b326cb2f945c8ed8fd8effa9f302672627"},
@@ -2902,9 +2782,6 @@ requests = [
     {file = "requests-2.25.1-py2.py3-none-any.whl", hash = "sha256:c210084e36a42ae6b9219e00e48287def368a26d03a048ddad7bfee44f75871e"},
     {file = "requests-2.25.1.tar.gz", hash = "sha256:27973dd4a904a4f13b263a19c866c13b92a39ed1c964655f025f3f8d3d75b804"},
 ]
-simpleeval = [
-    {file = "simpleeval-0.9.10.tar.gz", hash = "sha256:692055488c2864637f6c2edb5fa48175978a2a07318009e7cf03c9790ca17bea"},
-]
 six = [
     {file = "six-1.16.0-py2.py3-none-any.whl", hash = "sha256:8abb2f1d86890a2dfb989f9a77cfcfd3e47c2a354b01111771326f8aa26e0254"},
     {file = "six-1.16.0.tar.gz", hash = "sha256:1e61c37477a1626458e36f7b1d82aa5c9b094fa4802892072e49de9c60c4c926"},
@@ -2977,10 +2854,6 @@ uvicorn = [
 virtualenv = [
     {file = "virtualenv-20.4.7-py2.py3-none-any.whl", hash = "sha256:2b0126166ea7c9c3661f5b8e06773d28f83322de7a3ff7d06f0aed18c9de6a76"},
     {file = "virtualenv-20.4.7.tar.gz", hash = "sha256:14fdf849f80dbb29a4eb6caa9875d476ee2a5cf76a5f5415fa2f1606010ab467"},
-]
-wcmatch = [
-    {file = "wcmatch-8.2-py3-none-any.whl", hash = "sha256:9146b1ab9354e0797ef6ef69bc89cb32cb9f46d1b9eeef69c559aeec8f3bffb6"},
-    {file = "wcmatch-8.2.tar.gz", hash = "sha256:4d54ddb506c90b5a5bba3a96a1cfb0bb07127909e19046a71d689ddfb18c3617"},
 ]
 wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},

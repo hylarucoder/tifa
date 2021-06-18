@@ -15,9 +15,6 @@ export PRINT_HELP_PYSCRIPT
 help:
 	@python -c "$$PRINT_HELP_PYSCRIPT" < $(MAKEFILE_LIST)
 
-start: ## start
-	uvicorn tifa.app:current_app --reload
-
 flake8: ## lint
 	poetry run flake8 tifa
 
@@ -33,3 +30,40 @@ format: ## publish package to pypi
 
 dbinit:
 	alembic init -t async ./migration
+
+docker-build: ## build and compose up
+	docker compose build && docker-compose up
+
+docker-build-no-cache: ## build --no-cache
+	docker compose build --no-cache  && docker-compose up
+
+before-up: ## some deamons
+	docker compose up -d redis postgres elasticsearch
+
+start: ## runserver
+	make before-up
+	docker compose stop tifa-web
+	docker compose up --no-deps tifa-web
+
+beat: ## beat
+	docker compose up tifa-beat
+
+worker: ## worker
+	docker compose up tifa-worker
+
+tifa-monitor: ## flower
+	docker compose up tifa-monitor
+
+# docker images
+
+build-tifa: ## > tifa
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' .
+
+build-tifa-no-cache: ## > tifa
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' --no-cache .
+
+build-elasticsearch: ## > elasticsearch
+	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' .
+
+build-elasticsearch-no-cache: ## > elasticsearch
+	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache

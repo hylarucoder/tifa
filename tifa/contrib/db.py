@@ -4,7 +4,7 @@ from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from tifa.contrib.globals import glb
-from tifa.settings import get_settings
+from tifa.settings import settings
 
 
 class SQLAlchemy:
@@ -21,7 +21,7 @@ class SQLAlchemy:
 
     def create_engine(self):
         return create_async_engine(
-            get_settings().POSTGRES_DATABASE_URI,
+            settings.POSTGRES_DATABASE_URI,
             echo=True,
         )
 

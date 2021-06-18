@@ -4,7 +4,7 @@ import typer
 from alembic import command
 
 from tifa.globals import db
-from tifa.settings import get_settings
+from tifa.settings import settings
 
 group_db = typer.Typer()
 
@@ -48,5 +48,5 @@ def get_alembic_config():
 
     alembic_cfg = Config("./migration/alembic.ini")
     alembic_cfg.set_main_option("script_location", "./migration")
-    alembic_cfg.set_main_option("sqlalchemy.url", get_settings().POSTGRES_DATABASE_URI)
+    alembic_cfg.set_main_option("sqlalchemy.url", settings.POSTGRES_DATABASE_URI)
     return alembic_cfg

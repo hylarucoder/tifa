@@ -1,14 +1,13 @@
-from functools import lru_cache
+import os
+import pathlib
 from typing import Optional
 
-from pydantic import BaseSettings, PostgresDsn
-
-import pathlib
+from pydantic import BaseSettings as BSettings
 
 ROOT = pathlib.Path(__file__).parent.absolute()
 
 
-class BasicSettings(BaseSettings):
+class BaseSettings(BSettings):
     TITLE: str = "Tifa Lockhart"
     DESCRIPTION: str = "Yet another opinionated fastapi-start-kit with best practice"
     API_V1_ROUTE: str = "/api/v1"
@@ -24,28 +23,22 @@ class BasicSettings(BaseSettings):
     DEBUG: bool = False
     ENV: str = "LOCAL"
 
-    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa"
-    KAFKA_BOOTSTRAP_SERVERS: str = "http://localhost:9091"
+    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@postgres:5432/tifa"
+    KAFKA_BOOTSTRAP_SERVERS: str = "http://kafka:9091"
     KAFKA_TOPIC: str = "tifa.message"
     REDIS_CACHE_URI: str = "redis"
-    WHITEBOARD_URI: str = "redis://localhost/1"
+    WHITEBOARD_URI: str = "redis://redis:6379/1"
 
 
-class TestSettings(BasicSettings):
-    POSTGRES_DATABASE_URI: str = (
-        "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa_test"
-    )
+class Settings(BSettings):
+    ...
 
 
-class ProdSettings(BasicSettings):
-    POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@localhost:5432/tifa"
+if "SETTING_PATH" not in os.environ:
+    raise Exception("Must Specify Env SETTING_PATH")
 
-
-test_settings = TestSettings()
-prod_settings = ProdSettings()
-
-
-def get_settings(env: str = None) -> BasicSettings:
-    if env == "test":
-        return test_settings
-    return prod_settings
+# os.environ.setdefault("SETTING_PATH", "/opt/tifa/settings_docker.py")
+setting_path = os.environ["SETTING_PATH"]
+with open(setting_path, mode="rb") as file:
+    exec(file.read())
+settings = Settings()
