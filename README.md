@@ -33,6 +33,17 @@ make build-elasticsearch
 make debug
 ```
 
+## issues
+
+### 01 grpc cannot be installed on apple silicon
+
+```
+export GRPC_PYTHON_BUILD_SYSTEM_OPENSSL=1
+export GRPC_PYTHON_BUILD_SYSTEM_ZLIB=1
+export CFLAGS="-I/opt/homebrew/opt/openssl/include"
+export LDFLAGS="-L/opt/homebrew/opt/openssl/lib"
+```
+
 ## Credits
 
 1. https://github.com/ryanwang520/create-flask-skeleton
