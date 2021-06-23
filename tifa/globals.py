@@ -1,4 +1,7 @@
 from __future__ import annotations
+
+from typing import Optional
+
 from opentelemetry import trace
 from opentelemetry.exporter.jaeger.thrift import JaegerExporter
 from opentelemetry.sdk.resources import Resource, SERVICE_NAME
@@ -34,6 +37,10 @@ class BaseModel:
     @classmethod
     async def all(cls, **kwargs) -> list[BaseModel]:
         return (await db.session.execute(select(cls).where(**kwargs))).scalars().all()
+
+    @classmethod
+    async def get(cls, id) -> Optional[BaseModel]:
+        return await db.session.get(cls, id)
 
 
 db = SQLAlchemy(BaseModel)

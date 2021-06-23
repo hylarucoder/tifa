@@ -1,17 +1,21 @@
 from __future__ import annotations
 
+from typing import TypeVar
+
 from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
 from sqlalchemy.orm import sessionmaker
 
 from tifa.contrib.globals import glb
 from tifa.settings import settings
 
+T = TypeVar('T')
+
 
 class SQLAlchemy:
-    # Model: t.Type[BaseModel]
+    Model: T
     Session: sessionmaker
 
-    def __init__(self, Model):
+    def __init__(self, Model: T):
         self.g = glb
         self.Model = Model
         self.engine = self.create_engine()

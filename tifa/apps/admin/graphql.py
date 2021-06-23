@@ -1,47 +1,49 @@
 import graphene as gr
 
 from tifa.contrib.graphql import GQLRouter
+from tifa.exceptions import ApiException
+from tifa.globals import db
+from tifa.models.blog import Post
 
 router = GQLRouter()
 
 
 class TPost(gr.ObjectType):
-    id = gr.Int()
-    name = gr.String(required=True)
+    id = gr.Int(description="博客ID")
+    name = gr.String(required=True, description="博客标题")
 
 
 @router.item("ok", output=gr.Boolean)
 def test_ok():
     """
-    "test ok"
+    做一个简单的 healthcheck
     """
     return True
 
 
+@router.item("test_exception", output=gr.Boolean)
+def test_exception():
+    raise ApiException("raise an api exception")
+
+
 @router.item("post", output=TPost)
-def post_by_id(id: gr.Int):
+async def post_by_id(id: gr.Int):
     """
-    "test ok id"
+    文章详情
     """
-    return {
-        "id": id,
-        "name": "testName",
-    }
+    return await Post.get(id)
 
 
 @router.list("posts", output=TPost)
-def posts():
-    return [
-        {
-            "id": i,
-            "name": "testName",
-        }
-        for i in range(10)
-    ]
+async def posts():
+    """
+    文章列表
+    """
+    return await Post.all()
 
 
 class PPostPagination(gr.InputObjectType):
-    q = gr.String()
+    q = gr.String(description="标题,等等")
 
 
 @router.pagination("posts2", output=TPost)
@@ -60,16 +62,16 @@ def posts_pagination(params: PPostPagination):
 
 
 class ParamsCreatePost(gr.InputObjectType):
-    id = gr.Int(required=True)
     name = gr.String(required=True)
 
 
 @router.mutation("create_post", output=TPost)
-def create_post(params: ParamsCreatePost):
-    return TPost(
-        id=params.id,
-        name=params.name,
+async def create_post(params: ParamsCreatePost):
+    post = await Post.add(
+        name=params.name
     )
+    await db.session.commit()
+    return post
 
 
 graphql_schema = gr.Schema(
