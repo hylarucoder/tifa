@@ -10,8 +10,6 @@ ROOT = pathlib.Path(__file__).parent.absolute()
 class BaseSettings(BSettings):
     TITLE: str = "Tifa Lockhart"
     DESCRIPTION: str = "Yet another opinionated fastapi-start-kit with best practice"
-    API_V1_ROUTE: str = "/api/v1"
-    OPED_API_ROUTE: str = "/api/v1/openapi.json"
 
     TEMPLATE_PATH: str = f"{ROOT}/templates"
 

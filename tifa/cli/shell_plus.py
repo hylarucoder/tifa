@@ -9,13 +9,12 @@ def ishell():
     from IPython import embed
     import cProfile
     import pdb
-    from tifa.models.base import ModelMixin
 
     # TODO: dynamic import
     from tifa.models.user import User
     from tifa.models.sys_account import SysUser
 
-    models = {cls.__name__: cls for cls in ModelMixin.__subclasses__()}
+    models = {cls.__name__: cls for cls in db.Model.__subclasses__()}
     main = importlib.import_module("__main__")
     ctx = main.__dict__
     ctx.update(

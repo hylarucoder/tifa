@@ -15,8 +15,10 @@ for my goddess -- Tifa
 2. Much Less History Burden
 	- newer sdk
 	- newer python (3.9+)
+	- newer docker compose way for developing experience
 3. Best Practice
-	- try automate every boring stuff
+	- try automate every boring stuff with makefile/docker
+	- embeded ipython repl for fast debugging and code prototype
 	- type hint
 	- build with poetry
 
@@ -24,12 +26,11 @@ for my goddess -- Tifa
 
 ```bash
 poetry install
-
-# db setup
-createuser tifa
-createdb tifa
-psql -c "alter user tifa with encrypted password 'tifa123';"
-psql -c "alter user tifa with superuser;"
+# build local docker image
+make build-tifa
+make build-elasticsearch
+# make start
+make debug
 ```
 
 ## Credits

@@ -29,7 +29,13 @@ format: ## publish package to pypi
 	black tests
 
 dbinit:
-	docker compose run --rm tifa-toolbox bash -c "alembic init -t async ./migration"
+	docker compose run --rm tifa-toolbox bash -c "tifa-cli db init"
+
+dbmakemigrations:
+	docker compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
+
+dbmigrate:
+	docker compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
 
 docker-build: ## build and compose up
 	docker compose build && docker-compose up

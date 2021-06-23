@@ -65,8 +65,9 @@ class ResolverResult(t.NamedTuple):
     def get_mutation_args(self):
         kwargs = {}
         params_type = self.parameters["params"].annotation
+        params_type.__name__ = f"Params{self.name.title()}"
         kwargs["Arguments"] = type(
-            "Arguments", (), {"params": params_type(required=True)}
+            "Arguments", (), {"params": params_type(required=True, )}
         )
         return kwargs
 
