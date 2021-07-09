@@ -1,10 +1,10 @@
 from typing import List, Optional
 
-from fastapi import APIRouter, Query, Path
-from pydantic import BaseModel
+from fastapi import Query, FastAPI
+from pydantic import Field, BaseModel
 from starlette.websockets import WebSocket
 
-bp = APIRouter()
+bp = FastAPI()
 
 
 @bp.get("/")
@@ -57,14 +57,31 @@ def post_weibo(weibo: Weibo):
     return {weibo}
 
 
-@bp.post("/login")
-def login(name):
-    return ""
+class ILogin(BaseModel):
+    username: str
+    password: str
+
+
+class OLogin(BaseModel):
+    username: str
+    password: str
+
+
+@bp.post("/login", response_model=OLogin, summary="登陆", description="描述")
+def login(params: ILogin):
+    return params
 
 
 @bp.get("/profile")
 def profile():
     return "this is profile of {}"
+
+
+class Item(BaseModel):
+    name: str = Field(..., example="Foo")
+    description: Optional[str] = Field(None, example="A very nice Item")
+    price: float = Field(..., example=35.4)
+    tax: Optional[float] = Field(None, example=3.2)
 
 
 @bp.get("/test")

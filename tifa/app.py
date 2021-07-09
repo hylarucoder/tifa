@@ -1,7 +1,7 @@
 import time
 
-import socketio
 from fastapi import FastAPI, Request
+from prometheus_client import make_asgi_app  # type: ignore
 from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.responses import JSONResponse
@@ -14,26 +14,13 @@ from tifa.utils.pkg import import_submodules
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import user, admin, whiteboard
+    from tifa.apps import user, admin, health, whiteboard
 
-    app.include_router(admin.bp, prefix="/admin", tags=["admin"])
-    app.include_router(user.bp, prefix="/user", tags=["user"])
-    app.include_router(whiteboard.bp, prefix="/whiteboard", tags=["whiteboard"])
-    from prometheus_client import make_asgi_app
-
-    prometheus_app = make_asgi_app()
-    app.mount("/metrics", app=prometheus_app, name="prometheus_metrics")  # noqa
-
-    # 正在注册 - socket.io 路由"
-    from .apps.whiteboard import sio as whiteboard_router
-
-    app.mount(
-        "/whiteboard/",
-        app=socketio.ASGIApp(
-            socketio_server=whiteboard_router, socketio_path="/socket.io"
-        ),
-        name="whiteboard socket.io",
-    )  # noqa
+    app.mount("/health", health.bp)
+    app.mount("/admin", admin.bp)
+    app.mount("/user", user.bp)
+    app.mount("/whiteboard", whiteboard.bp)
+    app.mount("/metrics", make_asgi_app())
 
 
 def setup_error_handlers(app: FastAPI):
@@ -50,6 +37,7 @@ def setup_error_handlers(app: FastAPI):
     app.add_exception_handler(HTTPException, http_exception_handler)
 
     def handle_exc(request: Request, exc):
+        print("---> exc", exc)
         raise exc
 
     app.add_exception_handler(Exception, handle_exc)
