@@ -1,7 +1,6 @@
 from __future__ import annotations
-import sqlalchemy as sa
 
-from tifa.globals import db
+import sqlalchemy as sa
 
 
 class ModelMixin:

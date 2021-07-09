@@ -85,11 +85,11 @@ services:
 
   tifa-worker:
     <<: *tifa-common
-    command: [ "tifa-cli", "worker", "start" ]
+    command: bash -c "celery -A tifa.worker.celery worker"
 
   tifa-beat:
     <<: *tifa-common
-    command: [ "tifa-cli", "worker", "beat" ]
+    command: bash -c "celery -A tifa.worker.celery worker -B -n beat_worker"
 
   tifa-flower:
     <<: *tifa-common

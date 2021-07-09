@@ -17,14 +17,14 @@ def event_loop():
 
 
 @pytest.fixture(scope="session", autouse=True)
-async def setup_db():
-    async with db.engine.begin() as conn:
-        await conn.run_sync(db.drop_all)
-        await conn.run_sync(db.create_all)
+def setup_db():
+    with db.engine.begin() as conn:
+        db.drop_all(conn)
+        db.create_all(conn)
 
-    await SysUser.add(
+    SysUser.add(
         name="name",
     )
-    await db.session.commit()
+    db.session.commit()
     yield
-    await conn.close()
+    conn.close()

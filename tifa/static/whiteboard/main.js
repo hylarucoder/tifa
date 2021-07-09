@@ -3,7 +3,7 @@
 (function () {
 
     var socket = io("ws://localhost:8000", {
-        path: '/whiteboard/socket.io'
+        path: '/whiteboard/whiteboard/socket.io'
     });
     var canvas = document.getElementsByClassName('whiteboard')[0];
     var colors = document.getElementsByClassName('color');
