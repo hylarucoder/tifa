@@ -54,7 +54,7 @@ class ApiException(Exception):
             rv["biz_code"] = self.biz_code
         if self.errors:
             rv["errors"] = self.errors
-        return ApiResult(rv, status_code=self.status_code)
+        return JSONResponse(rv, status_code=self.status_code)
 
 
 class NotAuthorized(ApiException):

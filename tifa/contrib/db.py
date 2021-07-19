@@ -1,39 +1,43 @@
 from __future__ import annotations
 
+from asyncio import current_task
 from typing import TypeVar
 
 from sqlalchemy import create_engine
-from sqlalchemy.ext.asyncio import AsyncSession, create_async_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import (
+    AsyncSession,
+    create_async_engine,
+    async_scoped_session,
+)
+from sqlalchemy.orm import sessionmaker, Session, scoped_session
 
-from tifa.contrib.globals import glb
 from tifa.settings import settings
 
-T = TypeVar('T')
+T = TypeVar("T")
 
 
 class SQLAlchemy:
     Model: T
-    AsyncSession: sessionmaker
-    Session: sessionmaker
+    session: Session
+    async_session: AsyncSession
 
     def __init__(self, Model: T):
-        self.g = glb
         self.Model = Model
-        self.engine = self.create_engine()
-        self.AsyncSession = sessionmaker(self.engine, class_=AsyncSession, expire_on_commit=False)  # type: ignore
-        self.Session = sessionmaker(self.engine, autocommit=False, autoflush=False, )  # type: ignore
-
-    def create_engine(self):
-        return create_engine(
+        engine = create_engine(
             settings.POSTGRES_DATABASE_URI,
             echo=True,
         )
-
-    def create_async_engine(self):
-        return create_async_engine(
-            settings.POSTGRES_DATABASE_URI,
-            echo=True,
+        self.engine = engine
+        session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+        self.session = scoped_session(session_factory)
+        async_engine = create_async_engine(
+            settings.POSTGRES_DATABASE_URI_ASYNC, future=True, echo=True
+        )
+        async_session_factory = sessionmaker(
+            async_engine, expire_on_commit=False, class_=AsyncSession
+        )
+        self.async_session = async_scoped_session(
+            async_session_factory, scopefunc=current_task
         )
 
     def create_all(self, connection):
@@ -41,15 +45,3 @@ class SQLAlchemy:
 
     def drop_all(self, connection):
         return self.Model.metadata.drop_all(bind=connection)
-
-    @property
-    def async_session(self) -> AsyncSession:
-        if not self.g.async_session:
-            self.g.async_session = self.AsyncSession()
-        return self.g.async_session
-
-    @property
-    def session(self) -> Session:
-        if not self.g.session:
-            self.g.session = self.Session()
-        return self.g.session

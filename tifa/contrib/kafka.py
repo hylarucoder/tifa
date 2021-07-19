@@ -12,32 +12,27 @@ logger = logging.getLogger(__name__)
 
 
 class MyKafka:
+    producer: AIOKafkaProducer
+    consumer: AIOKafkaConsumer
+
     def __init__(self):
-        self._producer = None
-        self._consumer = None
+        self.producer = AIOKafkaProducer(
+            loop=loop, bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS
+        )
+        self.consumer = AIOKafkaConsumer(
+            settings.KAFKA_TOPIC,
+            loop=loop,
+            bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
+        )
 
-    async def get_producer(self):
-        if not self._producer:
-            self._producer = AIOKafkaProducer(
-                loop=loop, bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS
-            )
-            await self._producer.start()
-        return self._producer
+    async def start_producer(self):
+        await self.producer.start()
 
-    async def get_consumer(self):
-        if not self._consumer:
-            self._consumer = AIOKafkaConsumer(
-                settings.KAFKA_TOPIC,
-                loop=loop,
-                group_id="group1",
-                bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
-            )
-            await self._consumer.start()
-        return self._consumer
+    async def start_consumer(self):
+        await self.consumer.start()
 
     async def send(self, data):
-        producer = await self.get_producer()
-        await producer.send(settings.KAFKA_TOPIC, json.dumps(data))
+        await self.producer.send(settings.KAFKA_TOPIC, json.dumps(data))
 
 
 kafka = MyKafka()

@@ -13,7 +13,7 @@ async def http_exception_handler(request, exc):
         {
             "message": exc.detail,
         },
-        status_code=exc.status_code
+        status_code=exc.status_code,
     )
 
 

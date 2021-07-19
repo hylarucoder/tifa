@@ -21,13 +21,12 @@ class BaseSettings(BSettings):
     DEBUG: bool = False
     ENV: str = "LOCAL"
 
-    # POSTGRES_DATABASE_URI: str = "postgresql+asyncpg://tifa:tifa123@postgres:5432/tifa"
     POSTGRES_DATABASE_URI: str = "postgresql://tifa:tifa123@postgres:5432/tifa"
     KAFKA_BOOTSTRAP_SERVERS: str = "http://kafka:9091"
-    KAFKA_TOPIC: str = "tifa.message"
+    KAFKA_TOPIC: str = "tifa.pg_to_es"
     REDIS_CACHE_URI: str = "redis"
     WHITEBOARD_URI: str = "redis://redis:6379/1"
-    REDIS_CELERY_URL: str = 'redis://redis:6379/1'
+    REDIS_CELERY_URL: str = "redis://redis:6379/1"
 
 
 class Settings(BSettings):
