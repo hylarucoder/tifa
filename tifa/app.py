@@ -14,33 +14,14 @@ from tifa.utils.pkg import import_submodules
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import user, admin, health, whiteboard
+    from tifa.apps import user, admin, health, whiteboard, merchant
 
     app.mount("/health", health.bp)
     app.mount("/admin", admin.bp)
     app.mount("/user", user.bp)
+    app.mount("/merchant", user.bp)
     app.mount("/whiteboard", whiteboard.bp)
     app.mount("/metrics", make_asgi_app())
-
-
-def setup_error_handlers(app: FastAPI):
-    app.add_exception_handler(UnicornException, unicorn_exception_handler)
-
-    app.add_exception_handler(ApiException, lambda request, err: err.to_result())
-
-    async def http_exception_handler(request: Request, exc: HTTPException):
-        return JSONResponse(
-            status_code=exc.status_code,
-            content={"message": exc.detail},
-        )
-
-    app.add_exception_handler(HTTPException, http_exception_handler)
-
-    def handle_exc(request: Request, exc):
-        print("---> exc", exc)
-        raise exc
-
-    app.add_exception_handler(Exception, handle_exc)
 
 
 def setup_cli(app: FastAPI):
@@ -99,8 +80,6 @@ def create_app():
     setup_middleware(app)
     # 初始化全局 middleware
     setup_logging(app)
-    # 初始化全局 error handling
-    setup_error_handlers(app)
     # 初始化 sentry
     if settings.SENTRY_DSN:
         setup_sentry(app)

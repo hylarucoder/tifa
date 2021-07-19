@@ -1,10 +1,11 @@
 from fastapi import FastAPI
 
+from tifa.contrib.fastapi_plus import create_bp
 from tifa.globals import celery
 from fastapi.responses import ORJSONResponse
 from starlette.exceptions import HTTPException
 
-bp = FastAPI()
+bp = create_bp()
 
 
 @bp.exception_handler(HTTPException)

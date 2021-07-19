@@ -4,7 +4,9 @@ from fastapi import Query, FastAPI
 from pydantic import Field, BaseModel
 from starlette.websockets import WebSocket
 
-bp = FastAPI()
+from tifa.contrib.fastapi_plus import create_bp
+
+bp = create_bp()
 
 
 @bp.get("/")
@@ -24,10 +26,10 @@ def v2_one_plus_one(result: int):
 
 @bp.get("/collections/{col_id}/posts")
 def collections_posts(
-    col_id: int,
-    q: str = Query(None, min_length=3, max_length=50),
-    page: int = 1,
-    per_page: int = 10,
+        col_id: int,
+        q: str = Query(None, min_length=3, max_length=50),
+        page: int = 1,
+        per_page: int = 10,
 ):
     return {
         col_id,

@@ -1,7 +1,4 @@
-import pytest
-
-from tifa.globals import db
-from tifa.models.sys_account import SysUser
+from tifa.models.system import SysUser
 
 
 def test_account(setup_db):

@@ -1,9 +1,9 @@
-from tifa.globals import db
-from tifa.models.base import ModelMixin
 import sqlalchemy as sa
 
+from tifa.globals import Model
 
-class Post(ModelMixin, db.Model):
+
+class Post(Model):
     __tablename__ = "post"
 
     id = sa.Column(sa.Integer, primary_key=True)
