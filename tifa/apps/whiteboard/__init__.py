@@ -4,6 +4,7 @@ from socketio import AsyncServer, AsyncRedisManager
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
+from tifa.contrib.fastapi_plus import create_bp
 from tifa.settings import settings
 
 sio = AsyncServer(
@@ -12,7 +13,7 @@ sio = AsyncServer(
     cors_allowed_origins="*",
 )
 
-bp = FastAPI()
+bp = create_bp()
 
 bp.mount(
     "/whiteboard",

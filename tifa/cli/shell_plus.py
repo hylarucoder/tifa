@@ -11,8 +11,6 @@ def ishell():
     import pdb
 
     # TODO: dynamic import
-    from tifa.models.user import User
-    from tifa.models.sys_account import SysUser
 
     models = {cls.__name__: cls for cls in db.Model.__subclasses__()}
     main = importlib.import_module("__main__")

@@ -3,14 +3,6 @@ import typer
 group_worker = typer.Typer()
 
 
-async def job_tonight(ctx):
-    print("凌晨脚本")
-
-
-async def job_noon(ctx):
-    print("午间脚本")
-
-
 @group_worker.command("start")
 def start_worker():
     """
@@ -32,6 +24,11 @@ def start_monitor():
     """
     TODO: 监控
     """
+    ...
+
+
+@group_worker.command("pg_to_es")
+def pg_to_es():
     ...
 
 

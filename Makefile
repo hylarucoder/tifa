@@ -44,7 +44,7 @@ docker-build-no-cache: ## build --no-cache
 	docker compose build --no-cache  && docker-compose up
 
 before-up: ## some deamons
-	docker compose up -d redis postgres elasticsearch
+	docker compose up -d redis postgres elasticsearch zookeeper kafka
 
 before-full-up: ## some deamons
 	docker compose up -d redis postgres elasticsearch jaeger grafana prometheus

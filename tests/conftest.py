@@ -4,7 +4,7 @@ import pytest
 
 from tifa.app import create_app
 from tifa.globals import db
-from tifa.models.sys_account import SysUser
+from tifa.models.system import SysUser
 
 current_app = create_app()
 

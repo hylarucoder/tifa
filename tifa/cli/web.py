@@ -16,7 +16,6 @@ def start_tifa():
     )
 
 
-
 @group_web.command("whiteboard")
 def start_whiteboard():
     uvicorn.run(
@@ -27,4 +26,3 @@ def start_whiteboard():
         port=8001,
         log_level="info",
     )
-

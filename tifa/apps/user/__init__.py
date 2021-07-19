@@ -4,7 +4,9 @@ from fastapi import Query, FastAPI
 from pydantic import Field, BaseModel
 from starlette.websockets import WebSocket
 
-bp = FastAPI()
+from tifa.contrib.fastapi_plus import create_bp
+
+bp = create_bp()
 
 
 @bp.get("/")
