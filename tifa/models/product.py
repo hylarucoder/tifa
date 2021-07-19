@@ -12,7 +12,7 @@ from tifa.models.merchant import Merchant
 
 class ProductBrand(Model):
     id = sa.Column(sa.Integer, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
 
     name = sa.Column(sa.String(50))
@@ -31,7 +31,7 @@ class ProductCategory(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(255))
     desc = sa.Column(sa.String(255))
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
     deleted = sa.Column(sa.Boolean, default=False)
 
@@ -40,10 +40,11 @@ class ProductSpu(Model):
     """
     -- spu: standard product unit 标准产品单位
     """
+
     id = sa.Column(sa.Integer, primary_key=True)
-    category_id = sa.Column(sa.Integer, sa.ForeignKey('product_brand.id'))
+    category_id = sa.Column(sa.Integer, sa.ForeignKey("product_brand.id"))
     category = relationship(ProductCategory)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
     name = sa.Column(sa.String(255))
     desc = sa.Column(sa.String(255))
@@ -56,10 +57,11 @@ class ProductSku(Model):
     """
     -- sku: stock keeping unit 库存量单位
     """
+
     id = sa.Column(sa.Integer, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
-    product_id = sa.Column(sa.Integer, sa.ForeignKey('product_spu.id'))
+    product_id = sa.Column(sa.Integer, sa.ForeignKey("product_spu.id"))
     product = relationship(ProductSpu)
     price = sa.Column(sa.DECIMAL(10, 2))
     market_price = sa.Column(sa.DECIMAL(10, 2))
@@ -70,7 +72,7 @@ class ProductSku(Model):
 class ProductAttr(Model):
     # -- 销售属性表 product_attr
     id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
     name = sa.Column(sa.String(255))
     desc = sa.Column(sa.String(255))
@@ -79,9 +81,9 @@ class ProductAttr(Model):
 class ProductAttrValue(Model):
     # -- 销售属性值 product_attr_value
     id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
-    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_attr.id'))
+    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr.id"))
     attr = relationship(ProductAttr)
     value = sa.Column(sa.String(255))
     desc = sa.Column(sa.String(255))
@@ -95,20 +97,20 @@ class ProductSpuSkuAttrMap(Model):
     # -- 3. # spu下 # 每个销售属性对应的销售属性值(一对多)
     # -- 4. # spu下 # 每个销售属性值对应的sku(一对多)
     id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey('merchant.id'))
+    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)
-    spu_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_spu.id'))
+    spu_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_spu.id"))
     spu = relationship(ProductSpu)
-    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_sku.id'))
+    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_sku.id"))
     sku = relationship(ProductSku)
-    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_attr.id'))
+    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr.id"))
     attr = relationship(ProductAttr)
-    attr_value_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_attr_value.id'))
+    attr_value_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr_value.id"))
     attr_value = relationship(ProductAttrValue)
 
 
 class ProductSkuStock(Model):
     id = sa.Column(sa.BigInteger, primary_key=True)
-    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey('product_sku.id'))
+    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_sku.id"))
     sku = relationship(ProductSku)
     qty = sa.Column(sa.Integer, default=99999)
