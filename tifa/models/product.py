@@ -42,7 +42,7 @@ class ProductSpu(Model):
     """
 
     id = sa.Column(sa.Integer, primary_key=True)
-    category_id = sa.Column(sa.Integer, sa.ForeignKey("product_brand.id"))
+    category_id = sa.Column(sa.Integer, sa.ForeignKey("product_category.id"))
     category = relationship(ProductCategory)
     merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
     merchant = relationship(Merchant)

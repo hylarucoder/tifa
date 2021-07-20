@@ -12,11 +12,13 @@ from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (
     BatchSpanProcessor,
 )
+from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy.future import select
-from sqlalchemy.orm import as_declarative, declared_attr
+from sqlalchemy.orm import as_declarative, declared_attr, Session
 
 from tifa.contrib.db import SQLAlchemy
 from tifa.contrib.globals import glb
+from tifa.exceptions import ApiException
 from tifa.settings import settings
 
 g = glb
@@ -43,22 +45,84 @@ class BaseModel:
         """Shortcut for returning class name."""
         return self.__class__.__name__
 
-    @classmethod
-    def add(cls, **kwargs) -> BaseModel:
-        obj = cls(**kwargs)
-        db.session.add(obj)
+
+DT = t.TypeVar("DT")
+
+
+class Dal:
+    session: Session
+
+    def __init__(self, s=None):
+        if not s:
+            self.session = session
+        else:
+            self.session = s
+
+    def add(self, clz: DT, **kwargs) -> DT:
+        obj = clz(**kwargs)
+        self.session.add(obj)
         return obj
 
-    @classmethod
-    def all(cls, **kwargs) -> list[BaseModel]:
-        return (db.session.execute(select(cls).where(**kwargs))).scalars().all()
+    def all(self, clz: DT, **kwargs) -> list[DT]:
+        return (self.session.execute(select(clz).where(**kwargs))).scalars().all()
 
-    @classmethod
-    def get(cls, id) -> t.Optional[BaseModel]:
-        return db.session.get(cls, id)
+    def get(self, clz: DT, id) -> t.Optional[DT]:
+        return self.session.get(clz, id)
+
+    def get_or_404(self, clz: DT, id) -> DT:
+        ins = self.session.get(clz, id)
+        if not ins:
+            raise ApiException("not found")
+        return ins
+
+    def first_or_404(self, clz: DT, *args) -> DT:
+        ins = (self.session.execute(select(clz).where(*args))).scalars().first()
+        if not ins:
+            raise ApiException("not found")
+        return ins
+
+    def commit(self):
+        self.session.commit()
+
+
+class AsyncDal:
+    session: AsyncSession
+
+    def __init__(self, s):
+        self.session = s
+
+    async def add(self, clz: DT, **kwargs) -> DT:
+        obj = clz(**kwargs)
+        self.session.add(obj)
+        return obj
+
+    async def all(self, clz: DT, **kwargs) -> list[DT]:
+        return (await self.session.execute(select(clz).where(**kwargs))).scalars().all()
+
+    async def get(self, clz: DT, id) -> t.Optional[DT]:
+        return await self.session.get(clz, id)
+
+    async def get_or_404(self, clz: DT, id) -> DT:
+        ins = await self.session.get(clz, id)
+        if not ins:
+            raise ApiException("not found")
+        return ins
+
+    async def first_or_404(self, clz: DT, *args) -> DT:
+        ins = (await self.session.execute(select(clz).where(*args))).scalars().first()
+        if not ins:
+            raise ApiException("not found")
+        return ins
+
+    async def commit(self):
+        await self.session.commit()
 
 
 db = SQLAlchemy(BaseModel)
+# thread local session
+session = db.session
+# TODO: should init in request context?
+async_session = db.async_session
 
 if t.TYPE_CHECKING:
 

@@ -3,7 +3,7 @@ import asyncio
 import pytest
 
 from tifa.app import create_app
-from tifa.globals import db
+from tifa.globals import db, Dal
 from tifa.models.system import SysUser
 
 current_app = create_app()
@@ -22,9 +22,11 @@ def setup_db():
         db.drop_all(conn)
         db.create_all(conn)
 
-    SysUser.add(
+    dal = Dal(db.session)
+    dal.add(
+        SysUser,
         name="name",
     )
-    db.session.commit()
+    dal.session.commit()
     yield
     conn.close()

@@ -28,6 +28,9 @@ format: ## publish package to pypi
 	black tifa
 	black tests
 
+shell_plus:
+	docker compose run --rm tifa-toolbox bash -c "tifa-cli shell_plus"
+
 dbinit:
 	docker compose run --rm tifa-toolbox bash -c "tifa-cli db init"
 
