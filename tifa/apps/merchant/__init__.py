@@ -29,7 +29,7 @@ class TMerchant(APIModel):
     name: str
 
 
-@bp.item("/merchant", out=TProfile)
+@bp.item("/merchant", out=TMerchant)
 def get_merchant():
     dal = Dal(db.session)
     merchant = dal.first_or_404(Merchant)

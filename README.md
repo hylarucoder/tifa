@@ -9,9 +9,9 @@ for my goddess -- Tifa
 ## Feature
 
 1. Async! Async! Async!
-	- web framework by fastapi
+	- async web framework by fastapi
 	- socket.io by python-socketio
-	- async and sync orm supported by sqlalchemy/alembic migration
+	- async and sync orm supported by sqlalchemy/alembic migration, use async when io bound need
 2. Much Less History Burden
 	- newer sdk
 	- newer python (3.9+)
