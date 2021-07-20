@@ -17,11 +17,8 @@ from sqlalchemy.future import select
 from sqlalchemy.orm import as_declarative, declared_attr, Session
 
 from tifa.contrib.db import SQLAlchemy
-from tifa.contrib.globals import glb
-from tifa.exceptions import ApiException
+from tifa.exceptions import ApiException, NotFound
 from tifa.settings import settings
-
-g = glb
 
 
 def camel_to_snake_case(name):
@@ -58,13 +55,28 @@ class Dal:
         else:
             self.session = s
 
-    def add(self, clz: DT, **kwargs) -> DT:
-        obj = clz(**kwargs)
-        self.session.add(obj)
-        return obj
+    """
+    更通用
+    """
 
-    def all(self, clz: DT, **kwargs) -> list[DT]:
-        return (self.session.execute(select(clz).where(**kwargs))).scalars().all()
+    def execute_all(self, stmt, unique=False) -> list:
+        """
+        stmt = select(User).join(Address).where(Address.email == 'e@sa.us')
+        # when using joinedload() against collections, use unique() on the result
+        users = session.execute(
+            select(User).options(joinedload(User.addresses)).order_by(User.id)
+        ).unique().all()
+        """
+        if unique:
+            return self.session.execute(stmt).scalars().all()
+        else:
+            return self.session.execute(stmt).unique().scalars().all()
+
+    def execute_one(self, stmt) -> DT:
+        """
+        stmt = select(User).join(Address).where(Address.email == 'e@sa.us')
+        """
+        return self.session.execute(stmt).scalar_one()
 
     def get(self, clz: DT, id) -> t.Optional[DT]:
         return self.session.get(clz, id)
@@ -80,6 +92,14 @@ class Dal:
         if not ins:
             raise ApiException("not found")
         return ins
+
+    def all(self, clz: DT, **kwargs) -> list[DT]:
+        return self.execute_all(select(clz).where(**kwargs))
+
+    def add(self, clz: DT, **kwargs) -> DT:
+        obj = clz(**kwargs)
+        self.session.add(obj)
+        return obj
 
     def commit(self):
         self.session.commit()
@@ -105,13 +125,13 @@ class AsyncDal:
     async def get_or_404(self, clz: DT, id) -> DT:
         ins = await self.session.get(clz, id)
         if not ins:
-            raise ApiException("not found")
+            raise NotFound(f"{clz} not found")
         return ins
 
     async def first_or_404(self, clz: DT, *args) -> DT:
         ins = (await self.session.execute(select(clz).where(*args))).scalars().first()
         if not ins:
-            raise ApiException("not found")
+            raise NotFound(f"{clz} not found")
         return ins
 
     async def commit(self):

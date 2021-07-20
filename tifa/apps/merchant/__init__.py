@@ -32,7 +32,7 @@ class TMerchant(APIModel):
 
 
 @bp.item("/merchant", out=TProfile)
-def profile():
+def get_merchant():
     dal = Dal(db.session)
     merchant = dal.first_or_404(Merchant)
     return {
