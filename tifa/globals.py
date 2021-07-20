@@ -59,23 +59,17 @@ class Dal:
     更通用
     """
 
-    def execute_all(self, stmt, unique=False) -> list:
+    def eval_all(self, stmt, unique=False) -> list:
         """
-        stmt = select(User).join(Address).where(Address.email == 'e@sa.us')
         # when using joinedload() against collections, use unique() on the result
-        users = session.execute(
-            select(User).options(joinedload(User.addresses)).order_by(User.id)
-        ).unique().all()
+        users = session.execute(select(User).options(joinedload(User.addresses)).order_by(User.id)).unique().all()
         """
         if unique:
             return self.session.execute(stmt).scalars().all()
         else:
             return self.session.execute(stmt).unique().scalars().all()
 
-    def execute_one(self, stmt) -> DT:
-        """
-        stmt = select(User).join(Address).where(Address.email == 'e@sa.us')
-        """
+    def eval_one(self, stmt) -> DT:
         return self.session.execute(stmt).scalar_one()
 
     def get(self, clz: DT, id) -> t.Optional[DT]:
@@ -84,17 +78,17 @@ class Dal:
     def get_or_404(self, clz: DT, id) -> DT:
         ins = self.session.get(clz, id)
         if not ins:
-            raise ApiException("not found")
+            raise NotFound("not found")
         return ins
 
     def first_or_404(self, clz: DT, *args) -> DT:
         ins = (self.session.execute(select(clz).where(*args))).scalars().first()
         if not ins:
-            raise ApiException("not found")
+            raise NotFound("not found")
         return ins
 
     def all(self, clz: DT, **kwargs) -> list[DT]:
-        return self.execute_all(select(clz).where(**kwargs))
+        return self.eval_all(select(clz).where(**kwargs))
 
     def add(self, clz: DT, **kwargs) -> DT:
         obj = clz(**kwargs)

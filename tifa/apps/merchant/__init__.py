@@ -21,9 +21,7 @@ class TProfile(APIModel):
 async def profile():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Merchant)
-    return {
-        "item": merchant
-    }
+    return {"item": merchant}
 
 
 class TMerchant(APIModel):
@@ -35,6 +33,4 @@ class TMerchant(APIModel):
 def get_merchant():
     dal = Dal(db.session)
     merchant = dal.first_or_404(Merchant)
-    return {
-        "item": merchant
-    }
+    return {"item": merchant}
