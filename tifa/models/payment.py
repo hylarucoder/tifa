@@ -3,6 +3,8 @@ from sqlalchemy.dialects.postgresql import INET, JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.checkout import Checkout
+from tifa.models.order import Order
 
 
 class Payment(Model):
@@ -18,8 +20,8 @@ class Payment(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     gateway = sa.Column(sa.String(255), nullable=False)
     is_active = sa.Column(sa.Boolean, nullable=False)
-    created = sa.Column(sa.DateTime(True), nullable=False)
-    modified = sa.Column(sa.DateTime(True), nullable=False)
+    created = sa.Column(sa.DateTime, nullable=False)
+    modified = sa.Column(sa.DateTime, nullable=False)
     charge_status = sa.Column(sa.String(20), nullable=False)
     billing_first_name = sa.Column(sa.String(256), nullable=False)
     billing_last_name = sa.Column(sa.String(256), nullable=False)
@@ -43,28 +45,21 @@ class Payment(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     total = sa.Column(sa.Numeric(12, 3), nullable=False)
     captured_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    checkout_id = sa.Column(
-        sa.ForeignKey("checkout_checkout.token", deferrable=True, initially="DEFERRED"),
-        index=True,
-    )
-    order_id = sa.Column(
-        sa.ForeignKey("order_order.id", deferrable=True, initially="DEFERRED"),
-        index=True,
-    )
+    checkout_id = sa.Column(sa.ForeignKey("checkout.token"), )
+    checkout = relationship(Checkout)
+    order_id = sa.Column(sa.ForeignKey("order.id"), )
+    order = relationship(Order)
     to_confirm = sa.Column(sa.Boolean, nullable=False)
     payment_method_type = sa.Column(sa.String(256), nullable=False)
     return_url = sa.Column(sa.String(200))
     psp_reference = sa.Column(sa.String(512), index=True)
-
-    checkout = relationship("CheckoutCheckout")
-    order = relationship("OrderOrder")
 
 
 class PaymentTransaction(Model):
     __tablename__ = "payment_transaction"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    created = sa.Column(sa.DateTime(True), nullable=False)
+    created = sa.Column(sa.DateTime, nullable=False)
     token = sa.Column(sa.String(512), nullable=False)
     kind = sa.Column(sa.String(25), nullable=False)
     is_success = sa.Column(sa.Boolean, nullable=False)
@@ -72,14 +67,10 @@ class PaymentTransaction(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     gateway_response = sa.Column(JSONB, nullable=False)
-    payment_id = sa.Column(
-        sa.ForeignKey("payment_payment.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
+    payment_id = sa.Column(sa.ForeignKey("payment.id"), nullable=False, )
+    payment = relationship(Payment)
     customer_id = sa.Column(sa.String(256))
     action_required = sa.Column(sa.Boolean, nullable=False)
     action_required_data = sa.Column(JSONB, nullable=False)
     already_processed = sa.Column(sa.Boolean, nullable=False)
 
-    payment = relationship("PaymentPayment")

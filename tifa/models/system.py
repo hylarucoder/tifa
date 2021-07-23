@@ -1,47 +1,30 @@
+import datetime
+
 import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 
 
-class SysOrganization(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    name = sa.Column(sa.String(255))
+class Staff(Model):
+    __tablename__ = "staff"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(255), unique=True)
+    created_at = sa.Column(sa.DateTime, default=datetime.datetime.now)
+    updated_at = sa.Column(sa.DateTime, onupdate=datetime.datetime.now)
 
 
-class SysDept(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    name = sa.Column(sa.String(255))
+class Permission(Model):
+    __tablename__ = "permission"
+    id = sa.Column(sa.Integer, primary_key=True)
 
 
-class SysRole(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    name = sa.Column(sa.String(50))
-    #  users
-    #  permissions
+class StaffNotificationRecipient(Model):
+    __tablename__ = "staff_notification_recipient"
 
-
-class SysUser(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    name = sa.Column(sa.String(50), unique=True)
-    password_hash = sa.Column(sa.String(255))
-
-    # organization_roles = relationship('OrganizationRole', back_populates="user")
-
-
-class SysUserRole(Model):
-    name = sa.Column(sa.String(255))
-    user_id = sa.Column(sa.BigInteger, sa.ForeignKey("sys_user.id"), primary_key=True)
-    user = relationship(SysUser)
-    role_id = sa.Column(sa.BigInteger, sa.ForeignKey("sys_role.id"), primary_key=True)
-    role = relationship(SysRole)
-
-
-class SysPermission(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    name = sa.Column(sa.String(255))
-
-
-class SysUserAudit(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    content = sa.Column(sa.JSON(), default=dict)
+    id = sa.Column(sa.Integer, primary_key=True)
+    is_active = sa.Column(sa.Boolean, nullable=False)
+    staff_email = sa.Column(sa.String(254), unique=True)
+    staff_id = sa.Column(sa.ForeignKey("staff.id"), unique=True)
+    staff = relationship(Staff, uselist=False)

@@ -2,6 +2,7 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.product_collection import ProductCollection
 from tifa.models.utils import TimestampMixin
 
 
@@ -16,51 +17,50 @@ class Channel(TimestampMixin, Model):
 
 
 class ProductProductChannelListing(Model):
-    __tablename__ = "product_productchannellisting"
+    __tablename__ = "product_channel_listing"
     __table_args__ = (sa.UniqueConstraint("product_id", "channel_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     publication_date = sa.Column(sa.Date, index=True)
     is_published = sa.Column(sa.Boolean, nullable=False)
-    channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-    product_id = sa.Column(
-        sa.ForeignKey("product_product.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
+    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False)
+    channel = relationship(Channel)
+    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False)
+    product = relationship("Product")
     discounted_price_amount = sa.Column(sa.Numeric(12, 3))
     currency = sa.Column(sa.String(3), nullable=False)
     visible_in_listings = sa.Column(sa.Boolean, nullable=False)
     available_for_purchase = sa.Column(sa.Date)
 
-    channel = relationship("ChannelChannel")
-    product = relationship("ProductProduct")
-
 
 class ProductVariantChannelListing(Model):
-    __tablename__ = "product_productvariantchannellisting"
+    __tablename__ = "product_variant_channel_listing"
     __table_args__ = (sa.UniqueConstraint("variant_id", "channel_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     currency = sa.Column(sa.String(3), nullable=False)
     price_amount = sa.Column(sa.Numeric(12, 3))
     channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("channel.id"),
         nullable=False,
-        index=True,
     )
+    channel = relationship(Channel)
     variant_id = sa.Column(
-        sa.ForeignKey(
-            "product_productvariant.id", deferrable=True, initially="DEFERRED"
-        ),
+        sa.ForeignKey("product_variant.id"),
         nullable=False,
-        index=True,
     )
+    variant = relationship("ProductVariant")
     cost_price_amount = sa.Column(sa.Numeric(12, 3))
 
-    channel = relationship("ChannelChannel")
-    variant = relationship("ProductProductvariant")
+
+class ProductCollectionChannelListing(Model):
+    __tablename__ = "product_collection_channel_listing"
+    __table_args__ = (sa.UniqueConstraint("collection_id", "channel_id"),)
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    publication_date = sa.Column(sa.Date)
+    is_published = sa.Column(sa.Boolean, nullable=False)
+    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False)
+    channel = relationship(Channel)
+    collection_id = sa.Column(sa.ForeignKey("product_collection.id"), nullable=False)
+    collection = relationship(ProductCollection)

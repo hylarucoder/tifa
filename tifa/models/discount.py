@@ -2,6 +2,9 @@ import sqlalchemy as sa
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.channel import Channel
+from tifa.models.product_collection import ProductCategory, ProductCollection
+from tifa.models.product import Product
 from tifa.models.utils import TimestampMixin
 
 
@@ -11,8 +14,8 @@ class DiscountSale(TimestampMixin, Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(255), nullable=False)
     type = sa.Column(sa.String(10), nullable=False)
-    end_date = sa.Column(sa.DateTime(True))
-    start_date = sa.Column(sa.DateTime(True), nullable=False)
+    end_date = sa.Column(sa.DateTime)
+    start_date = sa.Column(sa.DateTime, nullable=False)
 
 
 class DiscountVoucher(TimestampMixin, Model):
@@ -29,8 +32,8 @@ class DiscountVoucher(TimestampMixin, Model):
     code = sa.Column(sa.String(12), nullable=False, unique=True)
     usage_limit = sa.Column(sa.Integer)
     used = sa.Column(sa.Integer, nullable=False)
-    start_date = sa.Column(sa.DateTime(True), nullable=False)
-    end_date = sa.Column(sa.DateTime(True))
+    start_date = sa.Column(sa.DateTime, nullable=False)
+    end_date = sa.Column(sa.DateTime)
     discount_value_type = sa.Column(sa.String(10), nullable=False)
     apply_once_per_order = sa.Column(sa.Boolean, nullable=False)
     countries = sa.Column(sa.String(749), nullable=False)
@@ -39,24 +42,37 @@ class DiscountVoucher(TimestampMixin, Model):
     only_for_staff = sa.Column(sa.Boolean, nullable=False)
 
 
+class DiscountVoucherTranslation(Model):
+    __tablename__ = "discount_voucher_translation"
+    __table_args__ = (sa.UniqueConstraint("language_code", "voucher_id"),)
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    language_code = sa.Column(sa.String(10), nullable=False)
+    name = sa.Column(sa.String(255))
+    voucher_id = sa.Column(
+        sa.ForeignKey("discount_voucher.id"),
+        nullable=False,
+    )
+
+    voucher = relationship(DiscountVoucher)
+
+
 class DiscountSaleCategory(TimestampMixin, Model):
     __tablename__ = "discount_sale_category"
     __table_args__ = (sa.UniqueConstraint("sale_id", "category_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_sale.id"),
         nullable=False,
-        index=True,
     )
+    sale = relationship(DiscountSale)
     category_id = sa.Column(
-        sa.ForeignKey("product_category.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product_category.id"),
         nullable=False,
-        index=True,
     )
 
-    category = relationship("ProductCategory")
-    sale = relationship("DiscountSale")
+    category = relationship(ProductCategory)
 
 
 class DiscountSaleCollection(TimestampMixin, Model):
@@ -65,18 +81,16 @@ class DiscountSaleCollection(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_sale.id"),
         nullable=False,
-        index=True,
     )
+    sale = relationship(DiscountSale)
     collection_id = sa.Column(
-        sa.ForeignKey("product_collection.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product_collection.id"),
         nullable=False,
-        index=True,
     )
 
-    collection = relationship("ProductCollection")
-    sale = relationship("DiscountSale")
+    collection = relationship(ProductCollection)
 
 
 class DiscountSaleProduct(TimestampMixin, Model):
@@ -85,18 +99,16 @@ class DiscountSaleProduct(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_sale.id"),
         nullable=False,
-        index=True,
     )
+    sale = relationship(DiscountSale)
     product_id = sa.Column(
-        sa.ForeignKey("product_product.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product.id"),
         nullable=False,
-        index=True,
     )
 
-    product = relationship("ProductProduct")
-    sale = relationship("DiscountSale")
+    product = relationship(Product)
 
 
 class DiscountSaleChannelListing(TimestampMixin, Model):
@@ -107,12 +119,12 @@ class DiscountSaleChannelListing(TimestampMixin, Model):
     discount_value = sa.Column(sa.Numeric(12, 3), nullable=False)
     currency = sa.Column(sa.String(3), nullable=False)
     channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("channel_channel.id"),
         nullable=False,
         index=True,
     )
     sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_sale.id"),
         nullable=False,
         index=True,
     )
@@ -129,12 +141,12 @@ class DiscountSaleTranslation(TimestampMixin, Model):
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(255))
     sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_sale.id"),
         nullable=False,
         index=True,
     )
 
-    sale = relationship("DiscountSale")
+    sale = relationship(DiscountSale)
 
 
 class DiscountVoucherCategory(TimestampMixin, Model):
@@ -143,18 +155,16 @@ class DiscountVoucherCategory(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_voucher.id"),
         nullable=False,
-        index=True,
     )
+    voucher = relationship(DiscountVoucher)
     category_id = sa.Column(
-        sa.ForeignKey("product_category.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product_category.id"),
         nullable=False,
-        index=True,
     )
 
-    category = relationship("ProductCategory")
-    voucher = relationship("DiscountVoucher")
+    category = relationship(ProductCategory)
 
 
 class DiscountVoucherCollection(TimestampMixin, Model):
@@ -163,38 +173,34 @@ class DiscountVoucherCollection(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_voucher.id"),
         nullable=False,
-        index=True,
     )
+    voucher = relationship(DiscountVoucher)
     collection_id = sa.Column(
-        sa.ForeignKey("product_collection.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product_collection.id"),
         nullable=False,
-        index=True,
     )
-
-    collection = relationship("ProductCollection")
-    voucher = relationship("DiscountVoucher")
+    collection = relationship(ProductCollection)
 
 
 class DiscountVoucherProduct(TimestampMixin, Model):
-    __tablename__ = "discount_voucher_products"
+    __tablename__ = "discount_voucher_product"
     __table_args__ = (sa.UniqueConstraint("voucher_id", "product_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_voucher.id"),
         nullable=False,
         index=True,
     )
+    voucher = relationship(DiscountVoucher)
     product_id = sa.Column(
-        sa.ForeignKey("product_product.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("product.id"),
         nullable=False,
         index=True,
     )
-
-    product = relationship("ProductProduct")
-    voucher = relationship("DiscountVoucher")
+    product = relationship(Product)
 
 
 class DiscountVoucherChannelListing(TimestampMixin, Model):
@@ -206,18 +212,15 @@ class DiscountVoucherChannelListing(TimestampMixin, Model):
     currency = sa.Column(sa.String(3), nullable=False)
     min_spent_amount = sa.Column(sa.Numeric(12, 3))
     channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("channel.id"),
         nullable=False,
-        index=True,
     )
+    channel = relationship(Channel)
     voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("discount_voucher.id"),
         nullable=False,
-        index=True,
     )
-
-    channel = relationship("ChannelChannel")
-    voucher = relationship("DiscountVoucher")
+    voucher = relationship(DiscountVoucher)
 
 
 class DiscountVoucherCustomer(Model):
@@ -226,26 +229,5 @@ class DiscountVoucherCustomer(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     customer_email = sa.Column(sa.String(254), nullable=False)
-    voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-
-    voucher = relationship("DiscountVoucher")
-
-
-class DiscountVoucherTranslation(Model):
-    __tablename__ = "discount_voucher_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "voucher_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255))
-    voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-
-    voucher = relationship("DiscountVoucher")
+    voucher_id = sa.Column(sa.ForeignKey("discount_voucher.id"), nullable=False, )
+    voucher = relationship(DiscountVoucher)

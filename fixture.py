@@ -1,5 +1,5 @@
 from tifa.globals import Dal, db
-from tifa.models.merchant import Merchant
+from tifa.models.system import Merchant
 
 # thread local session
 dal = Dal(db.session)

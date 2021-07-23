@@ -3,6 +3,8 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.system import Permission
+from tifa.models.utils import TimestampMixin
 
 
 class App(Model):
@@ -12,7 +14,7 @@ class App(Model):
     metadata_private = sa.Column(JSONB, index=True)
     metadata_public = sa.Column(JSONB, index=True)
     name = sa.Column(sa.String(60), nullable=False)
-    created = sa.Column(sa.DateTime(True), nullable=False)
+    created = sa.Column(sa.DateTime, nullable=False)
     is_active = sa.Column(sa.Boolean, nullable=False)
     about_app = sa.Column(sa.Text)
     app_url = sa.Column(sa.String(200))
@@ -26,14 +28,12 @@ class App(Model):
     version = sa.Column(sa.String(60))
 
 
-class AppInstallation(Model):
+class AppInstallation(TimestampMixin, Model):
     __tablename__ = "app_installation"
 
     id = sa.Column(sa.Integer, primary_key=True)
     status = sa.Column(sa.String(50), nullable=False)
     message = sa.Column(sa.String(255))
-    created_at = sa.Column(sa.DateTime(True), nullable=False)
-    updated_at = sa.Column(sa.DateTime(True), nullable=False)
     app_name = sa.Column(sa.String(60), nullable=False)
     manifest_url = sa.Column(sa.String(200), nullable=False)
 
@@ -44,50 +44,35 @@ class AppToken(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(128), nullable=False)
     auth_token = sa.Column(sa.String(30), nullable=False, unique=True)
-    app_id = sa.Column(
-        sa.ForeignKey("app_app.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-
-    app = relationship("AppApp")
+    app_id = sa.Column(sa.ForeignKey("app.id"), nullable=False)
+    app = relationship(App)
 
 
 class AppPermission(Model):
-    __tablename__ = "app_app_permissions"
+    __tablename__ = "app_permission"
     __table_args__ = (sa.UniqueConstraint("app_id", "permission_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    app_id = sa.Column(
-        sa.ForeignKey("app_app.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-    permission_id = sa.Column(
-        sa.ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
+    app_id = sa.Column(sa.ForeignKey("app.id"), nullable=False)
 
-    app = relationship("AppApp")
-    permission = relationship("AuthPermission")
+    app = relationship(App)
+    permission_id = sa.Column(sa.ForeignKey("permission.id"), nullable=False)
+    permission = relationship(Permission)
 
 
 class AppInstallationPermission(Model):
     __tablename__ = "app_installation_permissions"
-    __table_args__ = (sa.UniqueConstraint("appinstallation_id", "permission_id"),)
+    __table_args__ = (sa.UniqueConstraint("app_installation_id", "permission_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     app_installation_id = sa.Column(
-        sa.ForeignKey("app_installation.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("app_installation.id"),
         nullable=False,
         index=True,
     )
+    app_installation = relationship(AppInstallation)
     permission_id = sa.Column(
-        sa.ForeignKey("auth_permission.id", deferrable=True, initially="DEFERRED"),
+        sa.ForeignKey("permission.id"),
         nullable=False,
-        index=True,
     )
-
-    app_installation = relationship("AppAppinstallation")
-    permission = relationship("AuthPermission")
+    permission = relationship(Permission)

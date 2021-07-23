@@ -8,7 +8,7 @@ class DjangoPricesOpenexchangeratesConversionrate(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     to_currency = sa.Column(sa.String(3), nullable=False, unique=True)
     rate = sa.Column(sa.Numeric(20, 12), nullable=False)
-    modified_at = sa.Column(sa.DateTime(True), nullable=False)
+    modified_at = sa.Column(sa.DateTime, nullable=False)
 
 
 class DjangoPricesVatlayerRatetype(Model):

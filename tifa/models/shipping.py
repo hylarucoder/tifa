@@ -3,10 +3,24 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.channel import Channel
+from tifa.models.product import Product
 
 
-class ShippingShippingmethod(Model):
-    __tablename__ = "shipping_shippingmethod"
+class ShippingZone(Model):
+    __tablename__ = "shipping_zone"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(100), nullable=False)
+    countries = sa.Column(sa.String(749), nullable=False)
+    default = sa.Column(sa.Boolean, nullable=False)
+    metadata_public = sa.Column(JSONB, index=True)
+    metadata_private = sa.Column(JSONB, index=True)
+    description = sa.Column(sa.Text, nullable=False)
+
+
+class ShippingMethod(Model):
+    __tablename__ = "shipping_method"
     __table_args__ = (
         sa.CheckConstraint("maximum_delivery_days >= 0"),
         sa.CheckConstraint("minimum_delivery_days >= 0"),
@@ -18,67 +32,46 @@ class ShippingShippingmethod(Model):
     minimum_order_weight = sa.Column(sa.Float(53))
     type = sa.Column(sa.String(30), nullable=False)
     shipping_zone_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_shippingzone.id", deferrable=True, initially="DEFERRED"
-        ),
+        sa.ForeignKey("shipping_zone.id"),
         nullable=False,
-        index=True,
     )
+    shipping_zone = relationship(ShippingZone)
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
     maximum_delivery_days = sa.Column(sa.Integer)
     minimum_delivery_days = sa.Column(sa.Integer)
     description = sa.Column(JSONB)
 
-    shipping_zone = relationship("ShippingShippingzone")
 
-
-class ShippingShippingzoneChannel(Model):
-    __tablename__ = "shipping_shippingzone_channels"
-    __table_args__ = (sa.UniqueConstraint("shippingzone_id", "channel_id"),)
+class ShippingZoneChannel(Model):
+    __tablename__ = "shipping_zone_channel"
+    __table_args__ = (sa.UniqueConstraint("shipping_zone_id", "channel_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    shippingzone_id = sa.Column(
+    shipping_zone_id = sa.Column(
         sa.ForeignKey(
-            "shipping_shippingzone.id", deferrable=True, initially="DEFERRED"
+            "shipping_zone.id"
         ),
         nullable=False,
-        index=True,
     )
-    channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-
-    channel = relationship("ChannelChannel")
-    shippingzone = relationship("ShippingShippingzone")
+    shipping_zone = relationship(ShippingZone)
+    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False, )
+    channel = relationship(Channel)
 
 
-class ShippingShippingmethodExcludedProduct(Model):
-    __tablename__ = "shipping_shippingmethod_excluded_products"
-    __table_args__ = (sa.UniqueConstraint("shippingmethod_id", "product_id"),)
+class ShippingMethodExcludedProduct(Model):
+    __tablename__ = "shipping_method_excluded_product"
+    __table_args__ = (sa.UniqueConstraint("shipping_method_id", "product_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    shippingmethod_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_shippingmethod.id", deferrable=True, initially="DEFERRED"
-        ),
-        nullable=False,
-        index=True,
-    )
-    product_id = sa.Column(
-        sa.ForeignKey("product_product.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-
-    product = relationship("ProductProduct")
-    shippingmethod = relationship("ShippingShippingmethod")
+    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False)
+    shipping_method = relationship(ShippingMethod)
+    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
+    product = relationship(Product)
 
 
-class ShippingShippingmethodchannellisting(Model):
-    __tablename__ = "shipping_shippingmethodchannellisting"
+class ShippingMethodChannelListing(Model):
+    __tablename__ = "shipping_method_channel_listing"
     __table_args__ = (sa.UniqueConstraint("shipping_method_id", "channel_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -86,68 +79,31 @@ class ShippingShippingmethodchannellisting(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     maximum_order_price_amount = sa.Column(sa.Numeric(12, 3))
     price_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
-    shipping_method_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_shippingmethod.id", deferrable=True, initially="DEFERRED"
-        ),
-        nullable=False,
-        index=True,
-    )
-
-    channel = relationship("ChannelChannel")
-    shipping_method = relationship("ShippingShippingmethod")
+    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False, )
+    channel = relationship(Channel)
+    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method = relationship(ShippingMethod)
 
 
-class ShippingShippingmethodpostalcoderule(Model):
-    __tablename__ = "shipping_shippingmethodpostalcoderule"
+class ShippingMethodPostalCodeRule(Model):
+    __tablename__ = "shipping_method_postal_code_rule"
     __table_args__ = (sa.UniqueConstraint("shipping_method_id", "start", "end"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     start = sa.Column(sa.String(32), nullable=False)
     end = sa.Column(sa.String(32))
-    shipping_method_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_shippingmethod.id", deferrable=True, initially="DEFERRED"
-        ),
-        nullable=False,
-        index=True,
-    )
+    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method = relationship(ShippingMethod)
     inclusion_type = sa.Column(sa.String(32), nullable=False)
 
-    shipping_method = relationship("ShippingShippingmethod")
 
-
-class ShippingShippingmethodtranslation(Model):
-    __tablename__ = "shipping_shippingmethodtranslation"
+class ShippingMethodTranslation(Model):
+    __tablename__ = "shipping_method_translation"
     __table_args__ = (sa.UniqueConstraint("language_code", "shipping_method_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_shippingmethod.id", deferrable=True, initially="DEFERRED"
-        ),
-        nullable=False,
-        index=True,
-    )
+    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method = relationship(ShippingMethod)
     description = sa.Column(JSONB)
-
-    shipping_method = relationship("ShippingShippingmethod")
-
-
-class ShippingShippingzone(Model):
-    __tablename__ = "shipping_shippingzone"
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String(100), nullable=False)
-    countries = sa.Column(sa.String(749), nullable=False)
-    default = sa.Column(sa.Boolean, nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
-    description = sa.Column(sa.Text, nullable=False)

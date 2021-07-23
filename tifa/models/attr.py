@@ -42,20 +42,18 @@ class AttributeTranslation(Model):
     attribute = relationship(Attribute)
 
 
-class AttributeAttributevalue(Model):
-    __tablename__ = "attribute_attributevalue"
+class AttributeValue(Model):
+    __tablename__ = "attribute_value"
     __table_args__ = (
         sa.UniqueConstraint("slug", "attribute_id"),
-        sa.Index("attribute_a_name_9f3448_gin", "name", "slug"),
+        sa.Index("idx_attribute_value_name_slug", "name", "slug"),
     )
 
     id = sa.Column(sa.Integer, primary_key=True)
+    attribute_id = sa.Column(sa.ForeignKey("attribute.id"), nullable=False)
+    attribute = relationship(Attribute)
+
     name = sa.Column(sa.String(250), nullable=False)
-    attribute_id = sa.Column(
-        sa.ForeignKey("attribute_attribute.id", deferrable=True, initially="DEFERRED"),
-        nullable=False,
-        index=True,
-    )
     slug = sa.Column(sa.String(255), nullable=False, index=True)
     sort_order = sa.Column(sa.Integer, index=True)
     value = sa.Column(sa.String(100), nullable=False)
@@ -64,23 +62,14 @@ class AttributeAttributevalue(Model):
     rich_text = sa.Column(JSONB)
     sa.Boolean = sa.Column(sa.Boolean)
 
-    attribute = relationship("AttributeAttribute")
 
-
-class AttributeAttributevaluetranslation(Model):
-    __tablename__ = "attribute_attributevaluetranslation"
+class AttributeValueTranslation(Model):
+    __tablename__ = "attribute_value_translation"
     __table_args__ = (sa.UniqueConstraint("language_code", "attribute_value_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(100), nullable=False)
-    attribute_value_id = sa.Column(
-        sa.ForeignKey(
-            "attribute_attributevalue.id", deferrable=True, initially="DEFERRED"
-        ),
-        nullable=False,
-        index=True,
-    )
+    attribute_value_id = sa.Column(sa.ForeignKey("attribute_value.id"), nullable=False)
     rich_text = sa.Column(JSONB)
-
-    attribute_value = relationship("AttributeAttributevalue")
+    attribute_value = relationship(AttributeValue)
