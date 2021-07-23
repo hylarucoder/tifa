@@ -67,10 +67,11 @@ class OrderFulfillment(Model):
     tracking_number = sa.Column(sa.String(255), nullable=False)
     created = sa.Column(sa.DateTime, nullable=False)
     order_id = sa.Column(
-        sa.ForeignKey("order_order.id"),
+        sa.ForeignKey("order.id"),
         nullable=False,
         index=True,
     )
+    order = relationship(Order)
     fulfillment_order = sa.Column(sa.Integer, nullable=False)
     status = sa.Column(sa.String(32), nullable=False)
     metadata_public = sa.Column(JSONB, index=True)
@@ -78,7 +79,6 @@ class OrderFulfillment(Model):
     shipping_refund_amount = sa.Column(sa.Numeric(12, 3))
     total_refund_amount = sa.Column(sa.Numeric(12, 3))
 
-    order = relationship("OrderOrder")
 
 
 class OrderGiftCard(Model):

@@ -22,7 +22,7 @@ publish: ## publish package to pypi
 	poetry publish --build
 
 test: ## test
-	docker compose run --rm tifa-toolbox bash -c "python -m pytest tests"
+	docker compose run --rm tifa-toolbox-test bash -c "python -m pytest tests"
 
 format: ## publish package to pypi
 	black tifa

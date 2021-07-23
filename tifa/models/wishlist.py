@@ -27,15 +27,14 @@ class WishlistItem(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     product_id = sa.Column(
-        sa.ForeignKey("product_product.id"),
+        sa.ForeignKey("product.id"),
         nullable=False,
     )
-    wishlist_id = sa.Column(
-        sa.ForeignKey("wishlist_wishlist.id"),
-        nullable=False,
-    )
-
     product = relationship(Product)
+    wishlist_id = sa.Column(
+        sa.ForeignKey("wishlist.id"),
+        nullable=False,
+    )
     wishlist = relationship(Wishlist)
 
 

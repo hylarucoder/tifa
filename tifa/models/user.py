@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.address import Address
 from tifa.models.utils import TimestampMixin
 
 
@@ -17,15 +18,15 @@ class User(TimestampMixin, Model):
     is_active = sa.Column(sa.Boolean, default=False)
     password = sa.Column(sa.String(128), nullable=False)
     last_login_at = sa.Column(sa.DateTime)
-    default_billing_address_id = sa.Column(sa.ForeignKey("user_address.id"))
+    default_billing_address_id = sa.Column(sa.ForeignKey("address.id"))
     default_billing_address = relationship(
-        "UserAddress",
-        primaryjoin="User.default_billing_address_id == UserAddress.id",
+        Address,
+        primaryjoin="User.default_billing_address_id == Address.id",
     )
-    default_shipping_address_id = sa.Column(sa.ForeignKey("account_address.id"), )
+    default_shipping_address_id = sa.Column(sa.ForeignKey("address.id"), )
     default_shipping_address = relationship(
-        "UserAddress",
-        primaryjoin="User.default_shipping_address_id == UserAddress.id",
+        Address,
+        primaryjoin="User.default_shipping_address_id == Address.id",
     )
     note = sa.Column(sa.Text)
     first_name = sa.Column(sa.String(256), nullable=False)
@@ -37,41 +38,21 @@ class User(TimestampMixin, Model):
     language_code = sa.Column(sa.String(35), nullable=False)
 
 
-class Address(Model):
-    __tablename__ = "address"
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    first_name = sa.Column(sa.String(256), nullable=False)
-    last_name = sa.Column(sa.String(256), nullable=False)
-    company_name = sa.Column(sa.String(256), nullable=False)
-    street_address_1 = sa.Column(sa.String(256), nullable=False)
-    street_address_2 = sa.Column(sa.String(256), nullable=False)
-    city = sa.Column(sa.String(256), nullable=False)
-    postal_code = sa.Column(sa.String(20), nullable=False)
-    country = sa.Column(sa.String(2), nullable=False)
-    country_area = sa.Column(sa.String(128), nullable=False)
-    phone = sa.Column(sa.String(128), nullable=False)
-    city_area = sa.Column(sa.String(128), nullable=False)
-
-
 class UserAddressMap(Model):
     __tablename__ = "user_address_map"
     __table_args__ = (sa.UniqueConstraint("user_id", "address_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     user_id = sa.Column(
-        sa.ForeignKey("account_user.id"),
+        sa.ForeignKey("user.id"),
         nullable=False,
-        index=True,
     )
+    user = relationship(User)
     address_id = sa.Column(
-        sa.ForeignKey("account_address.id"),
+        sa.ForeignKey("address.id"),
         nullable=False,
-        index=True,
     )
-
-    address = relationship("AccountAddres")
-    user = relationship("AccountUser")
+    address = relationship(Address)
 
 
 class CustomerEvent(Model):

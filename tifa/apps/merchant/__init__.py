@@ -5,7 +5,7 @@ from fastapi_utils.enums import StrEnum
 
 from tifa.contrib.fastapi_plus import create_bp
 from tifa.globals import db, AsyncDal, Dal
-from tifa.models.system import Merchant
+from tifa.models.system import Staff
 
 bp = create_bp()
 
@@ -68,20 +68,20 @@ class TMe(APIModel):
 @bp.item("/me", out=TMe)
 async def profile():
     adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Merchant)
+    merchant = await adal.first_or_404(Staff)
     return {"item": merchant}
 
 
-class TMerchant(APIModel):
+class TStaff(APIModel):
     id: str
     name: str
 
 
-@bp.item("/merchant", out=TMerchant)
-def get_merchant():
+@bp.item("/staff", out=TStaff)
+def get_staff():
     dal = Dal(db.session)
-    merchant = dal.first_or_404(Merchant)
-    return {"item": merchant}
+    staff = dal.first_or_404(Staff)
+    return {"item": staff}
 
 
 """

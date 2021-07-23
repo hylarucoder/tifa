@@ -3,6 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.channel import Channel
 
 
 class PluginConfiguration(Model):

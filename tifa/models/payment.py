@@ -45,7 +45,7 @@ class Payment(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     total = sa.Column(sa.Numeric(12, 3), nullable=False)
     captured_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    checkout_id = sa.Column(sa.ForeignKey("checkout.token"), )
+    checkout_id = sa.Column(sa.ForeignKey("checkout.id"))
     checkout = relationship(Checkout)
     order_id = sa.Column(sa.ForeignKey("order.id"), )
     order = relationship(Order)

@@ -6,7 +6,7 @@ from tifa.globals import Model
 from tifa.models.order import OrderLine
 from tifa.models.product import ProductVariant
 from tifa.models.shipping import ShippingZone
-from tifa.models.user import Address
+from tifa.models.address import Address
 
 
 class Warehouse(Model):

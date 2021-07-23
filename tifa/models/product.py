@@ -28,7 +28,9 @@ class Product(Model):
     description = sa.Column(JSONB)
     updated_at = sa.Column(sa.DateTime)
     product_type_id = sa.Column(sa.ForeignKey("product_type.id"), nullable=False, )
+    product_type = relationship(ProductType)
     category_id = sa.Column(sa.ForeignKey("product_category.id"), )
+    category = relationship(ProductCategory)
     seo_description = sa.Column(sa.String(300))
     seo_title = sa.Column(sa.String(70))
     charge_taxes = sa.Column(sa.Boolean, nullable=False)
@@ -36,17 +38,22 @@ class Product(Model):
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
-    default_variant_id = sa.Column(sa.ForeignKey("product_variant.id"), unique=True)
-    description_plaintext = sa.Column(sa.Text, nullable=False)
-    search_vector = sa.Column(TSVECTOR, index=True)
-    rating = sa.Column(sa.Float(53))
-    category = relationship(ProductCategory)
+    default_variant_id = sa.Column(
+        sa.ForeignKey(
+            "product_variant.id",
+            use_alter=True,
+            name='fk_product_default_variant_id'
+        ),
+        unique=True
+    )
     default_variant = relationship(
         "ProductVariant",
         uselist=False,
         primaryjoin="Product.default_variant_id == ProductVariant.id",
     )
-    product_type = relationship(ProductType)
+    description_plaintext = sa.Column(sa.Text, nullable=False)
+    search_vector = sa.Column(TSVECTOR, index=True)
+    rating = sa.Column(sa.Float(53))
 
 
 class ProductTranslation(Model):
@@ -60,7 +67,6 @@ class ProductTranslation(Model):
     name = sa.Column(sa.String(250))
     description = sa.Column(JSONB)
     product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
-    product = relationship(Product)
 
 
 class ProductVariant(Model):
@@ -70,15 +76,14 @@ class ProductVariant(Model):
     sku = sa.Column(sa.String(255), nullable=False, unique=True)
     name = sa.Column(sa.String(255), nullable=False)
     product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False)
+    product = relationship(
+        "Product", foreign_keys=[product_id]
+    )
     track_inventory = sa.Column(sa.Boolean, nullable=False)
     weight = sa.Column(sa.Float(53))
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
     sort_order = sa.Column(sa.Integer, index=True)
-    product = relationship(
-        "Product",
-        primaryjoin="ProductVariant.product_id == Product.id",
-    )
 
 
 class ProductVariantTranslation(Model):

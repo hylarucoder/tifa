@@ -4,7 +4,7 @@ import pytest
 
 from tifa.app import create_app
 from tifa.globals import db, Dal
-from tifa.models.system import SysUser
+from tifa.models.system import Staff
 
 current_app = create_app()
 
@@ -19,12 +19,12 @@ def event_loop():
 @pytest.fixture(scope="session", autouse=True)
 def setup_db():
     with db.engine.begin() as conn:
-        db.drop_all(conn)
+        # db.drop_all(conn)
         db.create_all(conn)
 
     dal = Dal(db.session)
     dal.add(
-        SysUser,
+        Staff,
         name="name",
     )
     dal.session.commit()

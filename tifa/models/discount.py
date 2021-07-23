@@ -119,7 +119,7 @@ class DiscountSaleChannelListing(TimestampMixin, Model):
     discount_value = sa.Column(sa.Numeric(12, 3), nullable=False)
     currency = sa.Column(sa.String(3), nullable=False)
     channel_id = sa.Column(
-        sa.ForeignKey("channel_channel.id"),
+        sa.ForeignKey("channel.id"),
         nullable=False,
         index=True,
     )
@@ -129,8 +129,8 @@ class DiscountSaleChannelListing(TimestampMixin, Model):
         index=True,
     )
 
-    channel = relationship("ChannelChannel")
-    sale = relationship("DiscountSale")
+    channel = relationship(Channel)
+    sale = relationship(DiscountSale)
 
 
 class DiscountSaleTranslation(TimestampMixin, Model):

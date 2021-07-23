@@ -7,14 +7,15 @@ from tifa.models.channel import Channel
 from tifa.models.gift_card import GiftCard
 from tifa.models.product import ProductVariant
 from tifa.models.shipping import ShippingMethod
-from tifa.models.user import Address, User
+from tifa.models.user import User
+from tifa.models.address import Address
 from tifa.models.utils import TimestampMixin
 
 
 class Checkout(TimestampMixin, Model):
     __tablename__ = "checkout"
 
-    token = sa.Column(UUID, primary_key=True)
+    id = sa.Column(UUID, primary_key=True)
     created = sa.Column(sa.DateTime, nullable=False)
     last_change = sa.Column(sa.DateTime, nullable=False)
     email = sa.Column(sa.String(254), nullable=False)
@@ -42,12 +43,12 @@ class Checkout(TimestampMixin, Model):
     language_code = sa.Column(sa.String(35), nullable=False)
 
 
-class CheckoutCheckoutGiftCard(TimestampMixin, Model):
+class CheckoutGiftCard(TimestampMixin, Model):
     __tablename__ = "checkout_gift_card"
     __table_args__ = (sa.UniqueConstraint("checkout_id", "gift_card_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    checkout_id = sa.Column(sa.ForeignKey("checkout.token"), nullable=False)
+    checkout_id = sa.Column(sa.ForeignKey("checkout.id"), nullable=False)
     checkout = relationship(Checkout)
     gift_card_id = sa.Column(sa.ForeignKey("gift_card.id"), nullable=False)
     gift_card = relationship(GiftCard)
@@ -59,7 +60,7 @@ class CheckoutLine(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     quantity = sa.Column(sa.Integer, nullable=False)
-    checkout_id = sa.Column(sa.ForeignKey("checkout.token"), nullable=False)
+    checkout_id = sa.Column(sa.ForeignKey("checkout.id"), nullable=False)
     checkout = relationship(Checkout)
     variant_id = sa.Column(sa.ForeignKey("product_variant.id"), nullable=False)
     variant = relationship(ProductVariant)

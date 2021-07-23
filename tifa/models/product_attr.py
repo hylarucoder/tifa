@@ -12,7 +12,7 @@ class AttributeProduct(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     attribute_id = sa.Column(
-        sa.ForeignKey("attribute_attribute.id"),
+        sa.ForeignKey("attribute.id"),
         nullable=False,
     )
     attribute = relationship(Attribute)

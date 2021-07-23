@@ -41,7 +41,7 @@ class MenuItem(Model):
     )
     collection = relationship("ProductCollection")
     menu_id = sa.Column(
-        sa.ForeignKey("menu_menu.id"),
+        sa.ForeignKey("menu.id"),
         nullable=False,
     )
     menu = relationship(Menu)
@@ -54,7 +54,6 @@ class MenuItem(Model):
     metadata_private = sa.Column(JSONB, index=True)
 
 
-
 class MenuItemTranslation(Model):
     __tablename__ = "menu_item_translation"
     __table_args__ = (sa.UniqueConstraint("language_code", "menu_item_id"),)
@@ -63,9 +62,9 @@ class MenuItemTranslation(Model):
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(128), nullable=False)
     menu_item_id = sa.Column(
-        sa.ForeignKey("menu_menuitem.id"),
+        sa.ForeignKey("menu_item.id"),
         nullable=False,
         index=True,
     )
 
-    menu_item = relationship("MenuMenuitem")
+    menu_item = relationship(MenuItem)

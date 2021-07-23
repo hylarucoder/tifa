@@ -60,7 +60,7 @@ class AttributeValue(Model):
     content_type = sa.Column(sa.String(50))
     file_url = sa.Column(sa.String(200))
     rich_text = sa.Column(JSONB)
-    sa.Boolean = sa.Column(sa.Boolean)
+    boolean = sa.Column(sa.Boolean)
 
 
 class AttributeValueTranslation(Model):
