@@ -1,11 +1,9 @@
 from tifa.globals import Dal, db
-from tifa.models.system import Merchant
+from tifa.models.system import Staff
 
-# thread local session
 dal = Dal(db.session)
 dal.add(
-    Merchant,
-    code="001",
+    Staff,
     name="hey tea",
 )
 dal.commit()

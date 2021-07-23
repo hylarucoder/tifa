@@ -75,4 +75,3 @@ class ProductCategoryTranslation(TimestampMixin, Model):
     description = sa.Column(JSONB)
     category_id = sa.Column(sa.ForeignKey("product_category.id"), nullable=False)
     category = relationship(ProductCategory)
-

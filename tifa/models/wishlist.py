@@ -44,15 +44,11 @@ class WishlistItemVariant(TimestampMixin, Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     wishlist_item_id = sa.Column(
-        sa.ForeignKey(
-            "wishlist_item.id"
-        ),
+        sa.ForeignKey("wishlist_item.id"),
         nullable=False,
     )
     product_variant_id = sa.Column(
-        sa.ForeignKey(
-            "product_variant.id"
-        ),
+        sa.ForeignKey("product_variant.id"),
         nullable=False,
     )
 

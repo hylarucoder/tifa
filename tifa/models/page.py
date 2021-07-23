@@ -45,7 +45,8 @@ class PageTranslation(Model):
     language_code = sa.Column(sa.String(10), nullable=False)
     title = sa.Column(sa.String(255))
     content = sa.Column(JSONB)
-    page_id = sa.Column(sa.ForeignKey("page.id"), nullable=False, )
+    page_id = sa.Column(
+        sa.ForeignKey("page.id"),
+        nullable=False,
+    )
     page = relationship(Page)
-
-

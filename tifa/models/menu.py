@@ -47,7 +47,9 @@ class MenuItem(Model):
     menu = relationship(Menu)
     page_id = sa.Column(sa.ForeignKey("page.id"))
     page = relationship("Page")
-    parent_id = sa.Column(sa.ForeignKey("menu_item.id"), )
+    parent_id = sa.Column(
+        sa.ForeignKey("menu_item.id"),
+    )
     parent = relationship("MenuItem", remote_side=[id])
 
     metadata_public = sa.Column(JSONB, index=True)

@@ -17,6 +17,8 @@ class GiftCard(Model):
     is_active = sa.Column(sa.Boolean, nullable=False)
     initial_balance_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     current_balance_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    user_id = sa.Column(sa.ForeignKey("user.id"), )
+    user_id = sa.Column(
+        sa.ForeignKey("user.id"),
+    )
     currency = sa.Column(sa.String(3), nullable=False)
     user = relationship(User)

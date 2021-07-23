@@ -1,5 +1,5 @@
 import socketio
-from fastapi import APIRouter, Request, FastAPI
+from fastapi import Request
 from socketio import AsyncServer, AsyncRedisManager
 from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
@@ -10,7 +10,7 @@ from tifa.settings import settings
 sio = AsyncServer(
     client_manager=AsyncRedisManager(settings.WHITEBOARD_URI),
     async_mode="asgi",
-    cors_allowed_origins="*",
+    cors_allowed_origins=["*"],
 )
 
 bp = create_bp()
@@ -23,7 +23,6 @@ bp.mount(
 
 @sio.on("connect")
 async def on_connect(sid, environ, auth):
-    # await sio.emit("drawing", kwargs)
     ...
 
 

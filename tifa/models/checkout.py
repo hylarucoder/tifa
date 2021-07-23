@@ -22,10 +22,17 @@ class Checkout(TimestampMixin, Model):
     user_id = sa.Column(sa.ForeignKey("user.id"))
     user = relationship(User)
     billing_address_id = sa.Column(sa.ForeignKey("address.id"))
-    billing_address = relationship(Address, primaryjoin="Checkout.billing_address_id == Address.id")
-    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False, )
+    billing_address = relationship(
+        Address, primaryjoin="Checkout.billing_address_id == Address.id"
+    )
+    channel_id = sa.Column(
+        sa.ForeignKey("channel.id"),
+        nullable=False,
+    )
     channel = relationship(Channel)
-    shipping_address = relationship(Address, primaryjoin="Checkout.shipping_address_id == Address.id")
+    shipping_address = relationship(
+        Address, primaryjoin="Checkout.shipping_address_id == Address.id"
+    )
     shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"))
     shipping_method = relationship(ShippingMethod)
     discount_amount = sa.Column(sa.Numeric(12, 3), nullable=False)

@@ -18,7 +18,9 @@ class CsvExportFile(TimestampMixin, Model):
     content_file = sa.Column(sa.String(100))
     app_id = sa.Column(sa.ForeignKey("app.id"), index=True)
     app = relationship(App)
-    user_id = sa.Column(sa.ForeignKey("user.id"), )
+    user_id = sa.Column(
+        sa.ForeignKey("user.id"),
+    )
     user = relationship(User)
     message = sa.Column(sa.String(255))
 
@@ -32,7 +34,10 @@ class CsvExportEvent(Model):
     parameters = sa.Column(JSONB, nullable=False)
     app_id = sa.Column(sa.ForeignKey("app.id"))
     app = relationship(App)
-    export_file_id = sa.Column(sa.ForeignKey("csv_export_file.id"), nullable=False, )
+    export_file_id = sa.Column(
+        sa.ForeignKey("csv_export_file.id"),
+        nullable=False,
+    )
     user_id = sa.Column(sa.ForeignKey("user.id"))
     user = relationship(User)
     export_file = relationship(CsvExportFile)

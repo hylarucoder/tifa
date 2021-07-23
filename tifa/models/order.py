@@ -24,10 +24,14 @@ class Order(Model):
         "Address",
         primaryjoin="Order.shipping_address_id == Address.id",
     )
-    user_id = sa.Column(sa.ForeignKey("user.id"), )
+    user_id = sa.Column(
+        sa.ForeignKey("user.id"),
+    )
     user = relationship("User")
     total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    voucher_id = sa.Column(sa.ForeignKey("discount_voucher.id"), )
+    voucher_id = sa.Column(
+        sa.ForeignKey("discount_voucher.id"),
+    )
     voucher = relationship("DiscountVoucher")
     language_code = sa.Column(sa.String(35), nullable=False)
     shipping_price_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
@@ -35,7 +39,9 @@ class Order(Model):
     shipping_price_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     status = sa.Column(sa.String(32), nullable=False)
     shipping_method_name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), )
+    shipping_method_id = sa.Column(
+        sa.ForeignKey("shipping_method.id"),
+    )
     shipping_method = relationship("ShippingMethod")
     display_gross_prices = sa.Column(sa.Boolean, nullable=False)
     customer_note = sa.Column(sa.Text, nullable=False)
@@ -80,7 +86,6 @@ class OrderFulfillment(Model):
     total_refund_amount = sa.Column(sa.Numeric(12, 3))
 
 
-
 class OrderGiftCard(Model):
     __tablename__ = "order_gift_card"
     __table_args__ = (sa.UniqueConstraint("order_id", "gift_card_id"),)
@@ -106,7 +111,9 @@ class OrderEvent(Model):
     type = sa.Column(sa.String(255), nullable=False)
     order_id = sa.Column(sa.ForeignKey("order.id"), nullable=False)
     order = relationship("Order")
-    user_id = sa.Column(sa.ForeignKey("user.id"), )
+    user_id = sa.Column(
+        sa.ForeignKey("user.id"),
+    )
     user = relationship("User")
     parameters = sa.Column(JSONB, nullable=False)
     app_id = sa.Column(sa.ForeignKey("app.id"), index=True)
@@ -129,7 +136,9 @@ class OrderLine(Model):
     )
     order = relationship(Order)
     quantity_fulfilled = sa.Column(sa.Integer, nullable=False)
-    variant_id = sa.Column(sa.ForeignKey("product_variant.id"), )
+    variant_id = sa.Column(
+        sa.ForeignKey("product_variant.id"),
+    )
     variant = relationship(ProductVariant)
     tax_rate = sa.Column(sa.Numeric(5, 4), nullable=False)
     translated_product_name = sa.Column(sa.String(386), nullable=False)
@@ -185,6 +194,8 @@ class OrderDiscount(Model):
     name = sa.Column(sa.String(255))
     translated_name = sa.Column(sa.String(255))
     reason = sa.Column(sa.Text)
-    order_id = sa.Column(sa.ForeignKey("order.id"), )
+    order_id = sa.Column(
+        sa.ForeignKey("order.id"),
+    )
 
     order = relationship(Order)
