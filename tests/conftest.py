@@ -3,8 +3,8 @@ import asyncio
 import pytest
 
 from tifa.app import create_app
-from tifa.globals import db
-from tifa.models.system import SysUser
+from tifa.globals import db, Dal
+from tifa.models.system import Staff
 
 current_app = create_app()
 
@@ -19,12 +19,14 @@ def event_loop():
 @pytest.fixture(scope="session", autouse=True)
 def setup_db():
     with db.engine.begin() as conn:
-        db.drop_all(conn)
+        # db.drop_all(conn)
         db.create_all(conn)
 
-    SysUser.add(
+    dal = Dal(db.session)
+    dal.add(
+        Staff,
         name="name",
     )
-    db.session.commit()
+    dal.session.commit()
     yield
     conn.close()

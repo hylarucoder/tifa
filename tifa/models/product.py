@@ -1,116 +1,159 @@
-import datetime
-import enum
-
-from fastapi_utils.enums import StrEnum
+import sqlalchemy as sa
+from sqlalchemy.dialects.postgresql import JSONB, TSVECTOR, UUID
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
-import sqlalchemy as sa
-
-from tifa.models.merchant import Merchant
+from tifa.models.product_collection import ProductCategory, ProductCollection
 
 
-class ProductBrand(Model):
-    id = sa.Column(sa.Integer, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-
-    name = sa.Column(sa.String(50))
-    desc = sa.Column(sa.String(255))
-    logo_url = sa.Column(sa.String(255))
-
-    class Status(StrEnum):
-        ENABLE = enum.auto()
-        DISABLE = enum.auto()
-
-    status = sa.Column(sa.Enum(Status), default=Status.ENABLE)
-    deleted = sa.Column(sa.Boolean, default=False)
-
-
-class ProductCategory(Model):
-    id = sa.Column(sa.Integer, primary_key=True)
-    name = sa.Column(sa.String(255))
-    desc = sa.Column(sa.String(255))
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    deleted = sa.Column(sa.Boolean, default=False)
-
-
-class ProductSpu(Model):
-    """
-    -- spu: standard product unit 标准产品单位
-    """
+class ProductType(Model):
+    __tablename__ = "product_type"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    category_id = sa.Column(sa.Integer, sa.ForeignKey("product_brand.id"))
+    name = sa.Column(sa.String(250), nullable=False)
+    has_variants = sa.Column(sa.Boolean, nullable=False)
+    is_shipping_required = sa.Column(sa.Boolean, nullable=False)
+    weight = sa.Column(sa.Float(53), nullable=False)
+    is_digital = sa.Column(sa.Boolean, nullable=False)
+    metadata_public = sa.Column(JSONB, index=True)
+    metadata_private = sa.Column(JSONB, index=True)
+    slug = sa.Column(sa.String(255), nullable=False, unique=True)
+
+
+class Product(Model):
+    __tablename__ = "product"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    name = sa.Column(sa.String(250), nullable=False)
+    description = sa.Column(JSONB)
+    updated_at = sa.Column(sa.DateTime)
+    product_type_id = sa.Column(sa.ForeignKey("product_type.id"), nullable=False, )
+    product_type = relationship(ProductType)
+    category_id = sa.Column(sa.ForeignKey("product_category.id"), )
     category = relationship(ProductCategory)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    name = sa.Column(sa.String(255))
-    desc = sa.Column(sa.String(255))
-    price = sa.Column(sa.DECIMAL(10, 2))
-    market_price = sa.Column(sa.DECIMAL(10, 2))
-    deleted = sa.Column(sa.Boolean, default=False)
+    seo_description = sa.Column(sa.String(300))
+    seo_title = sa.Column(sa.String(70))
+    charge_taxes = sa.Column(sa.Boolean, nullable=False)
+    weight = sa.Column(sa.Float(53))
+    metadata_public = sa.Column(JSONB, index=True)
+    metadata_private = sa.Column(JSONB, index=True)
+    slug = sa.Column(sa.String(255), nullable=False, unique=True)
+    default_variant_id = sa.Column(
+        sa.ForeignKey(
+            "product_variant.id",
+            use_alter=True,
+            name='fk_product_default_variant_id'
+        ),
+        unique=True
+    )
+    default_variant = relationship(
+        "ProductVariant",
+        uselist=False,
+        primaryjoin="Product.default_variant_id == ProductVariant.id",
+    )
+    description_plaintext = sa.Column(sa.Text, nullable=False)
+    search_vector = sa.Column(TSVECTOR, index=True)
+    rating = sa.Column(sa.Float(53))
 
 
-class ProductSku(Model):
-    """
-    -- sku: stock keeping unit 库存量单位
-    """
+class ProductTranslation(Model):
+    __tablename__ = "product_translation"
+    __table_args__ = (sa.UniqueConstraint("language_code", "product_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    product_id = sa.Column(sa.Integer, sa.ForeignKey("product_spu.id"))
-    product = relationship(ProductSpu)
-    price = sa.Column(sa.DECIMAL(10, 2))
-    market_price = sa.Column(sa.DECIMAL(10, 2))
-    deleted = sa.Column(sa.Boolean, default=False)
-    # attrs 属性可以丢缓存
+    seo_title = sa.Column(sa.String(70))
+    seo_description = sa.Column(sa.String(300))
+    language_code = sa.Column(sa.String(10), nullable=False)
+    name = sa.Column(sa.String(250))
+    description = sa.Column(JSONB)
+    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
 
 
-class ProductAttr(Model):
-    # -- 销售属性表 product_attr
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    name = sa.Column(sa.String(255))
-    desc = sa.Column(sa.String(255))
+class ProductVariant(Model):
+    __tablename__ = "product_variant"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    sku = sa.Column(sa.String(255), nullable=False, unique=True)
+    name = sa.Column(sa.String(255), nullable=False)
+    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False)
+    product = relationship(
+        "Product", foreign_keys=[product_id]
+    )
+    track_inventory = sa.Column(sa.Boolean, nullable=False)
+    weight = sa.Column(sa.Float(53))
+    metadata_public = sa.Column(JSONB, index=True)
+    metadata_private = sa.Column(JSONB, index=True)
+    sort_order = sa.Column(sa.Integer, index=True)
 
 
-class ProductAttrValue(Model):
-    # -- 销售属性值 product_attr_value
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr.id"))
-    attr = relationship(ProductAttr)
-    value = sa.Column(sa.String(255))
-    desc = sa.Column(sa.String(255))
+class ProductVariantTranslation(Model):
+    __tablename__ = "product_variant_translation"
+    __table_args__ = (sa.UniqueConstraint("language_code", "product_variant_id"),)
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    language_code = sa.Column(sa.String(10), nullable=False)
+    name = sa.Column(sa.String(255), nullable=False)
+    product_variant_id = sa.Column(
+        sa.ForeignKey(
+            "product_variant.id"
+        ),
+        nullable=False,
+    )
+
+    product_variant = relationship(ProductVariant)
 
 
-class ProductSpuSkuAttrMap(Model):
-    # -- 关联关系冗余表
-    # product_spu_sku_attr_map
-    # -- 1. # spu下 # 有哪些sku
-    # -- 2. # spu下 # 有那些销售属性
-    # -- 3. # spu下 # 每个销售属性对应的销售属性值(一对多)
-    # -- 4. # spu下 # 每个销售属性值对应的sku(一对多)
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    merchant_id = sa.Column(sa.Integer, sa.ForeignKey("merchant.id"))
-    merchant = relationship(Merchant)
-    spu_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_spu.id"))
-    spu = relationship(ProductSpu)
-    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_sku.id"))
-    sku = relationship(ProductSku)
-    attr_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr.id"))
-    attr = relationship(ProductAttr)
-    attr_value_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_attr_value.id"))
-    attr_value = relationship(ProductAttrValue)
+class CollectionProduct(Model):
+    __tablename__ = "collection_product"
+    __table_args__ = (sa.UniqueConstraint("collection_id", "product_id"),)
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    collection_id = sa.Column(sa.ForeignKey("product_collection.id"), nullable=False, )
+    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
+    sort_order = sa.Column(sa.Integer, index=True)
+    collection = relationship(ProductCollection)
+    product = relationship(Product)
 
 
-class ProductSkuStock(Model):
-    id = sa.Column(sa.BigInteger, primary_key=True)
-    sku_id = sa.Column(sa.BigInteger, sa.ForeignKey("product_sku.id"))
-    sku = relationship(ProductSku)
-    qty = sa.Column(sa.Integer, default=99999)
+class ProductDigitalContent(Model):
+    __tablename__ = "product_digital_content"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    use_default_settings = sa.Column(sa.Boolean, nullable=False)
+    automatic_fulfillment = sa.Column(sa.Boolean, nullable=False)
+    content_type = sa.Column(sa.String(128), nullable=False)
+    content_file = sa.Column(sa.String(100), nullable=False)
+    max_downloads = sa.Column(sa.Integer)
+    url_valid_days = sa.Column(sa.Integer)
+    product_variant_id = sa.Column(
+        sa.ForeignKey(
+            "product_variant.id"
+        ),
+        nullable=False,
+        unique=True,
+    )
+    product_variant = relationship(ProductVariant, uselist=False)
+    metadata_public = sa.Column(JSONB, index=True)
+    metadata_private = sa.Column(JSONB, index=True)
+
+
+class ProductDigitalContentUrl(Model):
+    __tablename__ = "product_digital_content_url"
+
+    id = sa.Column(sa.Integer, primary_key=True)
+    token = sa.Column(UUID, nullable=False, unique=True)
+    created = sa.Column(sa.DateTime, nullable=False)
+    download_num = sa.Column(sa.Integer, nullable=False)
+    content_id = sa.Column(
+        sa.ForeignKey(
+            "product_digital_content.id"
+        ),
+        nullable=False,
+        index=True,
+    )
+    content = relationship(ProductDigitalContent)
+    line_id = sa.Column(
+        sa.ForeignKey("order_line.id"),
+        unique=True,
+    )
+    line = relationship("OrderLine", uselist=False)

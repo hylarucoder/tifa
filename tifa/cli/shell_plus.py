@@ -1,24 +1,27 @@
 import importlib
 
 from tifa.cli import cli
-from tifa.globals import db
+from tifa.globals import db, Dal, AsyncDal
+from tifa.utils.pkg import import_submodules
 
 
-@cli.command("ishell")
-def ishell():
+@cli.command("shell_plus")
+def shell_plus():
     from IPython import embed
     import cProfile
     import pdb
 
-    # TODO: dynamic import
-
+    import_submodules("tifa.models")
     models = {cls.__name__: cls for cls in db.Model.__subclasses__()}
+    dal = Dal(db.session)
+    adal = AsyncDal(db.async_session)
     main = importlib.import_module("__main__")
     ctx = main.__dict__
     ctx.update(
         {
             **models,
-            "async_session": db.async_session,
+            "dal": dal,
+            "adal": adal,
             "db": db,
             "ipdb": pdb,
             "cProfile": cProfile,
