@@ -59,7 +59,12 @@ class FastAPIPlus(FastAPI):
         self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
     ):
         summary = suffix_summary(path, summary)
-        return self.post(path, response_model=out, tags=tags, summary=summary)
+        cls_name = "Item" + path_to_cls_name(path)
+        item_schema = create_model(
+            cls_name,
+            item=(out, ...),
+        )
+        return self.post(path, response_model=item_schema, tags=tags, summary=summary)
 
 
 def suffix_summary(path, summary):
