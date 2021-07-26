@@ -1,6 +1,6 @@
 import json
 
-from fastapi.responses import Response
+from fastapi.responses import ORJSONResponse
 
 
 class ApiResult:
@@ -10,8 +10,7 @@ class ApiResult:
         self.nex_page = next_page
 
     def to_response(self):
-        return Response(
-            json.dumps(self.value, ensure_ascii=False),  # TODO: polish
+        return ORJSONResponse(
+            self.value,
             status_code=self.status_code,
-            # mimetype="application/json",
         )

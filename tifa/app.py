@@ -2,13 +2,10 @@ import time
 
 from fastapi import FastAPI, Request
 from prometheus_client import make_asgi_app  # type: ignore
-from starlette.exceptions import HTTPException
 from starlette.middleware.base import BaseHTTPMiddleware
-from starlette.responses import JSONResponse
 from starlette.staticfiles import StaticFiles
 
 from tifa.contrib.globals import GlobalsMiddleware
-from tifa.exceptions import ApiException, UnicornException, unicorn_exception_handler
 from tifa.settings import settings
 from tifa.utils.pkg import import_submodules
 

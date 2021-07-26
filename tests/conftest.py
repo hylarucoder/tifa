@@ -11,15 +11,19 @@ from tifa.models.user import User
 
 
 class ApiClient(TestClient):
-    def __init__(self, app, user=None, *args, **kwargs):
+    def __init__(self, app, prefix="", user=None, *args, **kwargs):
         self.user = user
+        self.prefix = prefix
         super().__init__(app, *args, **kwargs)
 
     def get(self, url: str, **kwargs) -> Response:
         return super().get(url, **kwargs)
 
-    def post(self, url: str, data=None, json=None, **kwargs) -> Response:
-        return super().post(url, data, json, **kwargs)
+    def op(self, url: str, json=None, **kwargs) -> Response:
+        res = super().post(url, None, json, **kwargs).json()
+        if "item" in res:
+            return res["item"]
+        return res
 
 
 app = create_app()
