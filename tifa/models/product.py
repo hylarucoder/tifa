@@ -27,9 +27,14 @@ class Product(Model):
     name = sa.Column(sa.String(250), nullable=False)
     description = sa.Column(JSONB)
     updated_at = sa.Column(sa.DateTime)
-    product_type_id = sa.Column(sa.ForeignKey("product_type.id"), nullable=False, )
+    product_type_id = sa.Column(
+        sa.ForeignKey("product_type.id"),
+        nullable=False,
+    )
     product_type = relationship(ProductType)
-    category_id = sa.Column(sa.ForeignKey("product_category.id"), )
+    category_id = sa.Column(
+        sa.ForeignKey("product_category.id"),
+    )
     category = relationship(ProductCategory)
     seo_description = sa.Column(sa.String(300))
     seo_title = sa.Column(sa.String(70))
@@ -40,11 +45,9 @@ class Product(Model):
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
     default_variant_id = sa.Column(
         sa.ForeignKey(
-            "product_variant.id",
-            use_alter=True,
-            name='fk_product_default_variant_id'
+            "product_variant.id", use_alter=True, name="fk_product_default_variant_id"
         ),
-        unique=True
+        unique=True,
     )
     default_variant = relationship(
         "ProductVariant",
@@ -66,7 +69,10 @@ class ProductTranslation(Model):
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(250))
     description = sa.Column(JSONB)
-    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
+    product_id = sa.Column(
+        sa.ForeignKey("product.id"),
+        nullable=False,
+    )
 
 
 class ProductVariant(Model):
@@ -76,9 +82,7 @@ class ProductVariant(Model):
     sku = sa.Column(sa.String(255), nullable=False, unique=True)
     name = sa.Column(sa.String(255), nullable=False)
     product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False)
-    product = relationship(
-        "Product", foreign_keys=[product_id]
-    )
+    product = relationship("Product", foreign_keys=[product_id])
     track_inventory = sa.Column(sa.Boolean, nullable=False)
     weight = sa.Column(sa.Float(53))
     metadata_public = sa.Column(JSONB, index=True)
@@ -94,9 +98,7 @@ class ProductVariantTranslation(Model):
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(255), nullable=False)
     product_variant_id = sa.Column(
-        sa.ForeignKey(
-            "product_variant.id"
-        ),
+        sa.ForeignKey("product_variant.id"),
         nullable=False,
     )
 
@@ -108,8 +110,14 @@ class CollectionProduct(Model):
     __table_args__ = (sa.UniqueConstraint("collection_id", "product_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    collection_id = sa.Column(sa.ForeignKey("product_collection.id"), nullable=False, )
-    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
+    collection_id = sa.Column(
+        sa.ForeignKey("product_collection.id"),
+        nullable=False,
+    )
+    product_id = sa.Column(
+        sa.ForeignKey("product.id"),
+        nullable=False,
+    )
     sort_order = sa.Column(sa.Integer, index=True)
     collection = relationship(ProductCollection)
     product = relationship(Product)
@@ -126,9 +134,7 @@ class ProductDigitalContent(Model):
     max_downloads = sa.Column(sa.Integer)
     url_valid_days = sa.Column(sa.Integer)
     product_variant_id = sa.Column(
-        sa.ForeignKey(
-            "product_variant.id"
-        ),
+        sa.ForeignKey("product_variant.id"),
         nullable=False,
         unique=True,
     )
@@ -145,9 +151,7 @@ class ProductDigitalContentUrl(Model):
     created = sa.Column(sa.DateTime, nullable=False)
     download_num = sa.Column(sa.Integer, nullable=False)
     content_id = sa.Column(
-        sa.ForeignKey(
-            "product_digital_content.id"
-        ),
+        sa.ForeignKey("product_digital_content.id"),
         nullable=False,
         index=True,
     )

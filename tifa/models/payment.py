@@ -47,7 +47,9 @@ class Payment(Model):
     captured_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     checkout_id = sa.Column(sa.ForeignKey("checkout.id"))
     checkout = relationship(Checkout)
-    order_id = sa.Column(sa.ForeignKey("order.id"), )
+    order_id = sa.Column(
+        sa.ForeignKey("order.id"),
+    )
     order = relationship(Order)
     to_confirm = sa.Column(sa.Boolean, nullable=False)
     payment_method_type = sa.Column(sa.String(256), nullable=False)
@@ -67,10 +69,12 @@ class PaymentTransaction(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     gateway_response = sa.Column(JSONB, nullable=False)
-    payment_id = sa.Column(sa.ForeignKey("payment.id"), nullable=False, )
+    payment_id = sa.Column(
+        sa.ForeignKey("payment.id"),
+        nullable=False,
+    )
     payment = relationship(Payment)
     customer_id = sa.Column(sa.String(256))
     action_required = sa.Column(sa.Boolean, nullable=False)
     action_required_data = sa.Column(JSONB, nullable=False)
     already_processed = sa.Column(sa.Boolean, nullable=False)
-

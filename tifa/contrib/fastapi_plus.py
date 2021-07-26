@@ -21,9 +21,9 @@ def path_to_cls_name(path):
 
 
 class FastAPIPlus(FastAPI):
-    def item(self, path, out, summary: str = "详细", tags: Optional[list[str]] = None):
-        if "-详细" not in summary:
-            summary = summary + "-详细"
+    def item(self, path, out, summary: str = "Item", tags: Optional[list[str]] = None):
+        if "-Item" not in summary:
+            summary = summary + "-Item"
         cls_name = "Item" + path_to_cls_name(path)
         item_schema = create_model(
             cls_name,
@@ -31,9 +31,9 @@ class FastAPIPlus(FastAPI):
         )
         return self.get(path, response_model=item_schema, tags=tags, summary=summary)
 
-    def list(self, path, out, summary: str = "列表", tags: Optional[list[str]] = None):
-        if "-列表" not in summary:
-            summary = summary + "-列表"
+    def list(self, path, out, summary: str = "List", tags: Optional[list[str]] = None):
+        if "-List" not in summary:
+            summary = summary + "-List"
         cls_name = "List" + path_to_cls_name(path)
         list_schema = create_model(
             cls_name,
@@ -41,9 +41,9 @@ class FastAPIPlus(FastAPI):
         )
         return self.get(path, response_model=list_schema, tags=tags, summary=summary)
 
-    def page(self, path, out, summary: str = "分页", tags: Optional[List[str]] = None):
-        if "-分页" not in summary:
-            summary = summary + "-分页"
+    def page(self, path, out, summary: str = "Page", tags: Optional[List[str]] = None):
+        if "-Page" not in summary:
+            summary = summary + "-Page"
         cls_name = "Page" + path_to_cls_name(path)
         list_schema = create_model(
             cls_name,
@@ -59,17 +59,29 @@ class FastAPIPlus(FastAPI):
         self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
     ):
         summary = suffix_summary(path, summary)
-        return self.post(path, response_model=out, tags=tags, summary=summary)
+        cls_name = "Item" + path_to_cls_name(path)
+        item_schema = create_model(
+            cls_name,
+            item=(out, ...),
+        )
+        return self.post(path, response_model=item_schema, tags=tags, summary=summary)
 
 
 def suffix_summary(path, summary):
     kv = {
-        "/add": "-新增",
-        "/edit": "-编辑",
-        "/sort": "-排序",
-        "/delete": "-删除",
-        "/enable": "-启用",
-        "/disable": "-停用",
+        "/create": "-Create",
+        "/bulk_create": "-BulkCreate",
+        "/update": "-Update",
+        "/refresh": "-Refresh",
+        "/verify": "-Verify",
+        "/reorder": "-Reorder",
+        "/delete": "-Delete",
+        "/bulk_delete": "-BulkDelete",
+        "/publish": "-Publish",
+        "/bulk_publish": "-BulkPublish",
+        "/translate": "-Translate",
+        "/activate": "-Activate",
+        "/deactivate": "-Deactivate",
     }
     for k, v in kv.items():
         if path.endswith(k):

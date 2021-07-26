@@ -23,7 +23,9 @@ class User(TimestampMixin, Model):
         Address,
         primaryjoin="User.default_billing_address_id == Address.id",
     )
-    default_shipping_address_id = sa.Column(sa.ForeignKey("address.id"), )
+    default_shipping_address_id = sa.Column(
+        sa.ForeignKey("address.id"),
+    )
     default_shipping_address = relationship(
         Address,
         primaryjoin="User.default_shipping_address_id == Address.id",
@@ -79,5 +81,7 @@ class CustomerNote(Model):
     is_public = sa.Column(sa.Boolean, nullable=False)
     user_id = sa.Column(sa.ForeignKey("user.id"), nullable=False)
     user = relationship(User)
-    staff_id = sa.Column(sa.ForeignKey("staff.id"), )
+    staff_id = sa.Column(
+        sa.ForeignKey("staff.id"),
+    )
     staff = relationship("Staff")

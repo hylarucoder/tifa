@@ -31,7 +31,10 @@ class AssignedProductAttribute(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False)
     product = relationship(Product)
-    assignment_id = sa.Column(sa.ForeignKey("attribute_product.id"), nullable=False, )
+    assignment_id = sa.Column(
+        sa.ForeignKey("attribute_product.id"),
+        nullable=False,
+    )
     assignment = relationship(AttributeProduct)
 
 
@@ -97,7 +100,15 @@ class AssignedVariantAttributeValue(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     sort_order = sa.Column(sa.Integer, index=True)
-    assignment_id = sa.Column(sa.ForeignKey("assigned_variant_attribute.id", ), nullable=False)
+    assignment_id = sa.Column(
+        sa.ForeignKey(
+            "assigned_variant_attribute.id",
+        ),
+        nullable=False,
+    )
     assignment = relationship(AssignedVariantAttribute)
-    value_id = sa.Column(sa.ForeignKey("attribute_value.id"), nullable=False, )
+    value_id = sa.Column(
+        sa.ForeignKey("attribute_value.id"),
+        nullable=False,
+    )
     value = relationship(AttributeValue)

@@ -16,5 +16,7 @@ class PluginConfiguration(Model):
     active = sa.Column(sa.Boolean, nullable=False)
     configuration = sa.Column(JSONB)
     identifier = sa.Column(sa.String(128), nullable=False)
-    channel_id = sa.Column(sa.ForeignKey("channel.id"), )
+    channel_id = sa.Column(
+        sa.ForeignKey("channel.id"),
+    )
     channel = relationship(Channel)

@@ -49,13 +49,14 @@ class ShippingZoneChannel(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     shipping_zone_id = sa.Column(
-        sa.ForeignKey(
-            "shipping_zone.id"
-        ),
+        sa.ForeignKey("shipping_zone.id"),
         nullable=False,
     )
     shipping_zone = relationship(ShippingZone)
-    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False, )
+    channel_id = sa.Column(
+        sa.ForeignKey("channel.id"),
+        nullable=False,
+    )
     channel = relationship(Channel)
 
 
@@ -66,7 +67,10 @@ class ShippingMethodExcludedProduct(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False)
     shipping_method = relationship(ShippingMethod)
-    product_id = sa.Column(sa.ForeignKey("product.id"), nullable=False, )
+    product_id = sa.Column(
+        sa.ForeignKey("product.id"),
+        nullable=False,
+    )
     product = relationship(Product)
 
 
@@ -79,9 +83,15 @@ class ShippingMethodChannelListing(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     maximum_order_price_amount = sa.Column(sa.Numeric(12, 3))
     price_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False, )
+    channel_id = sa.Column(
+        sa.ForeignKey("channel.id"),
+        nullable=False,
+    )
     channel = relationship(Channel)
-    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method_id = sa.Column(
+        sa.ForeignKey("shipping_method.id"),
+        nullable=False,
+    )
     shipping_method = relationship(ShippingMethod)
 
 
@@ -92,7 +102,10 @@ class ShippingMethodPostalCodeRule(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     start = sa.Column(sa.String(32), nullable=False)
     end = sa.Column(sa.String(32))
-    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method_id = sa.Column(
+        sa.ForeignKey("shipping_method.id"),
+        nullable=False,
+    )
     shipping_method = relationship(ShippingMethod)
     inclusion_type = sa.Column(sa.String(32), nullable=False)
 
@@ -104,6 +117,9 @@ class ShippingMethodTranslation(Model):
     id = sa.Column(sa.Integer, primary_key=True)
     language_code = sa.Column(sa.String(10), nullable=False)
     name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(sa.ForeignKey("shipping_method.id"), nullable=False, )
+    shipping_method_id = sa.Column(
+        sa.ForeignKey("shipping_method.id"),
+        nullable=False,
+    )
     shipping_method = relationship(ShippingMethod)
     description = sa.Column(JSONB)

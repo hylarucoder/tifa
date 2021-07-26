@@ -41,7 +41,9 @@ class AssignedPageAttributeValue(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     sort_order = sa.Column(sa.Integer, index=True)
-    assignment_id = sa.Column(sa.ForeignKey("assigned_page_attribute.id"), nullable=False)
+    assignment_id = sa.Column(
+        sa.ForeignKey("assigned_page_attribute.id"), nullable=False
+    )
     value_id = sa.Column(sa.ForeignKey("attribute_value.id"), nullable=False)
     assignment = relationship(AssignedPageAttribute)
     value = relationship(AttributeValue)

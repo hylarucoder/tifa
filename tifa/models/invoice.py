@@ -12,7 +12,9 @@ class Invoice(Model):
     __tablename__ = "invoice"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    order_id = sa.Column(sa.ForeignKey("order.id"), )
+    order_id = sa.Column(
+        sa.ForeignKey("order.id"),
+    )
     order = relationship(Order)
     metadata_private = sa.Column(JSONB, index=True)
     metadata_public = sa.Column(JSONB, index=True)
@@ -33,7 +35,9 @@ class InvoiceEvent(Model):
     date = sa.Column(sa.DateTime, nullable=False)
     type = sa.Column(sa.String(255), nullable=False)
     parameters = sa.Column(JSONB, nullable=False)
-    invoice_id = sa.Column(sa.ForeignKey("invoice.id"), )
+    invoice_id = sa.Column(
+        sa.ForeignKey("invoice.id"),
+    )
     invoice = relationship(Invoice)
     order_id = sa.Column(sa.ForeignKey("order.id"))
     order = relationship(Order)

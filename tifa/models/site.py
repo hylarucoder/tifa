@@ -15,9 +15,7 @@ class SiteSetting(Model):
         "Menu", primaryjoin="SiteSetting.bottom_menu_id == Menu.id"
     )
     top_menu_id = sa.Column(sa.ForeignKey("menu.id"), index=True)
-    top_menu = relationship(
-        "Menu", primaryjoin="SiteSetting.top_menu_id == Menu.id"
-    )
+    top_menu = relationship("Menu", primaryjoin="SiteSetting.top_menu_id == Menu.id")
     display_gross_prices = sa.Column(sa.Boolean, nullable=False)
     include_taxes_in_prices = sa.Column(sa.Boolean, nullable=False)
     charge_taxes_on_shipping = sa.Column(sa.Boolean, nullable=False)

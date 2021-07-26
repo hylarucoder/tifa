@@ -102,7 +102,6 @@ services:
   tifa-toolbox-test:
     <<: *tifa-common
     environment:
-      &tifa-common-env
       SETTING_PATH: "/opt/tifa/settings_docker_test.py"
     command: [ "tifa-cli" ]
 

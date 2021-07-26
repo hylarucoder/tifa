@@ -229,5 +229,8 @@ class DiscountVoucherCustomer(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     customer_email = sa.Column(sa.String(254), nullable=False)
-    voucher_id = sa.Column(sa.ForeignKey("discount_voucher.id"), nullable=False, )
+    voucher_id = sa.Column(
+        sa.ForeignKey("discount_voucher.id"),
+        nullable=False,
+    )
     voucher = relationship(DiscountVoucher)
