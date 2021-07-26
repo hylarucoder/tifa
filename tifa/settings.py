@@ -20,7 +20,7 @@ class BaseSettings(BSettings):
 
     DEBUG: bool = False
     ENV: str = "LOCAL"
-    SECRET_KEY: str = "asdasd"
+    SECRET_KEY: str = "change me"
 
     POSTGRES_DATABASE_URI: str = "postgresql://tifa:tifa123@postgres:5432/tifa"
     KAFKA_BOOTSTRAP_SERVERS: str = "http://kafka:9091"

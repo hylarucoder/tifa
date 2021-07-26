@@ -1,10 +1,8 @@
 import enum
 from typing import Optional
 
+from fastapi.responses import ORJSONResponse
 from starlette.requests import Request
-from starlette.responses import JSONResponse
-
-from tifa.api import ApiResult
 
 
 class HttpCodeEnum(enum.Enum):
@@ -54,7 +52,7 @@ class ApiException(Exception):
             rv["biz_code"] = self.biz_code
         if self.errors:
             rv["errors"] = self.errors
-        return JSONResponse(rv, status_code=self.status_code)
+        return ORJSONResponse(rv, status_code=self.status_code)
 
 
 class NotAuthorized(ApiException):
@@ -80,7 +78,7 @@ class UnicornException(Exception):
 
 
 def unicorn_exception_handler(request: Request, exc: UnicornException):
-    return JSONResponse(
+    return ORJSONResponse(
         status_code=418,
         content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
     )

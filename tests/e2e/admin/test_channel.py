@@ -1,12 +1,24 @@
 def test_channel_curd(staff_client):
-    res = staff_client.post(
+    channel = staff_client.op(
         "/admin/channel/create",
-        data={
+        json={
             "name": "test channel",
-            "is_active": True,
+            "isActive": True,
             "slug": "test_channel_slug",
-            "currency_code": "usa",
+            "currencyCode": "usa",
         }
     )
-    channel_id = res.json()["item"]["id"]
-    assert channel_id
+    assert channel["id"]
+    assert channel["isActive"]
+
+    channel = staff_client.op(
+        "/admin/channel/update",
+        json={
+            "id": channel["id"],
+            "name": "test channel",
+            "isActive": False,
+            "slug": "test_channel_slug",
+            "currencyCode": "usa",
+        }
+    )
+    assert not channel["isActive"]
