@@ -1,6 +1,6 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.merchant import bp
+from tifa.apps.admin import bp
 from tifa.globals import AsyncDal, db
 from tifa.models.menu import Menu
 

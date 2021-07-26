@@ -3,7 +3,7 @@ from enum import auto
 from fastapi_utils.api_model import APIModel
 from fastapi_utils.enums import StrEnum
 
-from tifa.apps.merchant import bp
+from tifa.apps.admin import bp
 
 
 class TWebhookEventType(StrEnum):

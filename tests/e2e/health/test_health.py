@@ -1,11 +1,4 @@
 import pytest
-from fastapi.testclient import TestClient
-
-from tifa.app import create_app
-
-app = create_app()
-
-client = TestClient(app)
 
 
 @pytest.mark.parametrize(
@@ -16,8 +9,8 @@ client = TestClient(app)
         ("/health/test/1_plus/_1_2", 404, None),
     ],
 )
-def test_get_path(path, expected_status, expected_response):
-    resp = client.get(path)
+def test_get_path(health_client, path, expected_status, expected_response):
+    resp = health_client.get(path)
     assert resp.status_code == expected_status
     if resp.status_code == 200:
         assert resp.json() == expected_response

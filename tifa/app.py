@@ -14,12 +14,11 @@ from tifa.utils.pkg import import_submodules
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import user, admin, health, whiteboard, merchant
+    from tifa.apps import user, health, whiteboard, admin
 
     app.mount("/health", health.bp)
     app.mount("/admin", admin.bp)
     app.mount("/user", user.bp)
-    app.mount("/merchant", merchant.bp)
     app.mount("/whiteboard", whiteboard.bp)
     app.mount("/metrics", make_asgi_app())
 
