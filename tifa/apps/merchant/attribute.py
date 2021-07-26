@@ -11,35 +11,35 @@ class TAttribute(APIModel):
 
 
 @bp.list("/attributes", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def addresses_list():
+async def get_attributes():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
 
 
 @bp.item("/attribute", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def app_item():
+async def get_attribute():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
 
 
 @bp.op("/attribute/create", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def app_create():
+async def attribute_create():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
 
 
 @bp.op("/attribute/update", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def app_update():
+async def attribute_update():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
 
 
 @bp.op("/attribute/delete", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def app_update():
+async def attribute_delete():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -48,14 +48,14 @@ async def app_update():
 @bp.op(
     "/attribute/bulk_delete", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
-async def app_update():
+async def attribute_bulk_delete():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
 
 
 @bp.op("/attribute/translate", out=TAttribute, summary="Attribute", tags=["Attribute"])
-async def app_create():
+async def attribute_translate():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -64,7 +64,7 @@ async def app_create():
 @bp.op(
     "/attribute/reorder_values", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
-async def app_create():
+async def attribute_reorder_values():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -73,7 +73,7 @@ async def app_create():
 @bp.op(
     "/attribute_value/create", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
-async def app_create():
+async def attribute_value_create():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -82,7 +82,7 @@ async def app_create():
 @bp.op(
     "/attribute_value/update", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
-async def app_create():
+async def attribute_value_update():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -91,7 +91,7 @@ async def app_create():
 @bp.op(
     "/attribute_value/delete", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
-async def app_create():
+async def attribute_value_delete():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -103,7 +103,7 @@ async def app_create():
     summary="Attribute",
     tags=["Attribute"],
 )
-async def app_create():
+async def attribute_value_bulk_delete():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}
@@ -115,7 +115,7 @@ async def app_create():
     summary="Attribute",
     tags=["Attribute"],
 )
-async def app_create():
+async def attribute_value_translate():
     adal = AsyncDal(db.async_session)
     ins = await adal.first_or_404(Attribute)
     return {"items": ins}

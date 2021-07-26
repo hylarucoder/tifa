@@ -95,6 +95,9 @@ class Dal:
         self.session.add(obj)
         return obj
 
+    def delete(self, ins: DT):
+        self.session.delete(ins)
+
     def commit(self):
         self.session.commit()
 

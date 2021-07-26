@@ -36,6 +36,6 @@ make debug
 ## Credits
 
 0. saleor
-1. https://github.com/ryanwang520/create-flask-skeleton
+1. https://github.com/ryanwang520/add-flask-skeleton
 2. https://github.com/tiangolo/full-stack-fastapi-postgresql
 
