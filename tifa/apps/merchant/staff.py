@@ -29,22 +29,27 @@ class TToken(APIModel):
     name: str
 
 
-@bp.op("/token/create", out=TToken, summary="Token", tags=["账户"])
+@bp.op("/token/create", out=TToken, summary="Token", tags=["Profile"])
 def token_create():
     ...
 
 
-@bp.op("/token/refresh", out=TToken, summary="Token", tags=["账户"])
+@bp.op("/token/refresh", out=TToken, summary="Token", tags=["Profile"])
 def token_refresh():
     ...
 
 
-@bp.op("/token/verify", out=TToken, summary="Token", tags=["账户"])
+@bp.op("/token/verify", out=TToken, summary="Token", tags=["Profile"])
 def token_verify():
     ...
 
 
-@bp.op("/token/deactivate_all", out=TToken, summary="Token-Deactivate-All", tags=["账户"])
+@bp.op(
+    "/token/deactivate_all",
+    out=TToken,
+    summary="Token-Deactivate-All",
+    tags=["Profile"],
+)
 def token_deactivate_all():
     ...
 
@@ -54,7 +59,7 @@ class TMe(APIModel):
     name: str
 
 
-@bp.item("/me", out=TMe, summary="我", tags=["账户"])
+@bp.item("/me", out=TMe, summary="我", tags=["Profile"])
 async def profile():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Staff)

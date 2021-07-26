@@ -1,11 +1,3 @@
-"""
-webhook(...): Webhook
-webhookCreate(...): WebhookCreate
-webhookDelete(...): WebhookDelete
-webhookEvents: [WebhookEvent]
-webhookSamplePayload(...): JSONString
-webhookUpdate(...): WebhookUpdate
-"""
 from enum import auto
 
 from fastapi_utils.api_model import APIModel
@@ -49,11 +41,71 @@ class TWebhookEventType(StrEnum):
     PAYMENT_VOID = auto()
 
 
+class TWebhook(APIModel):
+    id: str
+    name: str
+
+
+@bp.list(
+    "/webhooks",
+    out=TWebhook,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_list():
+    return []
+
+
+@bp.item(
+    "/webhook",
+    out=TWebhook,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_item():
+    return []
+
+
+@bp.op(
+    "/webhook/create",
+    out=TWebhook,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_create():
+    return []
+
+
+@bp.op(
+    "/webhook/update",
+    out=TWebhook,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_update():
+    return []
+
+
 class TWebhookEvent(APIModel):
     id: str
-    eventType: TWebhookEventType
+    name: str
 
 
-@bp.list("/webhooks", TWebhookEvent)
-def webhooks():
+@bp.list(
+    "/webhook/events",
+    out=TWebhookEvent,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_update():
+    return []
+
+
+@bp.list(
+    "/webhook/sample_payload",
+    out=TWebhookEvent,
+    summary="webhooks",
+    tags=["Webhook"],
+)
+def webhook_update():
     return []
