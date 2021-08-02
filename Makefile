@@ -22,49 +22,49 @@ publish: ## publish package to pypi
 	poetry publish --build
 
 test: ## test
-	docker compose run --rm tifa-toolbox-test bash -c "python -m pytest tests"
+	docker-compose run --rm tifa-toolbox-test bash -c "python -m pytest tests"
 
 format: ## publish package to pypi
 	black tifa
 	black tests
 
 shell_plus:
-	docker compose run --rm tifa-toolbox bash -c "tifa-cli shell_plus"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli shell_plus"
 
 dbinit:
-	docker compose run --rm tifa-toolbox bash -c "tifa-cli db init"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db init"
 
 dbmakemigrations:
-	docker compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
 
 dbmigrate:
-	docker compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
 
 docker-build: ## build and compose up
-	docker compose build && docker-compose up
+	docker-compose build && docker-compose up
 
 docker-build-no-cache: ## build --no-cache
-	docker compose build --no-cache  && docker-compose up
+	docker-compose build --no-cache  && docker-compose up
 
 before-up: ## some deamons
-	docker compose up -d redis postgres zookeeper kafka
+	docker-compose up -d redis postgres zookeeper kafka
 
 before-full-up: ## some deamons
-	docker compose up -d redis postgres elasticsearch jaeger grafana prometheus
+	docker-compose up -d redis postgres elasticsearch jaeger grafana prometheus
 
 start: ## runserver
 	make before-up
-	docker compose stop tifa-web
-	docker compose up --no-deps tifa-web
+	docker-compose stop tifa-web
+	docker-compose up --no-deps tifa-web
 
 beat: ## beat
-	docker compose up tifa-beat
+	docker-compose up tifa-beat
 
 worker: ## worker
-	docker compose up tifa-worker
+	docker-compose up tifa-worker
 
 tifa-monitor: ## flower
-	docker compose up tifa-monitor
+	docker-compose up tifa-monitor
 
 # docker images
 
