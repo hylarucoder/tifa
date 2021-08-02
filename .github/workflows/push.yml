@@ -5,8 +5,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: Build elasticsearch docker image
-        run: make build-elasticsearch
       - name: Build tifa docker image
         run: make build-tifa
       - name: Just up the stack
