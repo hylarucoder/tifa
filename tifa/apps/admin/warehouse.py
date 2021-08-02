@@ -26,5 +26,4 @@ def webhook_list():
     tags=["WareHouse"],
 )
 def webhook_item():
-    Warehouse
     return []

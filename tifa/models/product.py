@@ -4,9 +4,10 @@ from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.product_collection import ProductCategory, ProductCollection
+from tifa.models.utils import TimestampMixin
 
 
-class ProductType(Model):
+class ProductType(TimestampMixin, Model):
     __tablename__ = "product_type"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -20,13 +21,12 @@ class ProductType(Model):
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
 
 
-class Product(Model):
+class Product(TimestampMixin, Model):
     __tablename__ = "product"
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(250), nullable=False)
     description = sa.Column(JSONB)
-    updated_at = sa.Column(sa.DateTime)
     product_type_id = sa.Column(
         sa.ForeignKey("product_type.id"),
         nullable=False,
@@ -57,9 +57,10 @@ class Product(Model):
     description_plaintext = sa.Column(sa.Text, nullable=False)
     search_vector = sa.Column(TSVECTOR, index=True)
     rating = sa.Column(sa.Float(53))
+    updated_at = sa.Column(sa.DateTime)
 
 
-class ProductTranslation(Model):
+class ProductTranslation(TimestampMixin, Model):
     __tablename__ = "product_translation"
     __table_args__ = (sa.UniqueConstraint("language_code", "product_id"),)
 
@@ -75,7 +76,7 @@ class ProductTranslation(Model):
     )
 
 
-class ProductVariant(Model):
+class ProductVariant(TimestampMixin, Model):
     __tablename__ = "product_variant"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -90,7 +91,7 @@ class ProductVariant(Model):
     sort_order = sa.Column(sa.Integer, index=True)
 
 
-class ProductVariantTranslation(Model):
+class ProductVariantTranslation(TimestampMixin, Model):
     __tablename__ = "product_variant_translation"
     __table_args__ = (sa.UniqueConstraint("language_code", "product_variant_id"),)
 
@@ -105,7 +106,7 @@ class ProductVariantTranslation(Model):
     product_variant = relationship(ProductVariant)
 
 
-class CollectionProduct(Model):
+class CollectionProduct(TimestampMixin, Model):
     __tablename__ = "collection_product"
     __table_args__ = (sa.UniqueConstraint("collection_id", "product_id"),)
 
@@ -123,7 +124,7 @@ class CollectionProduct(Model):
     product = relationship(Product)
 
 
-class ProductDigitalContent(Model):
+class ProductDigitalContent(TimestampMixin, Model):
     __tablename__ = "product_digital_content"
 
     id = sa.Column(sa.Integer, primary_key=True)

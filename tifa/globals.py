@@ -75,6 +75,9 @@ class Dal:
     def get(self, clz: DT, id) -> t.Optional[DT]:
         return self.session.get(clz, id)
 
+    def bulk_get(self, clz: DT, ids: list[int | str]) -> list[DT]:
+        return self.session.execute(select(clz).where(clz.id.in_(ids))).scalars().all()
+
     def get_or_404(self, clz: DT, id) -> DT:
         ins = self.session.get(clz, id)
         if not ins:
@@ -87,8 +90,8 @@ class Dal:
             raise NotFound("not found")
         return ins
 
-    def all(self, clz: DT, **kwargs) -> list[DT]:
-        return self.eval_all(select(clz).where(**kwargs))
+    def all(self, clz: DT, *args) -> list[DT]:
+        return self.eval_all(select(clz).where(*args))
 
     def add(self, clz: DT, **kwargs) -> DT:
         obj = clz(**kwargs)

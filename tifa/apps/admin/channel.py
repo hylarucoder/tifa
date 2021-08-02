@@ -1,7 +1,7 @@
 from fastapi_utils.api_model import APIModel
 
 from . import bp
-from ...globals import db, AsyncDal, Dal
+from ...globals import db, Dal
 from ...models.channel import Channel
 
 
@@ -27,7 +27,7 @@ def get_channel(id: str):
     return {"item": item}
 
 
-class PChannelCreate(APIModel):
+class ParamsChannelCreate(APIModel):
     name: str
     is_active: bool
     slug: str
@@ -35,7 +35,7 @@ class PChannelCreate(APIModel):
 
 
 @bp.op("/channel/create", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_create(params: PChannelCreate):
+def channel_create(params: ParamsChannelCreate):
     dal = Dal(db.session)
     ins = dal.add(
         Channel,
@@ -48,7 +48,7 @@ def channel_create(params: PChannelCreate):
     return {"item": ins}
 
 
-class PChannelUpdate(APIModel):
+class ParamsChannelUpdate(APIModel):
     id: str
     name: str
     is_active: bool
@@ -57,7 +57,7 @@ class PChannelUpdate(APIModel):
 
 
 @bp.op("/channel/update", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_update(params: PChannelUpdate):
+def channel_update(params: ParamsChannelUpdate):
     dal = Dal(db.session)
     ins = dal.get_or_404(Channel, params.id)
     ins.name = params.name
@@ -68,12 +68,12 @@ def channel_update(params: PChannelUpdate):
     return {"item": ins}
 
 
-class PChannelActivate(APIModel):
+class ParamsChannelActivate(APIModel):
     id: str
 
 
 @bp.op("/channel/activate", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_activate(params: PChannelActivate):
+def channel_activate(params: ParamsChannelActivate):
     dal = Dal(db.session)
     ins = dal.get_or_404(Channel, params.id)
     ins.is_active = True
@@ -81,12 +81,12 @@ def channel_activate(params: PChannelActivate):
     return {"item": ins}
 
 
-class PChannelDeactivate(APIModel):
+class ParamsChannelDeactivate(APIModel):
     id: str
 
 
 @bp.op("/channel/deactivate", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_deactivate(params: PChannelDeactivate):
+def channel_deactivate(params: ParamsChannelDeactivate):
     dal = Dal(db.session)
     ins = dal.get_or_404(Channel, params.id)
     ins.is_active = False
@@ -94,12 +94,12 @@ def channel_deactivate(params: PChannelDeactivate):
     return {"item": ins}
 
 
-class PChannelDelete(APIModel):
+class ParamsChannelDelete(APIModel):
     id: str
 
 
 @bp.op("/channel/delete", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_delete(params: PChannelDelete):
+def channel_delete(params: ParamsChannelDelete):
     dal = Dal(db.session)
     ins = dal.get_or_404(Channel, params.id)
     dal.delete(ins)
