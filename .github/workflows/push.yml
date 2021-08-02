@@ -1,0 +1,14 @@
+name: run-pytest-when-push
+on: push
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build tifa docker image
+        run: make build-tifa
+      - name: Just up the stack
+        run: docker-compose up -d
+      - name: Run Pytest
+        run: make test
+
