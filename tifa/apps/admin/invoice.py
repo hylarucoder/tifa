@@ -11,51 +11,51 @@ class TInvoice(APIModel):
 
 
 @bp.list("/invoices", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def addresses_list():
+def addresses_list():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.item("/invoice", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_item():
+def app_item():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/create", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_create():
+def app_create():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/update", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_update():
+def app_update():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_update():
+def app_update():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/request", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_update():
+def app_update():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/request_delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-async def app_update():
+def app_update():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
@@ -65,7 +65,7 @@ async def app_update():
     summary="Invoice",
     tags=["Invoice"],
 )
-async def app_update():
+def app_update():
     adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(DiscountVoucher)
+    ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}

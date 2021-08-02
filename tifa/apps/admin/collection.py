@@ -4,66 +4,103 @@ collectionChannelListingUpdate(...): CollectionChannelListingUpdate
 from fastapi_utils.api_model import APIModel
 
 from . import bp
-from ...globals import AsyncDal, db
+from ...globals import db, Dal
 from ...models.menu import Menu
+from ...models.product_collection import ProductCategory
 
 
 class TCategory(APIModel):
     id: str
     name: str
+    slug: str
+    description: dict
+    level: int
+    seo_description: str
+    seo_title: str
+    background_image: str
+    background_image_alt: str
+    metadata_public: dict
+    metadata_private: dict
 
 
-@bp.list("/categories", out=TCategory, summary="Category", tags=["ProductCategory"])
-async def get_categories():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"items": merchant}
+@bp.page("/categories", out=TCategory, summary="Category", tags=["ProductCategory"])
+def categories_page():
+    adal = Dal(db.session)
+    items = adal.all(ProductCategory)
+    return {"items": items}
 
 
-@bp.item("/category", out=TCategory, summary="Category", tags=["ProductCategory"])
-async def get_category():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+@bp.item("/category/{id}", out=TCategory, summary="Category", tags=["ProductCategory"])
+def category_item(id: str):
+    adal = Dal(db.session)
+    item = adal.get_or_404(ProductCategory, id)
+    return {"item": item}
+
+
+class ParamsCategoryCreate(APIModel):
+    name: str
 
 
 @bp.op("/category/create", out=TCategory, summary="Category", tags=["ProductCategory"])
-async def category_create():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def category_create(params: ParamsCategoryCreate):
+    adal = Dal(db.session)
+    item = adal.add(
+        ProductCategory,
+        **params.dict()
+    )
+    return {"item": item}
+
+
+class ParamsCategoryUpdate(APIModel):
+    id: str
+    name: str
 
 
 @bp.op("/category/update", out=TCategory, summary="Category", tags=["ProductCategory"])
-async def category_update():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def category_update(params: ParamsCategoryUpdate):
+    adal = Dal(db.session)
+    item = adal.get_or_404(ProductCategory, params.id)
+    item.name = params.name
+    adal.commit()
+    return {"item": item}
+
+
+class ParamsCategoryDelete(APIModel):
+    id: str
 
 
 @bp.op("/category/delete", out=TCategory, summary="Category", tags=["ProductCategory"])
-async def category_delete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def category_delete(params: ParamsCategoryDelete):
+    adal = Dal(db.session)
+    item = adal.get_or_404(ProductCategory, params.id)
+    adal.delete(item)
+    adal.commit()
+    return {"item": item}
+
+
+class ParamsCategoryBulkDelete(APIModel):
+    ids: list[str]
 
 
 @bp.op(
     "/category/bulk_delete", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-async def category_bulk_delete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def category_bulk_delete(params: ParamsCategoryBulkDelete):
+    adal = Dal(db.session)
+    items = adal.bulk_get(ProductCategory, params.ids)
+    for item in items:
+        adal.delete(item)
+    adal.commit()
+    return {"items": items}
 
 
 @bp.op(
     "/category/translate", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def category_translate():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 class TCollection(APIModel):
@@ -74,19 +111,19 @@ class TCollection(APIModel):
 @bp.page(
     "/collections", out=TCollection, summary="Collection", tags=["ProductCollection"]
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collections_page():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.item(
     "/collection", out=TCollection, summary="Collection", tags=["ProductCollection"]
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_item():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -95,10 +132,10 @@ async def get_product_type():
     summary="Collection",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_create():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -107,10 +144,10 @@ async def get_product_type():
     summary="Collection",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_update():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -119,10 +156,10 @@ async def get_product_type():
     summary="Collection",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_delete():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -131,10 +168,10 @@ async def get_product_type():
     summary="Collection",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_bulk_delete():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -143,10 +180,10 @@ async def get_product_type():
     summary="Translate",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_translate():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -155,10 +192,10 @@ async def get_product_type():
     summary="AddProducts",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_add_products():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -167,10 +204,10 @@ async def get_product_type():
     summary="RemoveProducts",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_remove_products():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
 
 
 @bp.op(
@@ -179,7 +216,7 @@ async def get_product_type():
     summary="ReorderProducts",
     tags=["ProductCollection"],
 )
-async def get_product_type():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+def collection_reorder_products():
+    adal = Dal(db.session)
+    item = adal.first_or_404(Menu)
+    return {"item": item}
