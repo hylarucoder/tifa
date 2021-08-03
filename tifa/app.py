@@ -5,6 +5,8 @@ from prometheus_client import make_asgi_app  # type: ignore
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.staticfiles import StaticFiles
 
+import tifa.apps.admin.base
+import tifa.apps.user.base
 from tifa.contrib.globals import GlobalsMiddleware
 from tifa.settings import settings
 from tifa.utils.pkg import import_submodules
@@ -14,8 +16,8 @@ def setup_routers(app: FastAPI):
     from tifa.apps import user, health, whiteboard, admin
 
     app.mount("/health", health.bp)
-    app.mount("/admin", admin.bp)
-    app.mount("/user", user.bp)
+    app.mount("/admin", tifa.apps.admin.base.bp)
+    app.mount("/user", tifa.apps.user.base.bp)
     app.mount("/whiteboard", whiteboard.bp)
     app.mount("/metrics", make_asgi_app())
 

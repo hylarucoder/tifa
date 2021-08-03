@@ -19,9 +19,11 @@ staffNotificationRecipientUpdate(...): StaffNotificationRecipientUpdate
 
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import AsyncDal, db, Dal
-from ...models.system import Staff
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.adal import AsyncDal
+from tifa.db.dal import Dal
+from tifa.models.system import Staff
 
 
 class TToken(APIModel):

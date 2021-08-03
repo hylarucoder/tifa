@@ -3,10 +3,11 @@ collectionChannelListingUpdate(...): CollectionChannelListingUpdate
 """
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, Dal
-from ...models.menu import Menu
-from ...models.product_collection import ProductCategory
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.dal import Dal
+from tifa.models.menu import Menu
+from tifa.models.product_collection import ProductCategory
 
 
 class TCategory(APIModel):
@@ -44,10 +45,7 @@ class ParamsCategoryCreate(APIModel):
 @bp.op("/category/create", out=TCategory, summary="Category", tags=["ProductCategory"])
 def category_create(params: ParamsCategoryCreate):
     adal = Dal(db.session)
-    item = adal.add(
-        ProductCategory,
-        **params.dict()
-    )
+    item = adal.add(ProductCategory, **params.dict())
     return {"item": item}
 
 

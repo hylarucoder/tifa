@@ -8,10 +8,11 @@ productChannelListingUpdate(...): ProductChannelListingUpdate
 
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, Dal
-from ...models.menu import Menu
-from ...models.product import ProductType
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.dal import Dal
+from tifa.models.menu import Menu
+from tifa.models.product import ProductType
 
 
 class TProductType(APIModel):
@@ -35,10 +36,12 @@ def product_types_page():
     return {"items": merchant}
 
 
-@bp.item("/product_type/{id}", out=TProductType, summary="ProductType", tags=["ProductType"])
+@bp.item(
+    "/product_type/{id}", out=TProductType, summary="ProductType", tags=["ProductType"]
+)
 def product_type_item(id: str):
     adal = Dal(db.session)
-    merchant = adal.first_or_404(ProductType, id)
+    merchant = adal.get_or_404(ProductType, id)
     return {"item": merchant}
 
 
@@ -63,7 +66,6 @@ def product_type_create(params: ParamsProductTypeCreate):
     adal = Dal(db.session)
     item = adal.add(
         ProductType,
-
     )
     return {"item": item}
 
@@ -90,7 +92,6 @@ def product_type_update(params: ParamsProductTypeUpdate):
     adal = Dal(db.session)
     item = adal.add(
         ProductType,
-
     )
     return {"item": item}
 
@@ -107,7 +108,7 @@ class ParamsProductTypeDelete(APIModel):
 )
 def product_type_delete(params: ParamsProductTypeDelete):
     adal = Dal(db.session)
-    merchant = adal.first_or_404(ProductType, params.id)
+    merchant = adal.get_or_404(ProductType, params.id)
     return {"item": merchant}
 
 
@@ -152,9 +153,6 @@ class TProduct(APIModel):
     id: str
     name: str
     description: dict
-    description: dict
-
-
 
 @bp.list("/products", out=TProduct, summary="Product", tags=["Product"])
 def get_products():

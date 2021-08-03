@@ -29,14 +29,14 @@ class SQLAlchemy:
         )
         self.engine = engine
         session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
-        self.session = scoped_session(session_factory)
+        self.session = scoped_session(session_factory)  # type: ignore
         async_engine = create_async_engine(
             settings.POSTGRES_DATABASE_URI_ASYNC, future=True, echo=True
         )
-        async_session_factory = sessionmaker(
+        async_session_factory = sessionmaker(  # type: ignore
             async_engine, expire_on_commit=False, class_=AsyncSession
         )
-        self.async_session = async_scoped_session(
+        self.async_session = async_scoped_session(  # type: ignore
             async_session_factory, scopefunc=current_task
         )
 

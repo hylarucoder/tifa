@@ -41,4 +41,4 @@ if "SETTING_PATH" not in os.environ:
 setting_path = os.environ["SETTING_PATH"]
 with open(setting_path, mode="rb") as file:
     exec(file.read())
-settings = Settings()
+settings: BaseSettings = Settings()  # type: ignore

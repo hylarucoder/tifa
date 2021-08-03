@@ -7,9 +7,10 @@ pageTypeReorderAttributes(...): PageTypeReorderAttributes
 """
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, AsyncDal
-from ...models.page import Page
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.adal import AsyncDal
+from tifa.models.page import Page
 
 
 class TPageType(APIModel):

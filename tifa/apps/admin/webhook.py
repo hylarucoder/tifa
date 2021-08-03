@@ -97,7 +97,7 @@ class TWebhookEvent(APIModel):
     summary="webhooks",
     tags=["Webhook"],
 )
-def webhook_update():
+def webhook_events():
     return []
 
 
@@ -107,5 +107,5 @@ def webhook_update():
     summary="webhooks",
     tags=["Webhook"],
 )
-def webhook_update():
+def webhook_sample_payload():
     return []

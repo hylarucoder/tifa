@@ -120,7 +120,7 @@ def setup_error_handlers(app: FastAPI):
     app.add_exception_handler(Exception, handle_exc)
 
 
-def create_bp():
+def create_bp() -> FastAPIPlus:
     app = FastAPIPlus()
     setup_error_handlers(app)
     return app
