@@ -1,9 +1,16 @@
 name: run-pytest-when-push
 on: push
 jobs:
+  build_with_ghcr:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
+      - run: docker pull ghcr.io/$GITHUB_REPOSITORY/tifa:local || true
+      - run: docker build . -t 'tifa:local' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/$GITHUB_REPOSITORY/tifa:local
+      - run: docker tag 'tifa:local' ghcr.io/$GITHUB_REPOSITORY/tifa:local && docker push ghcr.io/$GITHUB_REPOSITORY/tifa:local || true
+
   test:
-    env:
-      DOCKER_BUILDKIT: '1'
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
