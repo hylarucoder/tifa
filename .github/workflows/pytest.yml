@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Just up the stack
-        run: docker-compose up -d
+        run: docker-compose up -d postgres redis
       - name: Run Pytest
         run: make test
 
