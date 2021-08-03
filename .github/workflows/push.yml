@@ -7,7 +7,7 @@ jobs:
       - uses: actions/checkout@v2
       - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u $GITHUB_ACTOR --password-stdin
       - run: docker pull ghcr.io/$GITHUB_REPOSITORY/tifa:local || true
-      - run: docker build . -t 'tifa:local' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/$GITHUB_REPOSITORY/tifa:local
+      - run: docker build -t 'tifa:local' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/$GITHUB_REPOSITORY/tifa:local
       - run: docker tag 'tifa:local' ghcr.io/$GITHUB_REPOSITORY/tifa:local && docker push ghcr.io/$GITHUB_REPOSITORY/tifa:local || true
 
   test:
