@@ -1,8 +1,9 @@
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, Dal
-from ...models.menu import Menu, MenuItem
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.dal import Dal
+from tifa.models.menu import Menu, MenuItem
 
 
 class TMenu(APIModel):
@@ -54,7 +55,7 @@ class ParamsMenuUpdate(APIModel):
 
 
 @bp.op("/menu/update", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_create(params: ParamsMenuUpdate):
+def menu_update(params: ParamsMenuUpdate):
     adal = Dal(db.session)
     item = adal.first_or_404(Menu)
     return {"item": item}
@@ -99,7 +100,7 @@ def menu_items(params: ParamsMenuItems):
 
 
 @bp.item("/menu_item/{id}", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item(id: str):
+def menu_item_item(id: str):
     adal = Dal(db.session)
     item = adal.get_or_404(MenuItem, id)
     return {"item": item}
@@ -112,7 +113,7 @@ class ParamsMenuItemCreate(APIModel):
 @bp.op("/menu_item/create", out=TMenuItem, summary="MenuItem", tags=["Menu"])
 def menu_item_create(params: ParamsMenuItemCreate):
     adal = Dal(db.session)
-    item = adal.add(MenuItem, **{})
+    item = adal.add(MenuItem)
     return {"item": item}
 
 

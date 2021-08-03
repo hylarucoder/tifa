@@ -1,7 +1,4 @@
-from tifa.contrib.fastapi_plus import create_bp
-
-bp = create_bp()
-
+from .base import bp
 from .app import *  # noqa
 from .attribute import *  # noqa
 from .channel import *  # noqa

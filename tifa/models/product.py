@@ -27,6 +27,7 @@ class Product(TimestampMixin, Model):
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(250), nullable=False)
     description = sa.Column(JSONB)
+    description_plaintext = sa.Column(sa.Text, nullable=False)
     product_type_id = sa.Column(
         sa.ForeignKey("product_type.id"),
         nullable=False,
@@ -54,10 +55,8 @@ class Product(TimestampMixin, Model):
         uselist=False,
         primaryjoin="Product.default_variant_id == ProductVariant.id",
     )
-    description_plaintext = sa.Column(sa.Text, nullable=False)
     search_vector = sa.Column(TSVECTOR, index=True)
     rating = sa.Column(sa.Float(53))
-    updated_at = sa.Column(sa.DateTime)
 
 
 class ProductTranslation(TimestampMixin, Model):

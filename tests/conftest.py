@@ -5,7 +5,8 @@ from requests import Response
 from starlette.testclient import TestClient
 
 from tifa.app import create_app
-from tifa.globals import db, Dal
+from tifa.globals import db
+from tifa.db.dal import Dal
 from tifa.models.system import Staff
 from tifa.models.user import User
 

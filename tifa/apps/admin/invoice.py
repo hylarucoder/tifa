@@ -1,8 +1,9 @@
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, AsyncDal
-from ...models.discount import DiscountVoucher
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.adal import AsyncDal
+from tifa.models.discount import DiscountVoucher
 
 
 class TInvoice(APIModel):
@@ -18,54 +19,54 @@ def addresses_list():
 
 
 @bp.item("/invoice", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_item():
+def invoice_item():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/create", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_create():
+def invoice_create():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/update", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_update():
+def invoice_update():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_update():
+def invoice_delete():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/request", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_update():
+def invoice_request():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op("/invoice/request_delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def app_update():
+def invoice_request_delete():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}
 
 
 @bp.op(
-    "/invoice/invoice_send_notification",
+    "/invoice/send_notification",
     out=TInvoice,
     summary="Invoice",
     tags=["Invoice"],
 )
-def app_update():
+def invoice_send_notification():
     adal = AsyncDal(db.async_session)
     ins = adal.first_or_404(DiscountVoucher)
     return {"items": ins}

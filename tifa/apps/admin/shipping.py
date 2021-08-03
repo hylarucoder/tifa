@@ -4,9 +4,10 @@ shippingMethodChannelListingUpdate(...): ShippingMethodChannelListingUpdate
 
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, AsyncDal
-from ...models.shipping import ShippingZone
+from tifa.apps.admin import bp
+from tifa.globals import db
+from tifa.db.adal import AsyncDal
+from tifa.models.shipping import ShippingZone
 
 
 class TShippingPrice(APIModel):

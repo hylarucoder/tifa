@@ -1,12 +1,13 @@
 """
 collectionChannelListingUpdate(...): CollectionChannelListingUpdate
 """
+from fastapi import Depends
 from fastapi_utils.api_model import APIModel
 
-from . import bp
-from ...globals import db, Dal
-from ...models.menu import Menu
-from ...models.product_collection import ProductCategory
+from tifa.apps.admin import bp
+from tifa.apps.deps import get_dal
+from tifa.db.dal import Dal
+from tifa.models.product_collection import ProductCategory, ProductCollection
 
 
 class TCategory(APIModel):
@@ -24,16 +25,13 @@ class TCategory(APIModel):
 
 
 @bp.page("/categories", out=TCategory, summary="Category", tags=["ProductCategory"])
-def categories_page():
-    adal = Dal(db.session)
-    items = adal.all(ProductCategory)
-    return {"items": items}
+def categories_page(dal: Dal = Depends(get_dal)):
+    return dal.page(ProductCategory)
 
 
 @bp.item("/category/{id}", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_item(id: str):
-    adal = Dal(db.session)
-    item = adal.get_or_404(ProductCategory, id)
+def category_item(id: str, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCategory, id)
     return {"item": item}
 
 
@@ -42,12 +40,8 @@ class ParamsCategoryCreate(APIModel):
 
 
 @bp.op("/category/create", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_create(params: ParamsCategoryCreate):
-    adal = Dal(db.session)
-    item = adal.add(
-        ProductCategory,
-        **params.dict()
-    )
+def category_create(params: ParamsCategoryCreate, dal: Dal = Depends(get_dal)):
+    item = dal.add(ProductCategory, **params.dict())
     return {"item": item}
 
 
@@ -57,11 +51,10 @@ class ParamsCategoryUpdate(APIModel):
 
 
 @bp.op("/category/update", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_update(params: ParamsCategoryUpdate):
-    adal = Dal(db.session)
-    item = adal.get_or_404(ProductCategory, params.id)
+def category_update(params: ParamsCategoryUpdate, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCategory, params.id)
     item.name = params.name
-    adal.commit()
+    dal.commit()
     return {"item": item}
 
 
@@ -70,11 +63,10 @@ class ParamsCategoryDelete(APIModel):
 
 
 @bp.op("/category/delete", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_delete(params: ParamsCategoryDelete):
-    adal = Dal(db.session)
-    item = adal.get_or_404(ProductCategory, params.id)
-    adal.delete(item)
-    adal.commit()
+def category_delete(params: ParamsCategoryDelete, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCategory, params.id)
+    dal.delete(item)
+    dal.commit()
     return {"item": item}
 
 
@@ -85,21 +77,24 @@ class ParamsCategoryBulkDelete(APIModel):
 @bp.op(
     "/category/bulk_delete", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-def category_bulk_delete(params: ParamsCategoryBulkDelete):
-    adal = Dal(db.session)
-    items = adal.bulk_get(ProductCategory, params.ids)
+def category_bulk_delete(params: ParamsCategoryBulkDelete, dal: Dal = Depends(get_dal)):
+    items = dal.bulk_get(ProductCategory, params.ids)
     for item in items:
-        adal.delete(item)
-    adal.commit()
+        dal.delete(item)
+    dal.commit()
     return {"items": items}
+
+
+class ParamsCategoryTranslate(APIModel):
+    id: str
+    name: str
 
 
 @bp.op(
     "/category/translate", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-def category_translate():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def category_translate(params: ParamsCategoryTranslate, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCategory, params.id)
     return {"item": item}
 
 
@@ -111,19 +106,23 @@ class TCollection(APIModel):
 @bp.page(
     "/collections", out=TCollection, summary="Collection", tags=["ProductCollection"]
 )
-def collections_page():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
-    return {"item": item}
+def collections_page(dal: Dal = Depends(get_dal)):
+    return dal.page(ProductCollection)
 
 
 @bp.item(
-    "/collection", out=TCollection, summary="Collection", tags=["ProductCollection"]
+    "/collection/{id}",
+    out=TCollection,
+    summary="Collection",
+    tags=["ProductCollection"],
 )
-def collection_item():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_item(id: str, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(id)
     return {"item": item}
+
+
+class ParamsCollectionCreate(APIModel):
+    name: str
 
 
 @bp.op(
@@ -132,10 +131,14 @@ def collection_item():
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_create():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_create(params: ParamsCollectionCreate, dal: Dal = Depends(get_dal)):
+    item = dal.add(ProductCollection, **params.dict())
     return {"item": item}
+
+
+class ParamsCollectionUpdate(APIModel):
+    id: str
+    name: str
 
 
 @bp.op(
@@ -144,10 +147,13 @@ def collection_create():
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_update():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_update(params: ParamsCollectionUpdate, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCollection, params.id)
     return {"item": item}
+
+
+class ParamsCollectionDelete(APIModel):
+    id: str
 
 
 @bp.op(
@@ -156,10 +162,13 @@ def collection_update():
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_delete():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_delete(params: ParamsCollectionDelete, dal: Dal = Depends(get_dal)):
+    item = dal.get_or_404(ProductCollection, params.id)
     return {"item": item}
+
+
+class ParamsCollectionBulkDelete(APIModel):
+    ids: list[str]
 
 
 @bp.op(
@@ -168,10 +177,14 @@ def collection_delete():
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_bulk_delete():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
-    return {"item": item}
+def collection_bulk_delete(
+    params: ParamsCollectionBulkDelete, dal: Dal = Depends(get_dal)
+):
+    items = dal.bulk_get(ProductCollection, params.ids)
+    for item in items:
+        dal.delete(item)
+    dal.commit()
+    return {"items": items}
 
 
 @bp.op(
@@ -180,10 +193,14 @@ def collection_bulk_delete():
     summary="Translate",
     tags=["ProductCollection"],
 )
-def collection_translate():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_translate(dal: Dal = Depends(get_dal)):
+    item = dal.first_or_404(ProductCollection)
     return {"item": item}
+
+
+class ParamsCollectionAddProducts(APIModel):
+    id: str
+    product_ids: list[str]
 
 
 @bp.op(
@@ -192,10 +209,16 @@ def collection_translate():
     summary="AddProducts",
     tags=["ProductCollection"],
 )
-def collection_add_products():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_add_products(
+    params: ParamsCollectionAddProducts, dal: Dal = Depends(get_dal)
+):
+    item = dal.get_or_404(ProductCollection, params.id)
     return {"item": item}
+
+
+class ParamsCollectionRemoveProducts(APIModel):
+    id: str
+    product_ids: list[str]
 
 
 @bp.op(
@@ -204,10 +227,16 @@ def collection_add_products():
     summary="RemoveProducts",
     tags=["ProductCollection"],
 )
-def collection_remove_products():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_remove_products(
+    params: ParamsCollectionRemoveProducts, dal: Dal = Depends(get_dal)
+):
+    item = dal.get_or_404(ProductCollection, params.id)
     return {"item": item}
+
+
+class ParamsCollectionReorderProducts(APIModel):
+    id: str
+    product_ids: list[str]
 
 
 @bp.op(
@@ -216,7 +245,8 @@ def collection_remove_products():
     summary="ReorderProducts",
     tags=["ProductCollection"],
 )
-def collection_reorder_products():
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+def collection_reorder_products(
+    params: ParamsCollectionReorderProducts, dal: Dal = Depends(get_dal)
+):
+    item = dal.get_or_404(ProductCollection, params.id)
     return {"item": item}

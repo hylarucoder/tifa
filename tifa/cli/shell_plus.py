@@ -1,7 +1,9 @@
 import importlib
 
 from tifa.cli import cli
-from tifa.globals import db, Dal, AsyncDal
+from tifa.globals import db
+from tifa.db.adal import AsyncDal
+from tifa.db.dal import Dal
 from tifa.utils.pkg import import_submodules
 
 

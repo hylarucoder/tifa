@@ -13,8 +13,8 @@ class MyRedis:
 
     @classmethod
     async def create(cls):
-        _pool = await aioredis.create_redis_pool(settings.REDIS_CACHE_URI)
+        _pool = await aioredis.Redis(host=settings.REDIS_CACHE_URI)
         return cls(pool=_pool)
 
 
-redis = MyRedis()
+redis = MyRedis.create()

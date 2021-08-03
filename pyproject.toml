@@ -63,7 +63,7 @@ mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 pre-commit = "*"
-sqlalchemy2-stubs = "0.0.2a2"
+sqlalchemy2-stubs = "0.0.2a8"
 pytest-asyncio = "^0.15.1"
 
 [tool.black]
