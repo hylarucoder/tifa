@@ -53,7 +53,7 @@ before-up: ## some deamons
 	docker-compose up -d redis postgres zookeeper kafka
 
 before-full-up: ## some deamons
-	docker-compose up -d redis postgres elasticsearch jaeger grafana prometheus
+	docker-compose up -d redis postgres
 
 start: ## runserver
 	make before-up
@@ -66,19 +66,26 @@ beat: ## beat
 worker: ## worker
 	docker-compose up tifa-worker
 
-tifa-monitor: ## flower
+monitor: ## flower
 	docker-compose up tifa-monitor
 
 # docker images
 
 build-tifa: ## > tifa
-	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' .
+	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' .
 
 build-tifa-no-cache: ## > tifa
-	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' --no-cache .
+	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' --no-cache .
 
 build-elasticsearch: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' .
 
 build-elasticsearch-no-cache: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache
+
+publish-tifa-image: ## > elasticsearch
+	echo ${GITHUB_TOKEN} | docker login ghcr.io -u twocucao --password-stdin
+	docker pull ghcr.io/twocucao/tifa:latest || true
+	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/twocucao/tifa:latest
+	docker tag 'tifa:latest' ghcr.io/twocucao/tifa:latest && docker push ghcr.io/twocucao/tifa:latest || true
+

@@ -1,0 +1,19 @@
+name: pytest
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  push:
+    branches:
+      - master
+      - ci/*
+
+jobs:
+  pytest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Just up the stack
+        run: docker-compose up -d
+      - name: Run Pytest
+        run: make test
+
