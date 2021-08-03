@@ -12,6 +12,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
+      - run: echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u twocucao --password-stdin
+      - run: docker pull ghcr.io/twocucao/tifa:latest || true
       - name: Just up the stack
         run: docker-compose up -d postgres redis
       - name: Run Pytest

@@ -120,6 +120,4 @@ services:
 volumes:
   postgres_data_dev: { }
   postgres_backup_dev: { }
-  prometheus_data: { }
-  grafana_data: { }
 
