@@ -46,30 +46,30 @@ class Dal:
             raise NotFound("not found")
         return ins
 
-    def first(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> T:
+    def first(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x) -> T:
         stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).scalars().first()
 
-    def last(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> T:
+    def last(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x) -> T:
         stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).scalars().first()
 
-    def all(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> list[T]:
+    def all(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x) -> list[T]:
         stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).scalars().all()
 
     def unique_all(
-        self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x
+            self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x
     ) -> list[T]:
         stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).unique().scalars().all()
 
     def page(
-        self,
-        clz: T,
-        stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x,
-        per_page=20,
-        page=1,
+            self,
+            clz: T,
+            stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x,
+            per_page=20,
+            page=1,
     ) -> Pagination:
         stmt = stmt_func(sa.select(clz))
         stmt_items = stmt.limit(per_page).offset((page - 1) * per_page)
@@ -77,8 +77,8 @@ class Dal:
             self.session.execute(
                 sa.select(sa.func.count()).select_from(stmt.subquery())
             )
-            .scalars()
-            .one()
+                .scalars()
+                .one()
         )
         items = self.session.execute(stmt_items).scalars().all()
         return Pagination(page, per_page, total, items)
