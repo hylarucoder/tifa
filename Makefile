@@ -89,3 +89,4 @@ publish-tifa-image: ## > elasticsearch
 	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/twocucao/tifa:latest
 	docker tag 'tifa:latest' ghcr.io/twocucao/tifa:latest && docker push ghcr.io/twocucao/tifa:latest || true
 
+
