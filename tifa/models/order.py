@@ -1,4 +1,7 @@
+from enum import auto
+
 import sqlalchemy as sa
+from fastapi_utils.enums import StrEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
@@ -11,36 +14,59 @@ class Order(TimestampMixin, Model):
     __tablename__ = "order"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    tracking_client_id = sa.Column(sa.String(36), nullable=False)
     user_email = sa.Column(sa.String(254), nullable=False, index=True)
+    tracking_client_id = sa.Column(sa.String(36), nullable=False)
+
     token = sa.Column(sa.String(36), nullable=False, unique=True)
+    checkout_token = sa.Column(sa.String(36), nullable=False)
+
     user_id = sa.Column(sa.ForeignKey("user.id"))
     user = relationship("User")
+
+    weight = sa.Column(sa.Float(53), nullable=False)
+
     total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     voucher_id = sa.Column(sa.ForeignKey("discount_voucher.id"))
     voucher = relationship("DiscountVoucher")
+
     language_code = sa.Column(sa.String(35), nullable=False)
-    shipping_price_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     total_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    shipping_price_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
+
+    class Status(StrEnum):
+        DRAFT = auto()
+        UNCONFIRMED = auto()
+        UNFULFILLED = auto()
+        PARTIALLY_FULFILLED = auto()
+        FULFILLED = auto()
+        PARTIALLY_RETURNED = auto()
+        RETURNED = auto()
+        CANCELED = auto()
+
     status = sa.Column(sa.String(32), nullable=False)
     display_gross_prices = sa.Column(sa.Boolean, nullable=False)
-    customer_note = sa.Column(sa.Text, nullable=False)
-    weight = sa.Column(sa.Float(53), nullable=False)
-    checkout_token = sa.Column(sa.String(36), nullable=False)
     currency = sa.Column(sa.String(3), nullable=False)
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
     redirect_url = sa.Column(sa.String(200))
-    shipping_tax_rate = sa.Column(sa.Numeric(5, 4), nullable=False)
     undiscounted_total_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     undiscounted_total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     total_paid_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
+
+    customer_note = sa.Column(sa.Text, nullable=False)
+
+    class Origin(StrEnum):
+        CHECKOUT = auto()
+        DRAFT = auto()
+        REISSUE = auto()
 
     origin = sa.Column(sa.String(32), nullable=False)
     original_id = sa.Column(sa.ForeignKey("order.id"))
     original = relationship("Order", remote_side=[id])
 
+    # 物流
+    shipping_tax_rate = sa.Column(sa.Numeric(5, 4), nullable=False)
+    shipping_price_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
+    shipping_price_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     shipping_method_name = sa.Column(sa.String(255))
     shipping_method_id = sa.Column(
         sa.ForeignKey("shipping_method.id"),
@@ -61,13 +87,12 @@ class Order(TimestampMixin, Model):
     channel = relationship("Channel")
 
 
-class OrderFulfillment(Model):
+class OrderFulfillment(TimestampMixin, Model):
     __tablename__ = "order_fulfillment"
     __table_args__ = (sa.CheckConstraint("fulfillment_order >= 0"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
     tracking_number = sa.Column(sa.String(255), nullable=False)
-    created = sa.Column(sa.DateTime, nullable=False)
     order_id = sa.Column(
         sa.ForeignKey("order.id"),
         nullable=False,
@@ -75,6 +100,15 @@ class OrderFulfillment(Model):
     )
     order = relationship(Order)
     fulfillment_order = sa.Column(sa.Integer, nullable=False)
+
+    class Status:
+        FULFILLED = auto()
+        REFUNDED = auto()
+        RETURNED = auto()
+        REFUNDED_AND_RETURNED = auto()
+        REPLACED = auto()
+        CANCELED = auto()
+
     status = sa.Column(sa.String(32), nullable=False)
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
@@ -116,7 +150,7 @@ class OrderEvent(Model):
     app = relationship("App")
 
 
-class OrderLine(Model):
+class OrderLine(TimestampMixin, Model):
     __tablename__ = "order_line"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -153,7 +187,7 @@ class OrderLine(Model):
     undiscounted_unit_price_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
 
 
-class OrderFulfillmentLine(Model):
+class OrderFulfillmentLine(TimestampMixin, Model):
     __tablename__ = "order_fulfillment_line"
     __table_args__ = (sa.CheckConstraint("quantity >= 0"),)
 
@@ -175,7 +209,7 @@ class OrderFulfillmentLine(Model):
     order_line = relationship(OrderLine)
 
 
-class OrderDiscount(Model):
+class OrderDiscount(TimestampMixin, Model):
     __tablename__ = "order_discount"
     __table_args__ = (
         sa.Index("discount_or_name_d16858_gin", "name", "translated_name"),
