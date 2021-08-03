@@ -46,7 +46,9 @@ class Order(TimestampMixin, Model):
         sa.ForeignKey("shipping_method.id"),
     )
     shipping_method = relationship("ShippingMethod")
-    billing_address_id = sa.Column(sa.ForeignKey("address.id"), )
+    billing_address_id = sa.Column(
+        sa.ForeignKey("address.id"),
+    )
     billing_address = relationship(
         "Address", primaryjoin="Order.billing_address_id == Address.id"
     )
