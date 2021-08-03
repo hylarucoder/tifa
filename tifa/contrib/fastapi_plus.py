@@ -25,7 +25,7 @@ class FastAPIPlus(FastAPI):
         if "-Item" not in summary:
             summary = summary + "-Item"
         cls_name = "Item" + path_to_cls_name(path)
-        item_schema = create_model(
+        item_schema = create_model(  # type: ignore
             cls_name,
             item=(out, ...),
         )
@@ -35,9 +35,9 @@ class FastAPIPlus(FastAPI):
         if "-List" not in summary:
             summary = summary + "-List"
         cls_name = "List" + path_to_cls_name(path)
-        list_schema = create_model(
+        list_schema = create_model(  # type: ignore
             cls_name,
-            items=(list[out], ...),
+            items=(list[out], ...),  # type: ignore
         )
         return self.get(path, response_model=list_schema, tags=tags, summary=summary)
 
@@ -45,24 +45,24 @@ class FastAPIPlus(FastAPI):
         if "-Page" not in summary:
             summary = summary + "-Page"
         cls_name = "Page" + path_to_cls_name(path)
-        list_schema = create_model(
+        page_schema = create_model(  # type: ignore
             cls_name,
-            items=(list[out], ...),
+            items=(list[out], ...),  # type: ignore
             page=(int, ...),
             per_page=(int, ...),
             total=(int, ...),
             __base__=APIModel,
         )
-        return self.get(path, response_model=list_schema, tags=tags, summary=summary)
+        return self.get(path, response_model=page_schema, tags=tags, summary=summary)
 
     def op(
         self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
     ):
         summary = suffix_summary(path, summary)
         cls_name = "Item" + path_to_cls_name(path)
-        item_schema = create_model(
+        item_schema = create_model(  # type: ignore
             cls_name,
-            item=(out, ...),
+            item=(out, ...),  # type: ignore
         )
         return self.post(path, response_model=item_schema, tags=tags, summary=summary)
 

@@ -1,5 +1,3 @@
-import sqlalchemy as sa
-from devtools import debug
 from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin import bp
@@ -19,7 +17,7 @@ class TChannel(APIModel):
 @bp.page("/channels", out=TChannel, summary="Channel", tags=["Channel"])
 def get_channels():
     dal = Dal(db.session)
-    return dal.page(Channel)
+    return dal.page(Channel, per_page=100)
 
 
 @bp.item("/channel/{id}", out=TChannel, summary="Channel", tags=["Channel"])

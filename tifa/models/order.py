@@ -4,45 +4,26 @@ from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.product import ProductVariant
+from tifa.models.utils import TimestampMixin
 
 
-class Order(Model):
+class Order(TimestampMixin, Model):
     __tablename__ = "order"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    created = sa.Column(sa.DateTime, nullable=False)
     tracking_client_id = sa.Column(sa.String(36), nullable=False)
     user_email = sa.Column(sa.String(254), nullable=False, index=True)
     token = sa.Column(sa.String(36), nullable=False, unique=True)
-    billing_address_id = sa.Column(
-        sa.ForeignKey("address.id"),
-    )
-    shipping_address_id = sa.Column(
-        sa.ForeignKey("address.id"),
-    )
-    shipping_address = relationship(
-        "Address",
-        primaryjoin="Order.shipping_address_id == Address.id",
-    )
-    user_id = sa.Column(
-        sa.ForeignKey("user.id"),
-    )
+    user_id = sa.Column(sa.ForeignKey("user.id"))
     user = relationship("User")
     total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
-    voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id"),
-    )
+    voucher_id = sa.Column(sa.ForeignKey("discount_voucher.id"))
     voucher = relationship("DiscountVoucher")
     language_code = sa.Column(sa.String(35), nullable=False)
     shipping_price_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     total_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     shipping_price_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     status = sa.Column(sa.String(32), nullable=False)
-    shipping_method_name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(
-        sa.ForeignKey("shipping_method.id"),
-    )
-    shipping_method = relationship("ShippingMethod")
     display_gross_prices = sa.Column(sa.Boolean, nullable=False)
     customer_note = sa.Column(sa.Text, nullable=False)
     weight = sa.Column(sa.Float(53), nullable=False)
@@ -50,18 +31,31 @@ class Order(Model):
     currency = sa.Column(sa.String(3), nullable=False)
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
-    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False)
     redirect_url = sa.Column(sa.String(200))
     shipping_tax_rate = sa.Column(sa.Numeric(5, 4), nullable=False)
     undiscounted_total_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     undiscounted_total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     total_paid_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
+
     origin = sa.Column(sa.String(32), nullable=False)
     original_id = sa.Column(sa.ForeignKey("order.id"))
     original = relationship("Order", remote_side=[id])
+
+    shipping_method_name = sa.Column(sa.String(255))
+    shipping_method_id = sa.Column(
+        sa.ForeignKey("shipping_method.id"),
+    )
+    shipping_method = relationship("ShippingMethod")
+    billing_address_id = sa.Column(sa.ForeignKey("address.id"), )
     billing_address = relationship(
         "Address", primaryjoin="Order.billing_address_id == Address.id"
     )
+    shipping_address_id = sa.Column(sa.ForeignKey("address.id"))
+    shipping_address = relationship(
+        "Address",
+        primaryjoin="Order.shipping_address_id == Address.id",
+    )
+    channel_id = sa.Column(sa.ForeignKey("channel.id"), nullable=False)
     channel = relationship("Channel")
 
 

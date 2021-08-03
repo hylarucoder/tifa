@@ -39,26 +39,39 @@ class Dal:
             raise NotFound("not found")
         return ins
 
-    def first_or_404(self, stmt: T) -> T:
+    def first_or_404(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> T:
+        stmt = stmt_func(sa.select(clz))
         ins = self.session.execute(stmt).scalars().first()
         if not ins:
             raise NotFound("not found")
         return ins
 
-    def first(self, stmt: T) -> T:
+    def first(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> T:
+        stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).scalars().first()
 
-    def last(self, stmt: T) -> T:
+    def last(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> T:
+        stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).scalars().first()
 
-    def all(self, clz: T, *args) -> list[T]:
-        return self.session.execute(sa.select(clz).where(*args)).scalars().all()
+    def all(self, clz: T, stmt_func: t.Callable[[sa.select], sa.select]) -> list[T]:
+        stmt = stmt_func(sa.select(clz))
+        return self.session.execute(stmt).scalars().all()
 
-    def unique_all(self, stmt: T) -> list[T]:
+    def unique_all(
+        self, clz: T, stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x
+    ) -> list[T]:
+        stmt = stmt_func(sa.select(clz))
         return self.session.execute(stmt).unique().scalars().all()
 
-    def page(self, cls: T, per_page=20, page=1) -> Pagination:
-        stmt = sa.select(cls)
+    def page(
+        self,
+        clz: T,
+        stmt_func: t.Callable[[sa.select], sa.select] = lambda x: x,
+        per_page=20,
+        page=1,
+    ) -> Pagination:
+        stmt = stmt_func(sa.select(clz))
         stmt_items = stmt.limit(per_page).offset((page - 1) * per_page)
         total = (
             self.session.execute(

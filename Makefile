@@ -18,6 +18,9 @@ help:
 flake8: ## lint
 	poetry run flake8 tifa
 
+mypy: ## mypy
+	poetry run mypy tifa
+
 publish: ## publish package to pypi
 	poetry publish --build
 
