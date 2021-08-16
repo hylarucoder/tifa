@@ -11,6 +11,7 @@ class Staff(Model):
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(255), unique=True)
+    password_hash = sa.Column(sa.String(255))
     created_at = sa.Column(sa.DateTime, default=datetime.datetime.now)
     updated_at = sa.Column(sa.DateTime, onupdate=datetime.datetime.now)
 
