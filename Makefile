@@ -34,13 +34,13 @@ format: ## publish package to pypi
 shell_plus:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli shell_plus"
 
-dbinit:
+db.init:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db init"
 
-dbmakemigrations:
+db.makemigrations:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
 
-dbmigrate:
+db.migrate:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
 
 docker-build: ## build and compose up
