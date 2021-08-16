@@ -48,15 +48,15 @@ class FastAPIPlus(FastAPI):
         page_schema = create_model(  # type: ignore
             cls_name,
             items=(list[out], ...),  # type: ignore
-            page=(int, ...),
-            per_page=(int, ...),
-            total=(int, ...),
+            page=(Optional[int], ...),
+            per_page=(Optional[int], ...),
+            total=(Optional[int], ...),
             __base__=APIModel,
         )
         return self.get(path, response_model=page_schema, tags=tags, summary=summary)
 
     def op(
-        self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
+            self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
     ):
         summary = suffix_summary(path, summary)
         cls_name = "Item" + path_to_cls_name(path)
@@ -120,7 +120,9 @@ def setup_error_handlers(app: FastAPI):
     app.add_exception_handler(Exception, handle_exc)
 
 
-def create_bp() -> FastAPIPlus:
-    app = FastAPIPlus()
+def create_bp(dependencies: list = None) -> FastAPIPlus:
+    if not dependencies:
+        dependencies = []
+    app = FastAPIPlus(dependencies=dependencies)
     setup_error_handlers(app)
     return app
