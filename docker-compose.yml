@@ -2,7 +2,7 @@ version: "3.7"
 
 x-tifa-common:
   &tifa-common
-  image: tifa:local
+  image: twocucao/tifa:latest
   volumes:
     - .:/opt/tifa
   environment:
@@ -120,6 +120,4 @@ services:
 volumes:
   postgres_data_dev: { }
   postgres_backup_dev: { }
-  prometheus_data: { }
-  grafana_data: { }
 

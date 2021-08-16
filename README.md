@@ -28,7 +28,6 @@ for my goddess -- Tifa
 poetry install
 # build local docker image
 make build-tifa
-make build-elasticsearch
 # make start
 make debug
 ```

@@ -34,13 +34,13 @@ format: ## publish package to pypi
 shell_plus:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli shell_plus"
 
-dbinit:
+db.init:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db init"
 
-dbmakemigrations:
+db.makemigrations:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
 
-dbmigrate:
+db.migrate:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
 
 docker-build: ## build and compose up
@@ -50,10 +50,10 @@ docker-build-no-cache: ## build --no-cache
 	docker-compose build --no-cache  && docker-compose up
 
 before-up: ## some deamons
-	docker-compose up -d redis postgres zookeeper kafka
+	docker-compose up -d redis postgres
 
 before-full-up: ## some deamons
-	docker-compose up -d redis postgres elasticsearch jaeger grafana prometheus
+	docker-compose up -d redis postgres
 
 start: ## runserver
 	make before-up
@@ -66,19 +66,29 @@ beat: ## beat
 worker: ## worker
 	docker-compose up tifa-worker
 
-tifa-monitor: ## flower
+monitor: ## flower
 	docker-compose up tifa-monitor
 
 # docker images
 
 build-tifa: ## > tifa
-	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' .
+	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' .
+	docker tag 'tifa:latest' twocucao/tifa:latest
 
 build-tifa-no-cache: ## > tifa
-	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' --no-cache .
+	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' --no-cache .
 
 build-elasticsearch: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' .
 
 build-elasticsearch-no-cache: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache
+
+publish-tifa-image: ## > elasticsearch
+	echo ${DOCKER_PASS} | docker login -u twocucao --password-stdin
+	docker pull twocucao/tifa:latest || true
+	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=twocucao/tifa:latest
+	docker tag 'tifa:latest' twocucao/tifa:latest
+	docker push twocucao/tifa:latest || true
+
+
