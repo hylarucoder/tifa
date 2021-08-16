@@ -20,9 +20,8 @@ staffNotificationRecipientUpdate(...): StaffNotificationRecipientUpdate
 from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin import bp
-from tifa.globals import db
 from tifa.db.adal import AsyncDal
-from tifa.db.dal import Dal
+from tifa.globals import db
 from tifa.models.system import Staff
 
 
@@ -56,13 +55,39 @@ def token_deactivate_all():
     ...
 
 
-class TMe(APIModel):
+class TStaff(APIModel):
     id: str
     name: str
+    is_admin: bool
 
 
-@bp.item("/me", out=TMe, summary="我", tags=["Profile"])
-async def profile():
+@bp.page("/staffs", out=TStaff, summary="Staff", tags=["Staff"])
+async def get_staffs():
     adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Staff)
-    return {"item": merchant}
+    ...
+
+
+@bp.item("/staff/{id}", out=TStaff, summary="Staff", tags=["Staff"])
+async def get_staffs(id: str):
+    ...
+
+
+class BStaffCreate(APIModel):
+    name: str
+    password: str
+
+
+@bp.op("/staff/create", out=TStaff, summary="Staff", tags=["Staff"])
+async def staff_create(b: BStaffCreate):
+
+    ...
+
+
+@bp.op("/staff/update", out=TStaff, summary="Staff", tags=["Staff"])
+async def staff_update():
+    ...
+
+
+@bp.op("/staff/delete", out=TStaff, summary="Staff", tags=["Staff"])
+async def staff_delete():
+    ...
