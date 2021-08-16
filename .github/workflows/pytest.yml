@@ -12,7 +12,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - run: make build-tifa
       - name: Just up the stack
         run: docker-compose up -d postgres redis
       - name: Run Pytest

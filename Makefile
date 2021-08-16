@@ -84,9 +84,9 @@ build-elasticsearch-no-cache: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache
 
 publish-tifa-image: ## > elasticsearch
-	echo ${GITHUB_TOKEN} | docker login ghcr.io -u twocucao --password-stdin
-	docker pull ghcr.io/twocucao/tifa:latest || true
-	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=ghcr.io/twocucao/tifa:latest
-	docker tag 'tifa:latest' ghcr.io/twocucao/tifa:latest && docker push ghcr.io/twocucao/tifa:latest || true
+	echo ${DOCKER_PASS} | docker login -u twocucao --password-stdin
+	docker pull twocucao/tifa:latest || true
+	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=twocucao/tifa:latest
+	docker tag 'tifa:latest' twocucao/tifa:latest && docker push twocucao/tifa:latest || true
 
 
