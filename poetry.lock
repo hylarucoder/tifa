@@ -136,27 +136,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "arq"
-version = "0.20"
-description = "Job queues in python with asyncio and redis"
-category = "main"
-optional = false
-python-versions = ">=3.6"
-
-[package.dependencies]
-aioredis = ">=1.1.0"
-click = ">=6.7"
-pydantic = ">=1"
-
-[package.extras]
-watch = ["watchgod (>=0.4)"]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "asgiref"
 version = "3.4.1"
 description = "ASGI specs, helper code, and adapters"
@@ -2442,7 +2421,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "77fb18afc406facabca825c7763b336e5862863200a468c660479997b99c3671"
+content-hash = "3cb5449e6c2442b2660c82478f3eba5fe2ea840281be5a8d84e5c83e57baca79"
 
 [metadata.files]
 aiofiles = [
@@ -2538,10 +2517,6 @@ appdirs = [
 appnope = [
     {file = "appnope-0.1.2-py2.py3-none-any.whl", hash = "sha256:93aa393e9d6c54c5cd570ccadd8edad61ea0c4b9ea7a01409020c9aa019eb442"},
     {file = "appnope-0.1.2.tar.gz", hash = "sha256:dd83cd4b5b460958838f6eb3000c660b1f9caf2a5b1de4264e941512f603258a"},
-]
-arq = [
-    {file = "arq-0.20-py3-none-any.whl", hash = "sha256:6883a3048672a69264e23263ae62c1e4559594d7e0d46bd8d4b832b1b6ede840"},
-    {file = "arq-0.20.tar.gz", hash = "sha256:340dbc6e47159978714285f4c3fab7ad1c66c65fa26945b5b42f8f0584ed1a84"},
 ]
 asgiref = [
     {file = "asgiref-3.4.1-py3-none-any.whl", hash = "sha256:ffc141aa908e6f175673e7b1b3b7af4fdb0ecb738fc5c8b88f69f055c2415214"},

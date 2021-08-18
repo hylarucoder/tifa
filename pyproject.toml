@@ -50,7 +50,6 @@ qrcode = "^7.1"
 raven = "^6.10.0"
 redis = "^3.5.3"
 tenacity = "^7.0.0"
-wechatpy = "^1.8.15"
 xlrd = "^2.0.1"
 
 [tool.poetry.dev-dependencies]
@@ -84,6 +83,6 @@ fastcli = 'tifa.cli:cli'
 tifa-cli = 'tifa.cli:cli'
 
 [build-system]
-requires = ["poetry>=0.12"]
-build-backend = "poetry.masonry.api"
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
 
