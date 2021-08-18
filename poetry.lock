@@ -1300,19 +1300,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "optionaldict"
-version = "0.1.2"
-description = "A dict-like object that ignore NoneType values for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "orjson"
 version = "3.6.1"
 description = "Fast, correct Python JSON library supporting dataclasses, datetimes, and numpy"
@@ -2308,30 +2295,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "wechatpy"
-version = "1.8.15"
-description = "WeChat SDK for Python"
-category = "main"
-optional = false
-python-versions = "*"
-
-[package.dependencies]
-optionaldict = ">=0.1.0"
-python-dateutil = ">=2.5.2"
-requests = ">=2.4.3"
-six = ">=1.8.0"
-xmltodict = ">=0.11.0"
-
-[package.extras]
-cryptography = ["cryptography"]
-pycrypto = ["pycryptodome"]
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "wrapt"
 version = "1.12.1"
 description = "Module for decorators, wrappers and monkey patching."
@@ -2389,19 +2352,6 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
-name = "xmltodict"
-version = "0.12.0"
-description = "Makes working with XML feel like you are working with JSON"
-category = "main"
-optional = false
-python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*"
-
-[package.source]
-type = "legacy"
-url = "https://mirrors.aliyun.com/pypi/simple"
-reference = "aliyun"
-
-[[package]]
 name = "yarl"
 version = "1.6.3"
 description = "Yet another URL library"
@@ -2421,7 +2371,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "3cb5449e6c2442b2660c82478f3eba5fe2ea840281be5a8d84e5c83e57baca79"
+content-hash = "996e7063c8396218d0b1ff58d0e77c4cdc9ddd663b800c94154bdecee9b20fb8"
 
 [metadata.files]
 aiofiles = [
@@ -3108,10 +3058,6 @@ opentelemetry-semantic-conventions = [
     {file = "opentelemetry-semantic-conventions-0.23b2.tar.gz", hash = "sha256:f3f1a26afde671e0a80a9bb6e6f2826a034105482e8465497ab798fc72547b5c"},
     {file = "opentelemetry_semantic_conventions-0.23b2-py3-none-any.whl", hash = "sha256:76e65b9b7ec20894fed84c49b40bf1f9a26c7d605c44481ead503dc91876ae94"},
 ]
-optionaldict = [
-    {file = "optionaldict-0.1.2-py2.py3-none-any.whl", hash = "sha256:278d9b79b3d6a55b1b8ff5f9017bff6383a33426348d09e699ff50162bbcdab7"},
-    {file = "optionaldict-0.1.2.tar.gz", hash = "sha256:175b62ee8259af703def42e0b44b413ea55e7b0732456cb2fd5cbbc998605966"},
-]
 orjson = [
     {file = "orjson-3.6.1-cp310-cp310-manylinux_2_24_aarch64.whl", hash = "sha256:ee75753d1929ddd84702ac75d146083c501c7b1978acb35561a25093446b7f5a"},
     {file = "orjson-3.6.1-cp310-cp310-manylinux_2_24_x86_64.whl", hash = "sha256:52bd32016e9cc55ca89ce5678196e5d55fec72ded9d9bd2e1e10745b9144562f"},
@@ -3573,10 +3519,6 @@ wcwidth = [
     {file = "wcwidth-0.2.5-py2.py3-none-any.whl", hash = "sha256:beb4802a9cebb9144e99086eff703a642a13d6a0052920003a230f3294bbe784"},
     {file = "wcwidth-0.2.5.tar.gz", hash = "sha256:c4d647b99872929fdb7bdcaa4fbe7f01413ed3d98077df798530e5b04f116c83"},
 ]
-wechatpy = [
-    {file = "wechatpy-1.8.15-py2.py3-none-any.whl", hash = "sha256:0ac7bd23725cc6cbcfcc45cc4864c2afb9e9b630a2fa6763b0fbed9fe714d5f6"},
-    {file = "wechatpy-1.8.15.tar.gz", hash = "sha256:0724347ea9ede4f14b59acefd6e41c9baae25e822df204ece3eeba3d9e1dfd03"},
-]
 wrapt = [
     {file = "wrapt-1.12.1.tar.gz", hash = "sha256:b62ffa81fb85f4332a4f609cab4ac40709470da05643a082ec1eb88e6d9b97d7"},
 ]
@@ -3591,10 +3533,6 @@ xlsxwriter = [
 xlwt = [
     {file = "xlwt-1.3.0-py2.py3-none-any.whl", hash = "md5:085e6a73f9bffa8de4abd2c131b8afd5"},
     {file = "xlwt-1.3.0.tar.gz", hash = "md5:4b1ca8a3cef3261f4b4dc3f138e383a8"},
-]
-xmltodict = [
-    {file = "xmltodict-0.12.0-py2.py3-none-any.whl", hash = "sha256:8bbcb45cc982f48b2ca8fe7e7827c5d792f217ecf1792626f808bf41c3b86051"},
-    {file = "xmltodict-0.12.0.tar.gz", hash = "sha256:50d8c638ed7ecb88d90561beedbf720c9b4e851a9fa6c47ebd64e99d166d8a21"},
 ]
 yarl = [
     {file = "yarl-1.6.3-cp36-cp36m-macosx_10_14_x86_64.whl", hash = "sha256:0355a701b3998dcd832d0dc47cc5dedf3874f966ac7f870e0f3a6788d802d434"},
