@@ -1,3 +1,3 @@
-from tifa.apps.admin.base import context
+from tifa.apps.admin import g
 from tifa.db.adal import AsyncDal
 from tifa.models.system import Staff

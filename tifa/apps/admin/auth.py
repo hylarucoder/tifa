@@ -1,7 +1,7 @@
 from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin import bp
-from tifa.apps.admin.base import context
+from tifa.apps.admin.local import g
 from tifa.auth import get_password_hash, verify_password, gen_jwt
 from tifa.db.adal import AsyncDal
 from tifa.exceptions import ApiException
@@ -16,7 +16,7 @@ class TMe(APIModel):
 
 @bp.item("/me", out=TMe, summary="我", tags=["Auth"])
 async def profile():
-    staff = context.staff
+    staff = g.staff
     return {"item": staff}
 
 
@@ -33,7 +33,7 @@ class BLogin(APIModel):
 
 @bp.op("/login", out=TLogin, summary="登陆", tags=["Auth"])
 async def login(b: BLogin):
-    adal = context.adal
+    adal = g.adal
     staff = await adal.first_or_404(
         Staff, Staff.name == b.name
     )

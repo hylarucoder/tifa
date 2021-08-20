@@ -7,7 +7,7 @@ accountAddressUpdate(...): AccountAddressUpdate
 """
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin.base import bp
+from tifa.apps.admin.router import bp
 from tifa.globals import db
 from tifa.db.dal import Dal
 from tifa.models.address import Address
