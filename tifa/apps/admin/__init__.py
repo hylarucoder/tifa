@@ -1,4 +1,4 @@
-from .base import bp
+from .router import bp
 from .auth import *  # noqa
 from .app import *  # noqa
 from .attribute import *  # noqa

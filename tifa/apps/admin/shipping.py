@@ -4,9 +4,8 @@ shippingMethodChannelListingUpdate(...): ShippingMethodChannelListingUpdate
 
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.globals import db
-from tifa.db.adal import AsyncDal
+from tifa.apps.admin.local import g
+from tifa.apps.admin.router import bp
 from tifa.models.shipping import ShippingZone
 
 
@@ -22,8 +21,7 @@ class TShippingPrice(APIModel):
     tags=["Shipping"],
 )
 async def get_shipping_prices():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -34,8 +32,7 @@ async def get_shipping_prices():
     tags=["Shipping"],
 )
 async def shipping_price_create():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -46,8 +43,7 @@ async def shipping_price_create():
     tags=["Shipping"],
 )
 async def shipping_price_update():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -58,8 +54,7 @@ async def shipping_price_update():
     tags=["Shipping"],
 )
 async def shipping_price_delete():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -70,8 +65,7 @@ async def shipping_price_delete():
     tags=["Shipping"],
 )
 async def shipping_price_bulk_delete():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -82,8 +76,7 @@ async def shipping_price_bulk_delete():
     tags=["Shipping"],
 )
 async def shipping_price_translate():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -94,8 +87,7 @@ async def shipping_price_translate():
     tags=["Shipping"],
 )
 async def shipping_price_exclude_products():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -106,8 +98,7 @@ async def shipping_price_exclude_products():
     tags=["Shipping"],
 )
 async def shipping_price_remove_product_from_exclude():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -123,8 +114,7 @@ class TShippingZone(APIModel):
     tags=["Shipping"],
 )
 async def get_shipping_zones():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -132,8 +122,7 @@ async def get_shipping_zones():
     "/shipping_zone", out=TShippingZone, summary="ShippingPrice", tags=["Shipping"]
 )
 async def get_shipping_zone():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -144,8 +133,7 @@ async def get_shipping_zone():
     tags=["Shipping"],
 )
 async def shipping_zone_create():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -156,8 +144,7 @@ async def shipping_zone_create():
     tags=["Shipping"],
 )
 async def shipping_zone_update():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -168,8 +155,7 @@ async def shipping_zone_update():
     tags=["Shipping"],
 )
 async def shipping_zone_delete():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}
 
 
@@ -180,6 +166,5 @@ async def shipping_zone_delete():
     tags=["Shipping"],
 )
 async def shipping_zone_bulk_delete():
-    adal = AsyncDal(db.async_session)
-    ins = await adal.first_or_404(ShippingZone)
+    ins = await g.adal.first_or_404(ShippingZone)
     return {"items": ins}

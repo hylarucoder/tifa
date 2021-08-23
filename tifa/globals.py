@@ -20,7 +20,7 @@ from tifa.settings import settings
 db = SQLAlchemy(BaseModel)
 # thread local session
 session = db.session
-# TODO: should init in request context?
+# TODO: should init in request g?
 async_session = db.async_session
 
 if t.TYPE_CHECKING:

@@ -6,15 +6,12 @@ import datetime
 from enum import auto
 from typing import Optional
 
-from fastapi import Depends
-from fastapi_utils.api_model import APIModel
 import pydantic as pt
+from fastapi_utils.api_model import APIModel
 from fastapi_utils.enums import StrEnum
 
-from tifa.apps.admin import bp
-from tifa.apps.deps import get_dal
-from tifa.globals import db
-from tifa.db.dal import Dal
+from tifa.apps.admin.local import g
+from tifa.apps.admin.router import bp
 from tifa.models.product import ProductType, Product, ProductVariant
 
 
@@ -33,15 +30,17 @@ class TProductType(APIModel):
 @bp.page(
     "/product_types", out=TProductType, summary="ProductType", tags=["ProductType"]
 )
-def product_types_page(dal: Dal = Depends(get_dal)):
-    return dal.page(ProductType)
+async def product_types_page():
+    return await g.adal.page(ProductType)
 
 
 @bp.item(
     "/product_type/{id}", out=TProductType, summary="ProductType", tags=["ProductType"]
 )
-def product_type_item(id: str, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductType, id)
+async def product_type_item(
+    id: str,
+):
+    item = g.adal.get_or_404(ProductType, id)
     return {"item": item}
 
 
@@ -62,9 +61,11 @@ class ParamsProductTypeCreate(APIModel):
     summary="ProductType",
     tags=["ProductType"],
 )
-def product_type_create(params: ParamsProductTypeCreate, dal: Dal = Depends(get_dal)):
-    item = dal.add(ProductType, **params.dict())
-    dal.commit()
+async def product_type_create(
+    params: ParamsProductTypeCreate,
+):
+    item = g.adal.add(ProductType, **params.dict())
+    g.adal.commit()
     return {"item": item}
 
 
@@ -86,8 +87,10 @@ class ParamsProductTypeUpdate(APIModel):
     summary="ProductType",
     tags=["ProductType"],
 )
-def product_type_update(params: ParamsProductTypeUpdate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductType, params.id)
+async def product_type_update(
+    params: ParamsProductTypeUpdate,
+):
+    item = g.adal.get_or_404(ProductType, params.id)
     item.name = params.name
     item.has_variants = params.has_variants
     item.is_shipping_required = params.is_shipping_required
@@ -96,7 +99,7 @@ def product_type_update(params: ParamsProductTypeUpdate, dal: Dal = Depends(get_
     item.slug = params.slug
     item.metadata_public = params.metadata_public
     item.metadata_private = params.metadata_private
-    dal.commit()
+    g.adal.commit()
     return {"item": item}
 
 
@@ -110,10 +113,12 @@ class ParamsProductTypeDelete(APIModel):
     summary="ProductType",
     tags=["ProductType"],
 )
-def product_type_delete(params: ParamsProductTypeDelete, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductType, params.id)
-    dal.delete(item)
-    dal.commit()
+async def product_type_delete(
+    params: ParamsProductTypeDelete,
+):
+    item = g.adal.get_or_404(ProductType, params.id)
+    g.adal.delete(item)
+    g.adal.commit()
     return {"item": item}
 
 
@@ -127,14 +132,14 @@ class ParamsProductTypeBulkDelete(APIModel):
     summary="ProductType",
     tags=["ProductType"],
 )
-def product_type_bulk_delete(
-    params: ParamsProductTypeBulkDelete, dal: Dal = Depends(get_dal)
+async def product_type_bulk_delete(
+    params: ParamsProductTypeBulkDelete,
 ):
-    items = dal.bulk_get(ProductType, params.ids)
+    items = g.adal.bulk_get(ProductType, params.ids)
     for item in items:
         # soft vs hard
-        dal.delete(item)
-    dal.commit()
+        g.adal.delete(item)
+    await g.adal.commit()
     return {"items": items}
 
 
@@ -155,10 +160,10 @@ class ParamsProductTypeAssignAttributes(APIModel):
     summary="product_type_assign_attributes",
     tags=["ProductType"],
 )
-def product_type_assign_attributes(
-    params: ParamsProductTypeAssignAttributes, dal: Dal = Depends(get_dal)
+async def product_type_assign_attributes(
+    params: ParamsProductTypeAssignAttributes,
 ):
-    item = dal.get_or_404(ProductType, params.id)
+    item = await g.adal.get_or_404(ProductType, params.id)
     return {"item": item}
 
 
@@ -179,10 +184,10 @@ class ParamsProductTypeUnassignAttributes(APIModel):
     summary="product_type_unassign_attributes",
     tags=["ProductType"],
 )
-def product_type_unassign_attributes(
-    params: ParamsProductTypeUnassignAttributes, dal: Dal = Depends(get_dal)
+async def product_type_unassign_attributes(
+    params: ParamsProductTypeUnassignAttributes,
 ):
-    item = dal.get_or_404(ProductType, params.id)
+    item = await g.adal.get_or_404(ProductType, params.id)
     return {"item": item}
 
 
@@ -198,10 +203,10 @@ class ParamsProductTypeReorderAttributes(APIModel):
     summary="product_type_reorder_attributes",
     tags=["ProductType"],
 )
-def product_type_reorder_attributes(
-    params: ParamsProductTypeReorderAttributes, dal: Dal = Depends(get_dal)
+async def product_type_reorder_attributes(
+    params: ParamsProductTypeReorderAttributes,
 ):
-    item = dal.get_or_404(ProductType, params.id)
+    item = await g.adal.get_or_404(ProductType, params.id)
     return {"item": item}
 
 
@@ -231,13 +236,15 @@ class TProduct(APIModel):
 
 
 @bp.page("/products", out=TProduct, summary="Product", tags=["Product"])
-def products_page(dal: Dal = Depends(get_dal)):
-    return dal.page(Product)
+async def products_page():
+    return await g.adal.page(Product)
 
 
 @bp.item("/product/{id}", out=TProduct, summary="Product", tags=["Product"])
-def get_product(id: str, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(Product, id)
+async def get_product(
+    id: str,
+):
+    item = await g.adal.get_or_404(Product, id)
     return {"item": item}
 
 
@@ -260,9 +267,11 @@ class ParamsProductCreate(APIModel):
 
 
 @bp.op("/product/create", out=TProduct, summary="Product", tags=["Product"])
-def product_create(params: ParamsProductCreate, dal: Dal = Depends(get_dal)):
-    item = dal.add(Product, **params.dict())
-    dal.commit()
+async def product_create(
+    params: ParamsProductCreate,
+):
+    item = await g.adal.add(Product, **params.dict())
+    g.adal.commit()
     return {"item": item}
 
 
@@ -284,8 +293,10 @@ class ParamsProductUpdate(APIModel):
 
 
 @bp.op("/product/update", out=TProduct, summary="Product", tags=["Product"])
-def product_update(params: ParamsProductUpdate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(Product, params.id)
+async def product_update(
+    params: ParamsProductUpdate,
+):
+    item = await g.adal.get_or_404(Product, params.id)
     return {"item": item}
 
 
@@ -294,8 +305,10 @@ class ParamsProductDelete(APIModel):
 
 
 @bp.op("/product/delete", out=TProduct, summary="Product", tags=["Product"])
-def product_delete(params: ParamsProductDelete, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(Product, params.id)
+async def product_delete(
+    params: ParamsProductDelete,
+):
+    item = await g.adal.get_or_404(Product, params.id)
     return {"item": item}
 
 
@@ -304,19 +317,11 @@ class ParamsProductBulkDelete(APIModel):
 
 
 @bp.op("/product/bulk_delete", out=TProduct, summary="Product", tags=["Product"])
-def product_bulk_delete(params: ParamsProductBulkDelete, dal: Dal = Depends(get_dal)):
-    items = dal.bulk_get(Product, params.ids)
+async def product_bulk_delete(
+    params: ParamsProductBulkDelete,
+):
+    items = await g.adal.bulk_get(Product, params.ids)
     return {"items": items}
-
-
-class ParamsProductTranslate(APIModel):
-    id: str
-
-
-@bp.op("/product/translate", out=TProduct, summary="Product", tags=["Product"])
-def product_translate(params: ParamsProductTranslate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(Product, params.id)
-    return {"item": item}
 
 
 class ParamsProductReorderAttributeValues(APIModel):
@@ -330,10 +335,10 @@ class ParamsProductReorderAttributeValues(APIModel):
     summary="Product-reorder_attribute_values",
     tags=["Product"],
 )
-def product_reorder_attribute_values(
-    params: ParamsProductTranslate, dal: Dal = Depends(get_dal)
+async def product_reorder_attribute_values(
+    params: ParamsProductReorderAttributeValues,
 ):
-    item = dal.get_or_404(Product, params.id)
+    item = await g.adal.get_or_404(Product, params.id)
     return {"item": item}
 
 
@@ -348,8 +353,8 @@ class TProductVariant(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def get_product_variants(dal: Dal = Depends(get_dal)):
-    return dal.page(ProductVariant)
+async def get_product_variants():
+    return await g.adal.page(ProductVariant)
 
 
 @bp.item(
@@ -358,8 +363,10 @@ def get_product_variants(dal: Dal = Depends(get_dal)):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def get_product_variant(id: str, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductVariant, id)
+async def get_product_variant(
+    id: str,
+):
+    item = await g.adal.get_or_404(ProductVariant, id)
     return {"item": item}
 
 
@@ -380,10 +387,10 @@ class ParamsProductVariantCreate(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_create(
-    params: ParamsProductVariantCreate, dal: Dal = Depends(get_dal)
+async def product_variant_create(
+    params: ParamsProductVariantCreate,
 ):
-    item = dal.add(ProductVariant)
+    item = await g.adal.add(ProductVariant)
     return {"item": item}
 
 
@@ -403,13 +410,13 @@ class ParamsProductVariantBulkCreate(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_bulk_create(
-    params: ParamsProductVariantBulkCreate, dal: Dal = Depends(get_dal)
+async def product_variant_bulk_create(
+    params: ParamsProductVariantBulkCreate,
 ):
     """
     TODO: no variants
     """
-    item = dal.first_or_404(ProductVariant)
+    item = await g.adal.first_or_404(ProductVariant)
     return {"item": item}
 
 
@@ -424,10 +431,10 @@ class ParamsProductVariantUpdate(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_update(
-    params: ParamsProductVariantUpdate, dal: Dal = Depends(get_dal)
+async def product_variant_update(
+    params: ParamsProductVariantUpdate,
 ):
-    item = dal.get_or_404(ProductVariant, params.id)
+    item = await g.adal.get_or_404(ProductVariant, params.id)
     return {"item": item}
 
 
@@ -441,10 +448,10 @@ class ParamsProductVariantDelete(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_delete(
-    params: ParamsProductVariantDelete, dal: Dal = Depends(get_dal)
+async def product_variant_delete(
+    params: ParamsProductVariantDelete,
 ):
-    item = dal.get_or_404(ProductVariant, params.id)
+    item = await g.adal.get_or_404(ProductVariant, params.id)
     return {"item": item}
 
 
@@ -458,10 +465,10 @@ class ParamsProductVariantBulkDelete(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_bulk_delete(
-    params: ParamsProductVariantBulkDelete, dal: Dal = Depends(get_dal)
+async def product_variant_bulk_delete(
+    params: ParamsProductVariantBulkDelete,
 ):
-    items = dal.bulk_get(ProductVariant, params.ids)
+    items = await g.adal.bulk_get(ProductVariant, params.ids)
     return {"items": items}
 
 
@@ -476,10 +483,10 @@ class ParamsProductVariantReorder(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_reorder(
-    params: ParamsProductVariantReorder, dal: Dal = Depends(get_dal)
+async def product_variant_reorder(
+    params: ParamsProductVariantReorder,
 ):
-    items = dal.bulk_get(ProductVariant, params.ids)
+    items = await g.adal.bulk_get(ProductVariant, params.ids)
     return {"items": items}
 
 
@@ -494,10 +501,10 @@ class ParamsProductVariantReorderAttributeValues(APIModel):
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_reorder_attribute_values(
-    params: ParamsProductVariantReorderAttributeValues, dal: Dal = Depends(get_dal)
+async def product_variant_reorder_attribute_values(
+    params: ParamsProductVariantReorderAttributeValues,
 ):
-    item = dal.get_or_404(ProductVariant, params.id)
+    item = await g.adal.get_or_404(ProductVariant, params.id)
     return {"item": item}
 
 
@@ -507,9 +514,8 @@ def product_variant_reorder_attribute_values(
     summary="ProductVariant",
     tags=["ProductVariant"],
 )
-def product_variant_translate():
-    adal = Dal(db.session)
-    item = adal.first_or_404(ProductVariant)
+async def product_variant_translate():
+    item = await g.adal.first_or_404(ProductVariant)
     return {"item": item}
 
 
@@ -523,11 +529,10 @@ class ParamsProductVariantSetDefault(APIModel):
     summary="ProductVariant-set default",
     tags=["ProductVariant"],
 )
-def product_variant_set_default(
-    params: ParamsProductVariantSetDefault, dal: Dal = Depends(get_dal)
+async def product_variant_set_default(
+    params: ParamsProductVariantSetDefault,
 ):
-    adal = Dal(db.session)
-    item = adal.get_or_404(ProductVariant, params.id)
+    item = await g.adal.get_or_404(ProductVariant, params.id)
     return {"item": item}
 
 
@@ -537,9 +542,8 @@ def product_variant_set_default(
     summary="ProductVariant-stocks-create",
     tags=["ProductVariant"],
 )
-def product_variant_stocks_create():
-    adal = Dal(db.session)
-    item = adal.first_or_404(ProductVariant)
+async def product_variant_stocks_create():
+    item = await g.adal.first_or_404(ProductVariant)
     return {"item": item}
 
 
@@ -549,9 +553,8 @@ def product_variant_stocks_create():
     summary="ProductVariant-stocks-update",
     tags=["ProductVariant"],
 )
-def product_variant_stocks_update():
-    adal = Dal(db.session)
-    item = adal.first_or_404(ProductVariant)
+async def product_variant_stocks_update():
+    item = await g.adal.first_or_404(ProductVariant)
     return {"item": item}
 
 
@@ -561,7 +564,6 @@ def product_variant_stocks_update():
     summary="ProductVariant-stocks-update",
     tags=["ProductVariant"],
 )
-def product_variant_stocks_delete():
-    adal = Dal(db.session)
-    item = adal.first_or_404(ProductVariant)
+async def product_variant_stocks_delete():
+    item = await g.adal.first_or_404(ProductVariant)
     return {"item": item}

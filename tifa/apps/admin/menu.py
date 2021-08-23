@@ -1,8 +1,7 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.globals import db
-from tifa.db.dal import Dal
+from tifa.apps.admin.local import g
+from tifa.apps.admin.router import bp
 from tifa.models.menu import Menu, MenuItem
 
 
@@ -19,16 +18,14 @@ class TMenu(APIModel):
 
 
 @bp.page("/menus", out=TMenu, summary="Menu", tags=["Menu"])
-def menus_page():
-    adal = Dal(db.session)
-    items = adal.all(Menu)
+async def menus_page():
+    items = g.adal.all(Menu)
     return {"items": items}
 
 
 @bp.item("/menu/{id}", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_item(id: str):
-    adal = Dal(db.session)
-    item = adal.get_or_404(Menu, id)
+async def menu_item(id: str):
+    item = g.adal.get_or_404(Menu, id)
     return {"item": item}
 
 
@@ -40,9 +37,8 @@ class ParamsMenuCreate(APIModel):
 
 
 @bp.op("/menu/create", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_create(params: ParamsMenuCreate):
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+async def menu_create(params: ParamsMenuCreate):
+    item = g.adal.first_or_404(Menu)
     return {"item": item}
 
 
@@ -55,9 +51,8 @@ class ParamsMenuUpdate(APIModel):
 
 
 @bp.op("/menu/update", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_update(params: ParamsMenuUpdate):
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+async def menu_update(params: ParamsMenuUpdate):
+    item = g.adal.first_or_404(Menu)
     return {"item": item}
 
 
@@ -66,9 +61,8 @@ class ParamsMenuDelete(APIModel):
 
 
 @bp.op("/menu/delete", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_delete(params: ParamsMenuDelete):
-    adal = Dal(db.session)
-    item = adal.first_or_404(Menu)
+async def menu_delete(params: ParamsMenuDelete):
+    item = g.adal.first_or_404(Menu)
     return {"item": item}
 
 
@@ -77,9 +71,8 @@ class ParamsMenuBulkDelete(APIModel):
 
 
 @bp.op("/menu/bulk_delete", out=TMenu, summary="Menu", tags=["Menu"])
-def menu_bulk_delete(params: ParamsMenuBulkDelete):
-    adal = Dal(db.session)
-    items = adal.bulk_get(Menu, params.ids)
+async def menu_bulk_delete(params: ParamsMenuBulkDelete):
+    items = g.adal.bulk_get(Menu, params.ids)
     return {"items": items}
 
 
@@ -93,16 +86,14 @@ class ParamsMenuItems(APIModel):
 
 
 @bp.page("/menu_items", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_items(params: ParamsMenuItems):
-    adal = Dal(db.session)
-    items = adal.all(MenuItem, MenuItem.menu_id == params.menu_id)
+async def menu_items(params: ParamsMenuItems):
+    items = g.adal.all(MenuItem, MenuItem.menu_id == params.menu_id)
     return {"items": items}
 
 
 @bp.item("/menu_item/{id}", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_item(id: str):
-    adal = Dal(db.session)
-    item = adal.get_or_404(MenuItem, id)
+async def menu_item_item(id: str):
+    item = g.adal.get_or_404(MenuItem, id)
     return {"item": item}
 
 
@@ -111,9 +102,8 @@ class ParamsMenuItemCreate(APIModel):
 
 
 @bp.op("/menu_item/create", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_create(params: ParamsMenuItemCreate):
-    adal = Dal(db.session)
-    item = adal.add(MenuItem)
+async def menu_item_create(params: ParamsMenuItemCreate):
+    item = g.adal.add(MenuItem)
     return {"item": item}
 
 
@@ -123,9 +113,8 @@ class ParamsMenuItemUpdate(APIModel):
 
 
 @bp.op("/menu_item/update", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_update(params: ParamsMenuItemUpdate):
-    adal = Dal(db.session)
-    item = adal.get_or_404(MenuItem, params.id)
+async def menu_item_update(params: ParamsMenuItemUpdate):
+    item = g.adal.get_or_404(MenuItem, params.id)
     return {"item": item}
 
 
@@ -135,10 +124,9 @@ class ParamsMenuItemMove(APIModel):
 
 
 @bp.op("/menu_item/move", out=TMenuItem, summary="MenuItem-Move", tags=["Menu"])
-def menu_item_move(params: ParamsMenuItemMove):
-    adal = Dal(db.session)
-    item_from = adal.get_or_404(MenuItem, params.id_from)
-    item_to = adal.get_or_404(MenuItem, params.id_to)
+async def menu_item_move(params: ParamsMenuItemMove):
+    item_from = g.adal.get_or_404(MenuItem, params.id_from)
+    item_to = g.adal.get_or_404(MenuItem, params.id_to)
     return {"item": item_from}
 
 
@@ -147,9 +135,8 @@ class ParamsMenuItemTranslate(APIModel):
 
 
 @bp.op("/menu_item/translate", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_translate(params: ParamsMenuItemTranslate):
-    adal = Dal(db.session)
-    item = adal.get_or_404(MenuItem, params.id)
+async def menu_item_translate(params: ParamsMenuItemTranslate):
+    item = g.adal.get_or_404(MenuItem, params.id)
     return {"item": item}
 
 
@@ -158,9 +145,8 @@ class ParamsMenuItemDelete(APIModel):
 
 
 @bp.op("/menu_item/delete", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_delete(params: ParamsMenuItemDelete):
-    adal = Dal(db.session)
-    item = adal.get_or_404(MenuItem, params.id)
+async def menu_item_delete(params: ParamsMenuItemDelete):
+    item = g.adal.get_or_404(MenuItem, params.id)
     return {"item": item}
 
 
@@ -169,7 +155,6 @@ class ParamsMenuItemBulkDelete(APIModel):
 
 
 @bp.op("/menu_item/bulk_delete", out=TMenuItem, summary="MenuItem", tags=["Menu"])
-def menu_item_bulk_delete(params: ParamsMenuItemBulkDelete):
-    adal = Dal(db.session)
-    items = adal.bulk_get(MenuItem, params.ids)
+async def menu_item_bulk_delete(params: ParamsMenuItemBulkDelete):
+    items = g.adal.bulk_get(MenuItem, params.ids)
     return {"items": items}

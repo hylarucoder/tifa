@@ -36,8 +36,6 @@ class User(TimestampMixin, Model):
     avatar = sa.Column(sa.String(100))
     metadata_private = sa.Column(JSONB, index=True)
     metadata_public = sa.Column(JSONB, index=True)
-    jwt_token_key = sa.Column(sa.String(12), nullable=False)
-    language_code = sa.Column(sa.String(35), nullable=False)
 
 
 class UserAddressMap(Model):

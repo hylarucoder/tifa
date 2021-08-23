@@ -1,8 +1,7 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.db.dal import Dal
-from tifa.globals import db
+from tifa.apps.admin.local import g
+from tifa.apps.admin.router import bp
 from tifa.models.channel import Channel
 
 
@@ -15,15 +14,13 @@ class TChannel(APIModel):
 
 
 @bp.page("/channels", out=TChannel, summary="Channel", tags=["Channel"])
-def get_channels():
-    dal = Dal(db.session)
-    return dal.page(Channel, per_page=100)
+async def get_channels():
+    return await g.adal.page(Channel, per_page=100)
 
 
 @bp.item("/channel/{id}", out=TChannel, summary="Channel", tags=["Channel"])
-def get_channel(id: str):
-    dal = Dal(db.session)
-    item = dal.get_or_404(Channel, id)
+async def get_channel(id: str):
+    item = await g.adal.get_or_404(Channel, id)
     return {"item": item}
 
 
@@ -35,16 +32,15 @@ class ParamsChannelCreate(APIModel):
 
 
 @bp.op("/channel/create", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_create(params: ParamsChannelCreate):
-    dal = Dal(db.session)
-    ins = dal.add(
+async def channel_create(params: ParamsChannelCreate):
+    ins = g.adal.add(
         Channel,
         name=params.name,
         is_active=params.is_active,
         slug=params.slug,
         currency_code=params.currency_code,
     )
-    dal.commit()
+    await g.adal.commit()
     return {"item": ins}
 
 
@@ -57,14 +53,13 @@ class ParamsChannelUpdate(APIModel):
 
 
 @bp.op("/channel/update", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_update(params: ParamsChannelUpdate):
-    dal = Dal(db.session)
-    ins = dal.get_or_404(Channel, params.id)
+async def channel_update(params: ParamsChannelUpdate):
+    ins = await g.adal.get_or_404(Channel, params.id)
     ins.name = params.name
     ins.is_active = params.is_active
     ins.slug = params.slug
     ins.currency_code = params.currency_code
-    dal.commit()
+    await g.adal.commit()
     return {"item": ins}
 
 
@@ -73,11 +68,10 @@ class ParamsChannelActivate(APIModel):
 
 
 @bp.op("/channel/activate", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_activate(params: ParamsChannelActivate):
-    dal = Dal(db.session)
-    ins = dal.get_or_404(Channel, params.id)
+async def channel_activate(params: ParamsChannelActivate):
+    ins = await g.adal.get_or_404(Channel, params.id)
     ins.is_active = True
-    dal.commit()
+    await g.adal.commit()
     return {"item": ins}
 
 
@@ -86,11 +80,10 @@ class ParamsChannelDeactivate(APIModel):
 
 
 @bp.op("/channel/deactivate", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_deactivate(params: ParamsChannelDeactivate):
-    dal = Dal(db.session)
-    ins = dal.get_or_404(Channel, params.id)
-    ins.is_active = False
-    dal.commit()
+async def channel_deactivate(params: ParamsChannelDeactivate):
+    ins = await g.adal.get_or_404(Channel, params.id)
+    ins.is_active = True
+    await g.adal.commit()
     return {"item": ins}
 
 
@@ -99,9 +92,8 @@ class ParamsChannelDelete(APIModel):
 
 
 @bp.op("/channel/delete", out=TChannel, summary="Channel", tags=["Channel"])
-def channel_delete(params: ParamsChannelDelete):
-    dal = Dal(db.session)
-    ins = dal.get_or_404(Channel, params.id)
-    dal.delete(ins)
-    dal.commit()
+async def channel_delete(params: ParamsChannelDelete):
+    ins = await g.adal.get_or_404(Channel, params.id)
+    g.adal.delete(ins)
+    await g.adal.commit()
     return {"item": ins}

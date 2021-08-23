@@ -1,137 +1,90 @@
+import datetime
+from typing import Optional
+
+import pydantic as pt
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.user.base import bp
+from tifa.apps.user.router import bp
 from tifa.globals import db
 from tifa.db.adal import AsyncDal
 from tifa.models.menu import Menu
 
 
-class TCheckout(APIModel):
-    id: str
-    name: str
+class TCartItemActivity(APIModel):
+    act_id: str
+    act_type: str
+    act_title: str
 
 
-@bp.page("/checkouts", out=TCheckout)
-async def checkouts_item():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"items": merchant}
+class TCartItem(APIModel):
+    item_id: str
+    parent_item_id: Optional[str] = pt.Field(description="绑定的父item_id")
+    order_id: Optional[str] = pt.Field(description="绑定的订单号")
+    sku: str = pt.Field(description="sku")
+    spu: str = pt.Field(description="spu")
+    channel: str = pt.Field(description="售卖渠道")
+    quantity: int = pt.Field(description="商品数量")
+    status: int = pt.Field(description="status")  # 失效?过期?
+    sale_price: int = pt.Field(description="记录加车时候的销售价格")
+    special_price: int = pt.Field(description="指定价格加购物车")
+    post_free: bool = pt.Field(description="是否免邮")
+    activities: list[TCartItemActivity] = pt.Field(description="参加的活动记录")
+    created_at: datetime.datetime
+    updated_at: datetime.datetime
+    expired_at: datetime.datetime = pt.Field(description="有效时间")
 
 
-@bp.item("/checkout", out=TCheckout)
-async def checkout_item():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
+class TCart(APIModel):
+    items: str
+    updated_at: datetime.datetime
+    version: int
+    # uid: cart_type
 
 
-@bp.op("/checkout/create", out=TCheckout)
-async def checkout_create():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/complete", out=TCheckout)
-async def checkout_complete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/add_promo_code", out=TCheckout)
-async def checkout_add_promo_code():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/remove_promo_code", out=TCheckout)
-async def checkout_remove_promo_code():
+@bp.item("/cart", out=TCart)
+async def cart():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/payment_create", out=TCheckout)
-async def checkout_payment_create():
+@bp.op("/cart/add_item", out=TCart)
+async def cart_add_item():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/language_code_update", out=TCheckout)
-async def checkout_language_code_update():
+@bp.op("/cart/change_item_quantity", out=TCart)
+async def cart_edit_item_quantity():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/email_update", out=TCheckout)
-async def checkout_email_update():
+@bp.op("/cart/change_item_spec", out=TCart)
+async def cart_change_item_spec():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/billing_address_update", out=TCheckout)
-async def checkout_billing_address_update():
+@bp.op("/cart/delete_item", out=TCart)
+async def checkout_clean():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/customer_attach", out=TCheckout)
-async def checkout_customer_attach():
+@bp.op("/preview_order", out=TCart)
+async def preview_order():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}
 
 
-@bp.op("/checkout/customer_detach", out=TCheckout)
-async def checkout_customer_detach():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/lines", out=TCheckout)
-async def checkout_lines():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/lines/add", out=TCheckout)
-async def checkout_lines_add():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/lines/update", out=TCheckout)
-async def checkout_lines_update():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/lines/delete", out=TCheckout)
-async def checkout_lines_delete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/shipping_address/update", out=TCheckout)
-async def checkout_shipping_address_update():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
-    return {"item": merchant}
-
-
-@bp.op("/checkout/shipping_method/update", out=TCheckout)
-async def checkout_shipping_method_update():
+@bp.op("/make_order", out=TCart)
+async def make_order():
     adal = AsyncDal(db.async_session)
     merchant = await adal.first_or_404(Menu)
     return {"item": merchant}

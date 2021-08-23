@@ -1,9 +1,9 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.globals import db
-from tifa.db.adal import AsyncDal
+from tifa.apps.admin.router import bp
+from tifa.apps.admin.local import g
 from tifa.models.discount import DiscountVoucher
+from tifa.models.invoice import Invoice
 
 
 class TInvoice(APIModel):
@@ -12,51 +12,44 @@ class TInvoice(APIModel):
 
 
 @bp.list("/invoices", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def addresses_list():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_list():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.item("/invoice", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_item():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_item():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.op("/invoice/create", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_create():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_create():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.op("/invoice/update", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_update():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_update():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.op("/invoice/delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_delete():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_delete():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.op("/invoice/request", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_request():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_request():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
 @bp.op("/invoice/request_delete", out=TInvoice, summary="Invoice", tags=["Invoice"])
-def invoice_request_delete():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_request_delete():
+    ins = g.adal.first_or_404(Invoice)
     return {"items": ins}
 
 
@@ -66,7 +59,6 @@ def invoice_request_delete():
     summary="Invoice",
     tags=["Invoice"],
 )
-def invoice_send_notification():
-    adal = AsyncDal(db.async_session)
-    ins = adal.first_or_404(DiscountVoucher)
+async def invoice_send_notification():
+    ins = g.adal.first_or_404(DiscountVoucher)
     return {"items": ins}
