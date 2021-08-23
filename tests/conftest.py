@@ -52,7 +52,7 @@ def setup_db():
     conn.close()
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def session(setup_db) -> AsyncSession:
     async with AsyncSession(db.async_session) as session:
         yield session
@@ -105,7 +105,7 @@ def health_client():
     return ApiClient(app)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def color_attribute(session: AsyncSession):
     adal = AsyncDal(session)
     attribute = adal.add(
@@ -124,7 +124,7 @@ async def color_attribute(session: AsyncSession):
     return attribute
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def size_attribute(session: AsyncSession):
     adal = AsyncDal(session)
     attribute = adal.add(
@@ -145,7 +145,7 @@ async def size_attribute(session: AsyncSession):
     return attribute
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def date_attribute(session: AsyncSession):
     adal = AsyncDal(session)
     attribute = adal.add(
@@ -174,7 +174,7 @@ async def date_attribute(session: AsyncSession):
     return attribute
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def date_time_attribute(session: AsyncSession):
     adal = AsyncDal(session)
     attribute = adal.add(
@@ -204,7 +204,7 @@ async def date_time_attribute(session: AsyncSession):
     return attribute
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 async def product_type(session: AsyncSession, color_attribute, size_attribute):
     adal = AsyncDal(session)
     product_type = adal.add(
