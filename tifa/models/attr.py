@@ -1,8 +1,47 @@
+from enum import auto
+
 import sqlalchemy as sa
+from fastapi_utils.enums import StrEnum
 from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+
+
+class AttributeInputType:
+    DROPDOWN = "dropdown"
+    MULTISELECT = "multiselect"
+    FILE = "file"
+    REFERENCE = "reference"
+    NUMERIC = "numeric"
+    RICH_TEXT = "rich-text"
+    BOOLEAN = "boolean"
+    DATE = "date"
+    DATE_TIME = "date-time"
+
+    CHOICES = [
+        (DROPDOWN, "Dropdown"),
+        (MULTISELECT, "Multi Select"),
+        (FILE, "File"),
+        (REFERENCE, "Reference"),
+        (NUMERIC, "Numeric"),
+        (RICH_TEXT, "Rich Text"),
+        (BOOLEAN, "Boolean"),
+        (DATE, "Date"),
+        (DATE_TIME, "Date Time"),
+    ]
+
+    ALLOWED_IN_VARIANT_SELECTION = [
+        DROPDOWN,
+        BOOLEAN,
+    ]
+
+    TYPES_WITH_CHOICES = [
+        DROPDOWN,
+        MULTISELECT,
+    ]
+
+    TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
 
 
 class Attribute(Model):
@@ -21,6 +60,11 @@ class Attribute(Model):
     value_required = sa.Column(sa.Boolean, nullable=False)
     storefront_search_position = sa.Column(sa.Integer, nullable=False)
     is_variant_only = sa.Column(sa.Boolean, nullable=False)
+
+    class Type(StrEnum):
+        PRODUCT = auto()
+        PAGE = auto()
+
     type = sa.Column(sa.String(50), nullable=False)
     entity_type = sa.Column(sa.String(50))
     unit = sa.Column(sa.String(100))

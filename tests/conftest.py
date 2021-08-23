@@ -1,4 +1,5 @@
 import asyncio
+import datetime
 
 import pytest
 from requests import Response
@@ -8,6 +9,7 @@ from tifa.app import create_app
 from tifa.auth import gen_jwt
 from tifa.db.adal import AsyncDal
 from tifa.globals import db
+from tifa.models.attr import Attribute, AttributeValue, AttributeInputType
 from tifa.models.product import ProductType
 from tifa.models.system import Staff
 from tifa.models.user import User
@@ -56,7 +58,7 @@ async def adal(event_loop, setup_db) -> AsyncDal:
 
 
 @pytest.fixture(scope="session")
-async def staff(adal):
+async def staff(adal: AsyncDal):
     ins = adal.add(
         Staff,
         name="admin",
@@ -66,17 +68,22 @@ async def staff(adal):
 
 
 @pytest.fixture(scope="session")
-async def user():
+async def user(adal: AsyncDal):
     ins = adal.add(
         User,
-        name="alphago",
+        email="alphago@gmail.com",
+        is_active=True,
+        password="plain_password",
+        last_login_at=datetime.datetime.now(),
+        first_name="alpha",
+        last_name="go",
     )
     await adal.commit()
     return ins
 
 
 @pytest.fixture(scope="session")
-def staff_client(staff):
+def staff_client(staff: Staff):
     client = ApiClient(app, staff)
     token = gen_jwt("{\"admin\":1}", 60 * 24)
     client.headers.update({
@@ -86,13 +93,86 @@ def staff_client(staff):
 
 
 @pytest.fixture(scope="session")
-def user_client(user):
+def user_client(user: User):
     return ApiClient(app, user)
 
 
 @pytest.fixture(scope="session")
 def health_client():
     return ApiClient(app)
+
+
+@pytest.fixture
+def color_attribute(adal: AsyncDal):
+    attribute = adal.add(
+        Attribute,
+        slug="color",
+        name="Color",
+        type=Attribute.Type.PRODUCT,
+        filterable_in_storefront=True,
+        filterable_in_dashboard=True,
+        available_in_grid=True,
+    )
+    adal.add(AttributeValue, attribute=attribute, name="Red", slug="red")
+    adal.add(AttributeValue, attribute=attribute, name="Blue", slug="blue")
+    await adal.commit()
+    return attribute
+
+
+@pytest.fixture
+def date_attribute(adal: AsyncDal):
+    attribute = adal.add(
+        Attribute,
+        slug="release-date",
+        name="Release date",
+        type=Attribute.Type.PRODUCT,
+        input_type=AttributeInputType.DATE,
+        filterable_in_storefront=True,
+        filterable_in_dashboard=True,
+        available_in_grid=True,
+    )
+    for value in [
+        datetime.datetime(2020, 10, 5),
+        datetime.datetime(2020, 11, 5),
+    ]:
+        adal.add(
+            AttributeValue,
+            attribute=attribute,
+            name=f"{attribute.name}: {value.date()}",
+            slug=f"{value.date()}_{attribute.id}",
+            date_time=value,
+        )
+    await adal.commit()
+
+    return attribute
+
+
+@pytest.fixture
+def date_time_attribute(adal: AsyncDal):
+    attribute = Attribute.objects.create(
+        slug="release-date-time",
+        name="Release date time",
+        type=Attribute.Type.PRODUCT,
+        input_type=AttributeInputType.DATE_TIME,
+        filterable_in_storefront=True,
+        filterable_in_dashboard=True,
+        available_in_grid=True,
+    )
+
+    for value in [
+        datetime.datetime(2020, 10, 5),
+        datetime.datetime(2020, 11, 5),
+    ]:
+        adal.add(
+            AttributeValue,
+            attribute=attribute,
+            name=f"{attribute.name}: {value.date()}",
+            slug=f"{value.date()}_{attribute.id}",
+            date_time=value,
+        )
+    await adal.commit()
+
+    return attribute
 
 
 @pytest.fixture
