@@ -10,6 +10,7 @@ from tifa.models.product import ProductVariant, Product, ProductType
 @pytest.mark.asyncio
 async def test_filtering_by_attribute(
         adal: AsyncDal,
+        product_type,
         color_attribute,
         size_attribute,
         # category,
