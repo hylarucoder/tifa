@@ -171,7 +171,8 @@ async def date_attribute(adal: AsyncDal):
 
 @pytest.fixture
 async def date_time_attribute(adal: AsyncDal):
-    attribute = Attribute.objects.create(
+    attribute = adal.add(
+        Attribute,
         slug="release-date-time",
         name="Release date time",
         type=Attribute.Type.PRODUCT,
