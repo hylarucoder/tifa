@@ -59,7 +59,7 @@ class Attribute(Model):
     filterable_in_storefront = sa.Column(sa.Boolean, nullable=False)
     value_required = sa.Column(sa.Boolean, nullable=False, default=False)
     storefront_search_position = sa.Column(sa.Integer, nullable=False, default=False)
-    is_variant_only = sa.Column(sa.Boolean, nullable=False)
+    is_variant_only = sa.Column(sa.Boolean, nullable=False, default=False)
 
     class Type(StrEnum):
         PRODUCT = auto()
