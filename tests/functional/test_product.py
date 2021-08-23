@@ -11,12 +11,12 @@ from tifa.models.product import ProductVariant, Product, ProductType
 async def test_filtering_by_attribute(
         adal: AsyncDal,
         product_type,
-        color_attribute,
-        size_attribute,
-        # category,
-        date_attribute,
-        date_time_attribute,
-        # boolean_attribute,
+        # color_attribute,
+        # size_attribute,
+        # # category,
+        # date_attribute,
+        # date_time_attribute,
+        # # boolean_attribute,
 ):
     assert len(await adal.all(ProductType)) == 1
     ...
