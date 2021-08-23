@@ -53,11 +53,11 @@ class Attribute(Model):
         TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
 
     input_type = sa.Column(sa.String(50), nullable=False)
-    available_in_grid = sa.Column(sa.Boolean, nullable=False)
-    visible_in_storefront = sa.Column(sa.Boolean, nullable=False)
+    available_in_grid = sa.Column(sa.Boolean, nullable=False, default=True)
+    visible_in_storefront = sa.Column(sa.Boolean, nullable=False, default=False)
     filterable_in_dashboard = sa.Column(sa.Boolean, nullable=False)
     filterable_in_storefront = sa.Column(sa.Boolean, nullable=False)
-    value_required = sa.Column(sa.Boolean, nullable=False)
+    value_required = sa.Column(sa.Boolean, nullable=False, default=False)
     storefront_search_position = sa.Column(sa.Integer, nullable=False)
     is_variant_only = sa.Column(sa.Boolean, nullable=False)
 
