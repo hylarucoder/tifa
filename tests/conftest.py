@@ -9,8 +9,9 @@ from tifa.app import create_app
 from tifa.auth import gen_jwt
 from tifa.db.adal import AsyncDal
 from tifa.globals import db
-from tifa.models.attr import Attribute, AttributeValue, AttributeInputType
+from tifa.models.attr import Attribute, AttributeValue
 from tifa.models.product import ProductType
+from tifa.models.product_attr import AttributeProduct
 from tifa.models.system import Staff
 from tifa.models.user import User
 
@@ -103,12 +104,13 @@ def health_client():
 
 
 @pytest.fixture
-def color_attribute(adal: AsyncDal):
+async def color_attribute(adal: AsyncDal):
     attribute = adal.add(
         Attribute,
         slug="color",
         name="Color",
         type=Attribute.Type.PRODUCT,
+        input_type=Attribute.InputType.DROPDOWN,
         filterable_in_storefront=True,
         filterable_in_dashboard=True,
         available_in_grid=True,
@@ -120,13 +122,33 @@ def color_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-def date_attribute(adal: AsyncDal):
+async def size_attribute(adal: AsyncDal):
+    attribute = adal.add(
+        Attribute,
+        slug="size",
+        name="Size",
+        type=Attribute.Type.PRODUCT,
+        input_type=Attribute.InputType.DROPDOWN,
+        filterable_in_storefront=True,
+        filterable_in_dashboard=True,
+        available_in_grid=True,
+    )
+    adal.add(AttributeValue, attribute=attribute, name="3XL", slug="3xl")
+    adal.add(AttributeValue, attribute=attribute, name="2XL", slug="2xl")
+    adal.add(AttributeValue, attribute=attribute, name="XL", slug="xl")
+    adal.add(AttributeValue, attribute=attribute, name="L", slug="l")
+    await adal.commit()
+    return attribute
+
+
+@pytest.fixture
+async def date_attribute(adal: AsyncDal):
     attribute = adal.add(
         Attribute,
         slug="release-date",
         name="Release date",
         type=Attribute.Type.PRODUCT,
-        input_type=AttributeInputType.DATE,
+        input_type=Attribute.InputType.DATE,
         filterable_in_storefront=True,
         filterable_in_dashboard=True,
         available_in_grid=True,
@@ -148,12 +170,12 @@ def date_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-def date_time_attribute(adal: AsyncDal):
+async def date_time_attribute(adal: AsyncDal):
     attribute = Attribute.objects.create(
         slug="release-date-time",
         name="Release date time",
         type=Attribute.Type.PRODUCT,
-        input_type=AttributeInputType.DATE_TIME,
+        input_type=Attribute.InputType.DATE_TIME,
         filterable_in_storefront=True,
         filterable_in_dashboard=True,
         available_in_grid=True,
@@ -176,13 +198,23 @@ def date_time_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-async def product_type(color_attribute, size_attribute):
-    product_type = ProductType.objects.create(
+async def product_type(adal: AsyncDal, color_attribute, size_attribute):
+    product_type = adal.add(
+        ProductType,
         name="Default Type",
         slug="default-type",
         has_variants=True,
         is_shipping_required=True,
     )
-    product_type.product_attributes.add(color_attribute)
-    product_type.variant_attributes.add(size_attribute)
+    adal.add(
+        AttributeProduct,
+        attribute=color_attribute,
+        product_type=product_type,
+    )
+    adal.add(
+        AttributeProduct,
+        attribute=size_attribute,
+        product_type=product_type,
+    )
+    await adal.commit()
     return product_type

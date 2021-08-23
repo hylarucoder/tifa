@@ -1,18 +1,24 @@
-# from decimal import Decimal
-#
-# from tifa.models.channel import ProductVariantChannelListing
-# from tifa.models.product import ProductVariant, Product, ProductType
-#
-#
-# def test_filtering_by_attribute(
-#         adal,
-#         color_attribute,
-#         # size_attribute,
-#         category,
-#         # date_attribute,
-#         # date_time_attribute,
-#         # boolean_attribute,
-# ):
+from decimal import Decimal
+
+import pytest
+
+from tifa.db.adal import AsyncDal
+from tifa.models.channel import ProductVariantChannelListing
+from tifa.models.product import ProductVariant, Product, ProductType
+
+
+@pytest.mark.asyncio
+async def test_filtering_by_attribute(
+        adal: AsyncDal,
+        color_attribute,
+        size_attribute,
+        # category,
+        date_attribute,
+        date_time_attribute,
+        # boolean_attribute,
+):
+    assert len(await adal.all(ProductType)) == 1
+    ...
 #     product_type_a = ProductType.objects.create(
 #         name="New class", slug="new-class1", has_variants=True
 #     )

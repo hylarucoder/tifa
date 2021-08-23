@@ -8,42 +8,6 @@ from sqlalchemy.orm import relationship
 from tifa.globals import Model
 
 
-class AttributeInputType:
-    DROPDOWN = "dropdown"
-    MULTISELECT = "multiselect"
-    FILE = "file"
-    REFERENCE = "reference"
-    NUMERIC = "numeric"
-    RICH_TEXT = "rich-text"
-    BOOLEAN = "boolean"
-    DATE = "date"
-    DATE_TIME = "date-time"
-
-    CHOICES = [
-        (DROPDOWN, "Dropdown"),
-        (MULTISELECT, "Multi Select"),
-        (FILE, "File"),
-        (REFERENCE, "Reference"),
-        (NUMERIC, "Numeric"),
-        (RICH_TEXT, "Rich Text"),
-        (BOOLEAN, "Boolean"),
-        (DATE, "Date"),
-        (DATE_TIME, "Date Time"),
-    ]
-
-    ALLOWED_IN_VARIANT_SELECTION = [
-        DROPDOWN,
-        BOOLEAN,
-    ]
-
-    TYPES_WITH_CHOICES = [
-        DROPDOWN,
-        MULTISELECT,
-    ]
-
-    TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
-
-
 class Attribute(Model):
     __tablename__ = "attribute"
 
@@ -52,6 +16,42 @@ class Attribute(Model):
     name = sa.Column(sa.String(255), nullable=False)
     metadata_public = sa.Column(JSONB, index=True)
     metadata_private = sa.Column(JSONB, index=True)
+
+    class InputType(StrEnum):
+        DROPDOWN = "dropdown"
+        MULTISELECT = "multiselect"
+        FILE = "file"
+        REFERENCE = "reference"
+        NUMERIC = "numeric"
+        RICH_TEXT = "rich-text"
+        BOOLEAN = "boolean"
+        DATE = "date"
+        DATE_TIME = "date-time"
+
+        CHOICES = [
+            (DROPDOWN, "Dropdown"),
+            (MULTISELECT, "Multi Select"),
+            (FILE, "File"),
+            (REFERENCE, "Reference"),
+            (NUMERIC, "Numeric"),
+            (RICH_TEXT, "Rich Text"),
+            (BOOLEAN, "Boolean"),
+            (DATE, "Date"),
+            (DATE_TIME, "Date Time"),
+        ]
+
+        ALLOWED_IN_VARIANT_SELECTION = [
+            DROPDOWN,
+            BOOLEAN,
+        ]
+
+        TYPES_WITH_CHOICES = [
+            DROPDOWN,
+            MULTISELECT,
+        ]
+
+        TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
+
     input_type = sa.Column(sa.String(50), nullable=False)
     available_in_grid = sa.Column(sa.Boolean, nullable=False)
     visible_in_storefront = sa.Column(sa.Boolean, nullable=False)
