@@ -213,6 +213,8 @@ async def product_type(session: AsyncSession, color_attribute, size_attribute):
         slug="default-type",
         has_variants=True,
         is_shipping_required=True,
+        weight=0.1,
+        is_digital=True,
     )
     adal.add(
         AttributeProduct,
