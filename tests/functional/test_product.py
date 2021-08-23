@@ -1,6 +1,7 @@
 from decimal import Decimal
 
 import pytest
+from sqlalchemy.ext.asyncio import AsyncSession
 
 from tifa.db.adal import AsyncDal
 from tifa.models.channel import ProductVariantChannelListing
@@ -9,7 +10,7 @@ from tifa.models.product import ProductVariant, Product, ProductType
 
 @pytest.mark.asyncio
 async def test_filtering_by_attribute(
-        adal: AsyncDal,
+        session: AsyncSession,
         product_type,
         # color_attribute,
         # size_attribute,
@@ -18,6 +19,7 @@ async def test_filtering_by_attribute(
         # date_time_attribute,
         # # boolean_attribute,
 ):
+    adal = AsyncDal(session)
     assert len(await adal.all(ProductType)) == 1
     ...
 #     product_type_a = ProductType.objects.create(
