@@ -115,8 +115,8 @@ async def color_attribute(adal: AsyncDal):
         filterable_in_dashboard=True,
         available_in_grid=True,
     )
-    adal.add(AttributeValue, attribute=attribute, name="Red", slug="red")
-    adal.add(AttributeValue, attribute=attribute, name="Blue", slug="blue")
+    adal.add(AttributeValue, attribute=attribute, name="Red", slug="red", value="red")
+    adal.add(AttributeValue, attribute=attribute, name="Blue", slug="blue", value="blue")
     await adal.commit()
     return attribute
 
@@ -133,10 +133,10 @@ async def size_attribute(adal: AsyncDal):
         filterable_in_dashboard=True,
         available_in_grid=True,
     )
-    adal.add(AttributeValue, attribute=attribute, name="3XL", slug="3xl")
-    adal.add(AttributeValue, attribute=attribute, name="2XL", slug="2xl")
-    adal.add(AttributeValue, attribute=attribute, name="XL", slug="xl")
-    adal.add(AttributeValue, attribute=attribute, name="L", slug="l")
+    adal.add(AttributeValue, attribute=attribute, name="3XL", slug="3xl", value="3xl")
+    adal.add(AttributeValue, attribute=attribute, name="2XL", slug="2xl", value="2xl")
+    adal.add(AttributeValue, attribute=attribute, name="XL", slug="xl", value="xl")
+    adal.add(AttributeValue, attribute=attribute, name="L", slug="l", value="l")
     await adal.commit()
     return attribute
 
@@ -162,7 +162,7 @@ async def date_attribute(adal: AsyncDal):
             attribute=attribute,
             name=f"{attribute.name}: {value.date()}",
             slug=f"{value.date()}_{attribute.id}",
-            date_time=value,
+            value=value,
         )
     await adal.commit()
 
@@ -190,7 +190,7 @@ async def date_time_attribute(adal: AsyncDal):
             attribute=attribute,
             name=f"{attribute.name}: {value.date()}",
             slug=f"{value.date()}_{attribute.id}",
-            date_time=value,
+            value=value,
         )
     await adal.commit()
 
