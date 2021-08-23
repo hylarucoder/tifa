@@ -162,7 +162,7 @@ async def date_attribute(adal: AsyncDal):
             attribute=attribute,
             name=f"{attribute.name}: {value.date()}",
             slug=f"{value.date()}_{attribute.id}",
-            value=value,
+            value=f"{value.date()}",
         )
     await adal.commit()
 
@@ -190,7 +190,7 @@ async def date_time_attribute(adal: AsyncDal):
             attribute=attribute,
             name=f"{attribute.name}: {value.date()}",
             slug=f"{value.date()}_{attribute.id}",
-            value=value,
+            value=f"{value.date()}",
         )
     await adal.commit()
 
