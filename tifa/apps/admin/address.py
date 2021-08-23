@@ -1,10 +1,3 @@
-"""
-addressSetDefault(...): AddressSetDefault
-
-accountAddressCreate(...): AccountAddressCreate
-accountAddressDelete(...): AccountAddressDelete
-accountAddressUpdate(...): AccountAddressUpdate
-"""
 from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin.local import g

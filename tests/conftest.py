@@ -6,8 +6,9 @@ from starlette.testclient import TestClient
 
 from tifa.app import create_app
 from tifa.auth import gen_jwt
+from tifa.db.adal import AsyncDal
 from tifa.globals import db
-from tifa.db.dal import Dal
+from tifa.models.product import ProductType
 from tifa.models.system import Staff
 from tifa.models.user import User
 
@@ -48,28 +49,33 @@ def setup_db():
 
 
 @pytest.fixture(scope="session")
-def staff():
-    dal = Dal(db.session)
-    ins = dal.add(
+async def adal(event_loop, setup_db) -> AsyncDal:
+    adal = AsyncDal(db.async_session)
+    yield adal
+    await adal.session.close()
+
+
+@pytest.fixture(scope="session")
+async def staff(adal):
+    ins = adal.add(
         Staff,
         name="admin",
     )
-    dal.commit()
+    await adal.commit()
     return ins
 
 
 @pytest.fixture(scope="session")
-def user():
-    dal = Dal(db.session)
-    ins = dal.add(
+async def user():
+    ins = adal.add(
         User,
         name="alphago",
     )
-    dal.commit()
+    await adal.commit()
     return ins
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def staff_client(staff):
     client = ApiClient(app, staff)
     token = gen_jwt("{\"admin\":1}", 60 * 24)
@@ -79,11 +85,24 @@ def staff_client(staff):
     return client
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def user_client(user):
     return ApiClient(app, user)
 
 
-@pytest.fixture
+@pytest.fixture(scope="session")
 def health_client():
     return ApiClient(app)
+
+
+@pytest.fixture
+async def product_type(color_attribute, size_attribute):
+    product_type = ProductType.objects.create(
+        name="Default Type",
+        slug="default-type",
+        has_variants=True,
+        is_shipping_required=True,
+    )
+    product_type.product_attributes.add(color_attribute)
+    product_type.variant_attributes.add(size_attribute)
+    return product_type
