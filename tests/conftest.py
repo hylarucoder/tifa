@@ -3,6 +3,7 @@ import datetime
 
 import pytest
 from requests import Response
+from sqlalchemy.ext.asyncio import AsyncSession
 from starlette.testclient import TestClient
 
 from tifa.app import create_app
@@ -52,14 +53,14 @@ def setup_db():
 
 
 @pytest.fixture
-async def adal(event_loop, setup_db) -> AsyncDal:
-    adal = AsyncDal(db.async_session)
-    yield adal
-    await adal.session.close()
+async def session(setup_db) -> AsyncSession:
+    async with AsyncSession(db.async_session) as session:
+        yield session
 
 
 @pytest.fixture(scope="session")
-async def staff(adal: AsyncDal):
+async def staff(session: AsyncSession):
+    adal = AsyncDal(session)
     ins = adal.add(
         Staff,
         name="admin",
@@ -69,7 +70,8 @@ async def staff(adal: AsyncDal):
 
 
 @pytest.fixture(scope="session")
-async def user(adal: AsyncDal):
+async def user(session: AsyncSession):
+    adal = AsyncDal(session)
     ins = adal.add(
         User,
         email="alphago@gmail.com",
@@ -104,7 +106,8 @@ def health_client():
 
 
 @pytest.fixture
-async def color_attribute(adal: AsyncDal):
+async def color_attribute(session: AsyncSession):
+    adal = AsyncDal(session)
     attribute = adal.add(
         Attribute,
         slug="color",
@@ -122,7 +125,8 @@ async def color_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-async def size_attribute(adal: AsyncDal):
+async def size_attribute(session: AsyncSession):
+    adal = AsyncDal(session)
     attribute = adal.add(
         Attribute,
         slug="size",
@@ -142,7 +146,8 @@ async def size_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-async def date_attribute(adal: AsyncDal):
+async def date_attribute(session: AsyncSession):
+    adal = AsyncDal(session)
     attribute = adal.add(
         Attribute,
         slug="release-date",
@@ -170,7 +175,8 @@ async def date_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-async def date_time_attribute(adal: AsyncDal):
+async def date_time_attribute(session: AsyncSession):
+    adal = AsyncDal(session)
     attribute = adal.add(
         Attribute,
         slug="release-date-time",
@@ -199,7 +205,8 @@ async def date_time_attribute(adal: AsyncDal):
 
 
 @pytest.fixture
-async def product_type(adal: AsyncDal, color_attribute, size_attribute):
+async def product_type(session: AsyncSession, color_attribute, size_attribute):
+    adal = AsyncDal(session)
     product_type = adal.add(
         ProductType,
         name="Default Type",

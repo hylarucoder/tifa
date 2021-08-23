@@ -33,6 +33,7 @@ class SQLAlchemy:
         async_engine = create_async_engine(
             settings.POSTGRES_DATABASE_URI_ASYNC, future=True, echo=True
         )
+        self.async_engine = async_engine
         async_session_factory = sessionmaker(  # type: ignore
             async_engine, expire_on_commit=False, class_=AsyncSession
         )
