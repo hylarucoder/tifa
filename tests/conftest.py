@@ -51,7 +51,7 @@ def setup_db():
     conn.close()
 
 
-@pytest.fixture(scope="session")
+@pytest.fixture
 async def adal(event_loop, setup_db) -> AsyncDal:
     adal = AsyncDal(db.async_session)
     yield adal
