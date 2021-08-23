@@ -5,6 +5,7 @@ from requests import Response
 from starlette.testclient import TestClient
 
 from tifa.app import create_app
+from tifa.auth import gen_jwt
 from tifa.globals import db
 from tifa.db.dal import Dal
 from tifa.models.system import Staff
@@ -62,7 +63,7 @@ def user():
     dal = Dal(db.session)
     ins = dal.add(
         User,
-        name="name",
+        name="alphago",
     )
     dal.commit()
     return ins
@@ -70,7 +71,12 @@ def user():
 
 @pytest.fixture
 def staff_client(staff):
-    return ApiClient(app, staff)
+    token = gen_jwt("{\"admin\":1}", 60 * 24)
+    client = ApiClient(app, staff)
+    # client.headers.update({
+    #     "Authorization": f"Bearer {token}"
+    # })
+    return client
 
 
 @pytest.fixture

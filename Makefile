@@ -27,6 +27,9 @@ publish: ## publish package to pypi
 test: ## test
 	docker-compose run --rm tifa-toolbox-test bash -c "python -m pytest tests"
 
+test.verbose: ## test.verbose
+	docker-compose run --rm tifa-toolbox-test bash -c "python -m pytest tests -v --pdb --pdbcls=IPython.terminal.debugger:Pdb"
+
 format: ## publish package to pypi
 	black tifa
 	black tests

@@ -309,16 +309,6 @@ def product_bulk_delete(params: ParamsProductBulkDelete, dal: Dal = Depends(get_
     return {"items": items}
 
 
-class ParamsProductTranslate(APIModel):
-    id: str
-
-
-@bp.op("/product/translate", out=TProduct, summary="Product", tags=["Product"])
-def product_translate(params: ParamsProductTranslate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(Product, params.id)
-    return {"item": item}
-
-
 class ParamsProductReorderAttributeValues(APIModel):
     id: str
     value_ids: list[str]
@@ -331,7 +321,7 @@ class ParamsProductReorderAttributeValues(APIModel):
     tags=["Product"],
 )
 def product_reorder_attribute_values(
-    params: ParamsProductTranslate, dal: Dal = Depends(get_dal)
+    params: ParamsProductReorderAttributeValues, dal: Dal = Depends(get_dal)
 ):
     item = dal.get_or_404(Product, params.id)
     return {"item": item}

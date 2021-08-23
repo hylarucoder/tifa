@@ -14,7 +14,7 @@ class TWarehouse(APIModel):
     summary="WareHouse",
     tags=["WareHouse"],
 )
-def webhook_list():
+async def webhook_list():
     return []
 
 
@@ -24,5 +24,5 @@ def webhook_list():
     summary="WareHouse",
     tags=["WareHouse"],
 )
-def webhook_item():
+async def webhook_item():
     return []

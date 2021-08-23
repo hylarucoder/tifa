@@ -1,10 +1,10 @@
 from contextvars import ContextVar
 
 from tifa.db.adal import AsyncDal
-from tifa.models.system import Staff
+from tifa.models.user import User
 
 context_default = {
-    "staff": None,
+    "user": None,
     "adal": None,
 }
 _context = ContextVar("_context", default=context_default.copy())
@@ -26,11 +26,11 @@ class Context:
 
     @property
     def staff(self):
-        return self._context.get()["staff"]
+        return self._context.get()["user"]
 
     @staff.setter
-    def staff(self, v: Staff):
-        self._context.get()["staff"] = v
+    def staff(self, v: User):
+        self._context.get()["user"] = v
 
 
 g = Context()

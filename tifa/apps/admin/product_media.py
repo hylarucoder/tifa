@@ -1,9 +1,8 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.globals import db
-from tifa.db.adal import AsyncDal
-from tifa.models.menu import Menu
+from tifa.apps.admin.router import bp
+from tifa.apps.admin.local import g
+from tifa.models.product_media import ProductMedia
 
 
 class TProductMedia(APIModel):
@@ -18,8 +17,7 @@ class TProductMedia(APIModel):
     tags=["ProductMedia"],
 )
 async def product_media_create():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(ProductMedia)
     return {"item": merchant}
 
 
@@ -30,8 +28,7 @@ async def product_media_create():
     tags=["ProductMedia"],
 )
 async def product_media_update():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(ProductMedia)
     return {"item": merchant}
 
 
@@ -42,8 +39,7 @@ async def product_media_update():
     tags=["ProductMedia"],
 )
 async def product_media_delete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(ProductMedia)
     return {"item": merchant}
 
 
@@ -54,8 +50,7 @@ async def product_media_delete():
     tags=["ProductMedia"],
 )
 async def product_media_bulk_delete():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(ProductMedia)
     return {"item": merchant}
 
 
@@ -66,6 +61,5 @@ async def product_media_bulk_delete():
     tags=["ProductMedia"],
 )
 async def product_media_reorder():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(ProductMedia)
     return {"item": merchant}

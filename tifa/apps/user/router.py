@@ -1,23 +1,22 @@
 import json
-from typing import Optional
 
-from fastapi import Header, Depends, Request
-from tifa.apps.admin.local import g
+from fastapi import Depends
+from starlette.requests import Request
 
+from tifa.apps.user.local import g
 from tifa.auth import decode_jwt
 from tifa.contrib.fastapi_plus import create_bp
 from tifa.db.adal import AsyncDal
+from tifa.exceptions import NotFound, NotAuthorized
 from tifa.globals import db
-from tifa.models.system import Staff
-from tifa.exceptions import NotAuthorized, NotFound
+from tifa.models.user import User
 
-ALLOW_LIST = ("/admin/login",)
+ALLOW_LIST = ("/user/login",)
 
 
 async def before_request(
     request: Request,
 ):
-
     adal = AsyncDal(db.async_session)
     g.adal = adal
     if request.url.path not in ALLOW_LIST:
@@ -27,7 +26,7 @@ async def before_request(
                 raise NotAuthorized("Authorization Headers Required")
             token = authorization.split(" ")[1]
             content = decode_jwt(token)
-            staff = await adal.get_or_404(Staff, json.loads(content["sub"])["admin"])
+            staff = await adal.get_or_404(User, json.loads(content["sub"])["user"])
             g.staff = staff
         except NotAuthorized as e:
             raise e
