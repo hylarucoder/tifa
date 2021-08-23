@@ -54,7 +54,7 @@ def setup_db():
 
 @pytest.fixture(scope="session")
 async def session(setup_db) -> AsyncSession:
-    async with AsyncSession(db.async_session) as session:
+    async with AsyncSession(db.async_engine) as session:
         yield session
 
 
