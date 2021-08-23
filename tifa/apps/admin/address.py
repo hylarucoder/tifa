@@ -18,42 +18,42 @@ class TAddress(APIModel):
 
 
 @bp.list("/addresses", out=TAddress, summary="Address", tags=["Address"])
-def addresses_list():
+async def addresses_list():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.item("/address", out=TAddress, summary="Address", tags=["Address"])
-def address_item():
+async def address_item():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.op("/address/create", out=TAddress, summary="Address", tags=["Address"])
-def address_create():
+async def address_create():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.op("/address/update", out=TAddress, summary="Address", tags=["Address"])
-def address_update():
+async def address_update():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.op("/address/set_default", out=TAddress, summary="Address", tags=["Address"])
-def address_set_default():
+async def address_set_default():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.op("/address/delete", out=TAddress, summary="Address", tags=["Address"])
-def address_delete():
+async def address_delete():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}
 
 
 @bp.op("/address/validation_rules", out=TAddress, summary="Address", tags=["Address"])
-def address_validation_rule():
+async def address_validation_rule():
     ins = g.adal.first_or_404(Address)
     return {"items": ins}

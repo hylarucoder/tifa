@@ -71,11 +71,11 @@ def user():
 
 @pytest.fixture
 def staff_client(staff):
-    token = gen_jwt("{\"admin\":1}", 60 * 24)
     client = ApiClient(app, staff)
-    # client.headers.update({
-    #     "Authorization": f"Bearer {token}"
-    # })
+    token = gen_jwt("{\"admin\":1}", 60 * 24)
+    client.headers.update({
+        "Authorization": f"Bearer {token}"
+    })
     return client
 
 

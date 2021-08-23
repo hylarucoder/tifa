@@ -2,8 +2,6 @@ from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin.local import g
 from tifa.apps.admin.router import bp
-from tifa.globals import db
-from tifa.db.dal import Dal
 from tifa.models.app import App
 
 

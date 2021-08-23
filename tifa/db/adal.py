@@ -21,7 +21,7 @@ class AsyncDal:
         self.session = s
 
     async def get(self, clz: T, id: str) -> t.Optional[T]:
-        return await self.session.get(clz, id)
+        return await self.session.get(clz, int(id))
 
     async def bulk_get(self, clz: T, ids: list[str]) -> list[T]:
         return (
@@ -31,7 +31,7 @@ class AsyncDal:
         )
 
     async def get_or_404(self, clz: T, id) -> T:
-        ins = await self.session.get(clz, id)
+        ins = await self.session.get(clz, int(id))
         if not ins:
             raise NotFound(f"{clz} not found")
         return ins
@@ -71,10 +71,14 @@ class AsyncDal:
         items = (await self.session.execute(stmt_items)).scalars().all()
         return Pagination(page, per_page, total, items)
 
-    async def add(self, clz: T, **kwargs) -> T:
+    def add(self, clz: T, **kwargs) -> T:
         obj = clz(**kwargs)
         self.session.add(obj)
         return obj
+
+    def delete(self, ins: T) -> T:
+        self.session.delete(ins)
+        return self
 
     async def commit(self):
         await self.session.commit()
