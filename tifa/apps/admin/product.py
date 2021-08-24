@@ -16,15 +16,15 @@ from tifa.models.product import ProductType, Product, ProductVariant
 
 
 class TProductType(APIModel):
-    id: str
-    name: str
+    id: str = pt.Field(title="no des")
+    name: str = pt.Field(title="no des")
     has_variants: bool = pt.Field(title="Product type uses Variant Attributes")
-    is_shipping_required: bool
-    weight: float
-    is_digital: bool
-    metadata_public: dict[str, str]
-    metadata_private: dict[str, str]
-    slug: str
+    is_shipping_required: bool = pt.Field(title="no des")
+    weight: float = pt.Field(title="no des")
+    is_digital: bool = pt.Field(title="no des")
+    metadata_public: dict[str, str] = pt.Field(title="no des")
+    metadata_private: dict[str, str] = pt.Field(title="no des")
+    slug: str = pt.Field(title="no des")
 
 
 @bp.page(
@@ -45,14 +45,14 @@ async def product_type_item(
 
 
 class ParamsProductTypeCreate(APIModel):
-    name: str
-    has_variants: bool
-    is_shipping_required: bool
-    weight: float
-    is_digital: bool
-    metadata_public: dict
-    metadata_private: dict
-    slug: str
+    name: str = pt.Field(title="no des")
+    has_variants: bool = pt.Field(title="no des")
+    is_shipping_required: bool = pt.Field(title="no des")
+    weight: float = pt.Field(title="no des")
+    is_digital: bool = pt.Field(title="no des")
+    metadata_public: dict = pt.Field(title="no des")
+    metadata_private: dict = pt.Field(title="no des")
+    slug: str = pt.Field(title="no des")
 
 
 @bp.op(
@@ -70,15 +70,15 @@ async def product_type_create(
 
 
 class ParamsProductTypeUpdate(APIModel):
-    id: str
-    name: str
-    has_variants: bool
-    is_shipping_required: bool
-    weight: bool
-    is_digital: bool
-    metadata_public: dict
-    metadata_private: dict
-    slug: str
+    id: str = pt.Field(title="no des")
+    name: str = pt.Field(title="no des")
+    has_variants: bool = pt.Field(title="no des")
+    is_shipping_required: bool = pt.Field(title="no des")
+    weight: bool = pt.Field(title="no des")
+    is_digital: bool = pt.Field(title="no des")
+    metadata_public: dict = pt.Field(title="no des")
+    metadata_private: dict = pt.Field(title="no des")
+    slug: str = pt.Field(title="no des")
 
 
 @bp.op(

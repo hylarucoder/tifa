@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+import datetime
+import decimal
+import json
 from asyncio import current_task
 from typing import TypeVar, Type
 
+import orjson
 from sqlalchemy import create_engine
 from sqlalchemy.ext.asyncio import (
     AsyncSession,
@@ -14,6 +18,22 @@ from sqlalchemy.orm import sessionmaker, Session, scoped_session
 from tifa.conf import setting
 
 T = TypeVar("T")
+
+
+def default(obj):
+    if isinstance(obj, decimal.Decimal):
+        return str(obj)
+    # if isinstance(obj, datetime.date):
+    #     return str(obj)
+    # if isinstance(obj, datetime.datetime):
+    #     return str(obj)
+    # if isinstance(obj, datetime.time):
+    #     return str(obj)
+    raise TypeError
+
+
+def json_serializer(d: dict):
+    return orjson.dumps(d).decode()
 
 
 class SQLAlchemy:
@@ -32,9 +52,11 @@ class SQLAlchemy:
         session_factory = sessionmaker(autocommit=False, autoflush=False, bind=engine)
         self.session = scoped_session(session_factory)  # type: ignore
         async_engine = create_async_engine(
-            setting.POSTGRES_DATABASE_URI_ASYNC, future=True, echo=True
+            setting.POSTGRES_DATABASE_URI_ASYNC,
+            future=True,
+            echo=True,
+            json_serializer=json_serializer,
         )
-        self.async_engine = async_engine
         self.AsyncSession = async_session_factory = sessionmaker(  # type: ignore
             async_engine, expire_on_commit=False, class_=AsyncSession
         )

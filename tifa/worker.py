@@ -17,7 +17,7 @@ def test_celery(word: str) -> str:
 
 
 def task_cpu_bound():
-    return 'good result'
+    return "good result"
 
 
 @celery.task(name="test_celery_asyncio_cpu_bound")
@@ -28,7 +28,7 @@ def test_celery_asyncio_cpu_bound():
 
 async def task_io_bound():
     await asyncio.sleep(1)
-    return 'good result'
+    return "good result"
 
 
 @celery.task(name="test_celery_asyncio_io_bound")
