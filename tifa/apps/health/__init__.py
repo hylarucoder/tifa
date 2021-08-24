@@ -18,9 +18,21 @@ async def http_exception_handler(request, exc):
     )
 
 
-@bp.get("/test_celery")
+@bp.get("/test_celery_sync")
 def test_celery():
     celery.send_task("test_celery", args=("words????",))
+    return "ok"
+
+
+@bp.get("/test_celery_asyncio_io_bound")
+async def test_celery_async():
+    celery.send_task("test_celery_asyncio_io_bound", args=())
+    return "ok"
+
+
+@bp.get("/test_celery_asyncio_cpu_bound")
+async def test_celery_async():
+    celery.send_task("test_celery_asyncio_cpu_bound", args=())
     return "ok"
 
 
