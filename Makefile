@@ -86,7 +86,7 @@ build-elasticsearch: ## > elasticsearch
 build-elasticsearch-no-cache: ## > elasticsearch
 	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache
 
-publish-tifa-image: ## > elasticsearch
+publish-tifa-image: ## > build and publish tifa image
 	echo ${DOCKER_PASS} | docker login -u twocucao --password-stdin
 	docker pull twocucao/tifa:latest || true
 	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=twocucao/tifa:latest
