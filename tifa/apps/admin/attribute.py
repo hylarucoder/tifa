@@ -1,8 +1,7 @@
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.globals import db
-from tifa.db.dal import Dal
+from tifa.apps.admin.router import bp
+from tifa.apps.admin.local import g
 from tifa.models.attr import Attribute, AttributeValue
 
 
@@ -13,15 +12,13 @@ class TAttribute(APIModel):
 
 @bp.list("/attributes", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def get_attributes():
-    adal = Dal(db.session)
-    items = adal.all(Attribute)
+    items = g.adal.all(Attribute)
     return {"items": items}
 
 
 @bp.item("/attribute/{id}", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def get_attribute(id: str):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(Attribute, id)
+    ins = g.adal.get_or_404(Attribute, id)
     return {"items": ins}
 
 
@@ -31,8 +28,7 @@ class ParamsAttributeCreate(APIModel):
 
 @bp.op("/attribute/create", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def attribute_create(params: ParamsAttributeCreate):
-    adal = Dal(db.session)
-    ins = adal.add(Attribute, **params.dict())
+    ins = g.adal.add(Attribute, **params.dict())
     return {"items": ins}
 
 
@@ -43,8 +39,7 @@ class ParamsAttributeUpdate(APIModel):
 
 @bp.op("/attribute/update", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def attribute_update(params: ParamsAttributeUpdate):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(Attribute, params.id)
+    ins = g.adal.get_or_404(Attribute, params.id)
     return {"items": ins}
 
 
@@ -54,10 +49,9 @@ class ParamsAttributeDelete(APIModel):
 
 @bp.op("/attribute/delete", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def attribute_delete(params: ParamsAttributeDelete):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(Attribute, params.id)
-    adal.delete(ins)
-    adal.commit()
+    ins = g.adal.get_or_404(Attribute, params.id)
+    g.adal.delete(ins)
+    g.adal.commit()
     return {"item": ins}
 
 
@@ -69,11 +63,10 @@ class ParamsAttributeBulkDelete(APIModel):
     "/attribute/bulk_delete", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
 def attribute_bulk_delete(params: ParamsAttributeBulkDelete):
-    adal = Dal(db.session)
-    items = adal.bulk_get(Attribute, params.ids)
+    items = g.adal.bulk_get(Attribute, params.ids)
     for item in items:
-        adal.delete(item)
-    adal.commit()
+        g.adal.delete(item)
+    g.adal.commit()
     return {"items": items}
 
 
@@ -83,8 +76,7 @@ class ParamsAttributeTranslate(APIModel):
 
 @bp.op("/attribute/translate", out=TAttribute, summary="Attribute", tags=["Attribute"])
 def attribute_translate(params: ParamsAttributeTranslate):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(Attribute, params.id)
+    ins = g.adal.get_or_404(Attribute, params.id)
     return {"item": ins}
 
 
@@ -97,8 +89,7 @@ class ParamsAttributeReorderValues(APIModel):
     "/attribute/reorder_values", out=TAttribute, summary="Attribute", tags=["Attribute"]
 )
 def attribute_reorder_values(params: ParamsAttributeReorderValues):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(Attribute, params.id)
+    ins = g.adal.get_or_404(Attribute, params.id)
     return {"items": ins}
 
 
@@ -118,8 +109,7 @@ class ParamsAttributeValueCreate(APIModel):
     tags=["Attribute"],
 )
 def attribute_value_create(params: ParamsAttributeValueCreate):
-    adal = Dal(db.session)
-    ins = adal.add(AttributeValue)
+    ins = g.adal.add(AttributeValue)
     return {"item": ins}
 
 
@@ -135,8 +125,7 @@ class ParamsAttributeValueUpdate(APIModel):
     tags=["Attribute"],
 )
 def attribute_value_update(params: ParamsAttributeValueUpdate):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(AttributeValue, params.id)
+    ins = g.adal.get_or_404(AttributeValue, params.id)
     return {"item": ins}
 
 
@@ -151,10 +140,9 @@ class ParamsAttributeValueDelete(APIModel):
     tags=["Attribute"],
 )
 def attribute_value_delete(params: ParamsAttributeValueDelete):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(AttributeValue, params.id)
-    adal.delete(ins)
-    adal.commit()
+    ins = g.adal.get_or_404(AttributeValue, params.id)
+    g.adal.delete(ins)
+    g.adal.commit()
     return {"item": ins}
 
 
@@ -169,11 +157,10 @@ class ParamsAttributeValueBulkDelete(APIModel):
     tags=["Attribute"],
 )
 def attribute_value_bulk_delete(params: ParamsAttributeBulkDelete):
-    adal = Dal(db.session)
-    items = adal.bulk_get(AttributeValue, params.ids)
+    items = g.adal.bulk_get(AttributeValue, params.ids)
     for item in items:
-        adal.delete(item)
-    adal.commit()
+        g.adal.delete(item)
+    g.adal.commit()
     return {"items": items}
 
 
@@ -188,6 +175,5 @@ class ParamsAttributeValueTranslate(APIModel):
     tags=["Attribute"],
 )
 def attribute_value_translate(params: ParamsAttributeValueTranslate):
-    adal = Dal(db.session)
-    ins = adal.get_or_404(AttributeValue, params.id)
+    ins = g.adal.get_or_404(AttributeValue, params.id)
     return {"item": ins}

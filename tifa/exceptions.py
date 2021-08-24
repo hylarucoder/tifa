@@ -61,7 +61,7 @@ class NotAuthorized(ApiException):
 
 class NotFound(ApiException):
     status_code = HttpCodeEnum.NOT_FOUND.value
-    message = error_message[HttpCodeEnum.NOT_FOUND.name]
+    detail = error_message[HttpCodeEnum.NOT_FOUND.name]
 
 
 class InvalidToken(ApiException):

@@ -1,12 +1,10 @@
 import typing as t
-from typing import Union
 
 import sqlalchemy as sa
 from sqlalchemy.orm import Session
 
 from tifa.db.pagination import Pagination
 from tifa.exceptions import NotFound
-from tifa.globals import session
 
 T = t.TypeVar("T")
 
@@ -19,11 +17,8 @@ class Dal:
 
     session: Session
 
-    def __init__(self, s=None):
-        if not s:
-            self.session = session
-        else:
-            self.session = s
+    def __init__(self, s):
+        self.session = s
 
     def get(self, clz: T, id: str) -> t.Optional[T]:
         return self.session.get(clz, id)
