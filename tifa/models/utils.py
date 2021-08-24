@@ -11,3 +11,7 @@ class TimestampMixin:
 class MetadataMixin:
     metadata_private = sa.Column(JSONB, index=True)
     metadata_public = sa.Column(JSONB, index=True)
+
+
+class SortableMixin:
+    sort_order = sa.Column(sa.Integer, index=True)

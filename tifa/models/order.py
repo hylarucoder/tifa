@@ -85,7 +85,7 @@ class Order(MetadataMixin, TimestampMixin, Model):
     channel = relationship("Channel")
 
 
-class OrderFulfillment(MetadataMixin,TimestampMixin, Model):
+class OrderFulfillment(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "order_fulfillment"
     __table_args__ = (sa.CheckConstraint("fulfillment_order >= 0"),)
 

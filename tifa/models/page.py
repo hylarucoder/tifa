@@ -30,20 +30,3 @@ class Page(MetadataMixin, Model):
     seo_title = sa.Column(sa.String(70))
     page_type_id = sa.Column(sa.ForeignKey("page_type.id"), nullable=False)
     page_type = relationship(PageType)
-
-
-class PageTranslation(Model):
-    __tablename__ = "page_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "page_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    seo_title = sa.Column(sa.String(70))
-    seo_description = sa.Column(sa.String(300))
-    language_code = sa.Column(sa.String(10), nullable=False)
-    title = sa.Column(sa.String(255))
-    content = sa.Column(JSONB)
-    page_id = sa.Column(
-        sa.ForeignKey("page.id"),
-        nullable=False,
-    )
-    page = relationship(Page)

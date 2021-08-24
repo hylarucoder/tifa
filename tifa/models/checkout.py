@@ -1,14 +1,13 @@
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import UUID, JSONB
+from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.address import Address
 from tifa.models.channel import Channel
 from tifa.models.gift_card import GiftCard
-from tifa.models.product import ProductVariant
 from tifa.models.shipping import ShippingMethod
 from tifa.models.user import User
-from tifa.models.address import Address
 from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
@@ -16,8 +15,6 @@ class Checkout(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "checkout"
 
     id = sa.Column(UUID, primary_key=True)
-    created = sa.Column(sa.DateTime, nullable=False)
-    last_change = sa.Column(sa.DateTime, nullable=False)
     email = sa.Column(sa.String(254), nullable=False)
     user_id = sa.Column(sa.ForeignKey("user.id"))
     user = relationship(User)
@@ -57,15 +54,3 @@ class CheckoutGiftCard(TimestampMixin, Model):
     checkout = relationship(Checkout)
     gift_card_id = sa.Column(sa.ForeignKey("gift_card.id"), nullable=False)
     gift_card = relationship(GiftCard)
-
-
-class CheckoutLine(TimestampMixin, Model):
-    __tablename__ = "checkout_line"
-    __table_args__ = (sa.CheckConstraint("quantity >= 0"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    quantity = sa.Column(sa.Integer, nullable=False)
-    checkout_id = sa.Column(sa.ForeignKey("checkout.id"), nullable=False)
-    checkout = relationship(Checkout)
-    variant_id = sa.Column(sa.ForeignKey("product_variant.id"), nullable=False)
-    variant = relationship(ProductVariant)

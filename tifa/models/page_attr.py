@@ -4,14 +4,14 @@ from sqlalchemy.orm import relationship
 from tifa.globals import Model
 from tifa.models.attr import Attribute, AttributeValue
 from tifa.models.page import PageType, Page
+from tifa.models.utils import SortableMixin
 
 
-class AttributePage(Model):
+class AttributePage(SortableMixin, Model):
     __tablename__ = "attribute_page"
     __table_args__ = (sa.UniqueConstraint("attribute_id", "page_type_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    sort_order = sa.Column(sa.Integer, index=True)
     attribute_id = sa.Column(
         sa.ForeignKey("attribute.id"),
         nullable=False,
@@ -35,12 +35,11 @@ class AssignedPageAttribute(Model):
     page = relationship(Page)
 
 
-class AssignedPageAttributeValue(Model):
+class AssignedPageAttributeValue(SortableMixin, Model):
     __tablename__ = "assigned_page_attribute_value"
     __table_args__ = (sa.UniqueConstraint("value_id", "assignment_id"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    sort_order = sa.Column(sa.Integer, index=True)
     assignment_id = sa.Column(
         sa.ForeignKey("assigned_page_attribute.id"), nullable=False
     )

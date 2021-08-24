@@ -105,18 +105,3 @@ class ShippingMethodPostalCodeRule(Model):
     )
     shipping_method = relationship(ShippingMethod)
     inclusion_type = sa.Column(sa.String(32), nullable=False)
-
-
-class ShippingMethodTranslation(Model):
-    __tablename__ = "shipping_method_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "shipping_method_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(
-        sa.ForeignKey("shipping_method.id"),
-        nullable=False,
-    )
-    shipping_method = relationship(ShippingMethod)
-    description = sa.Column(JSONB)

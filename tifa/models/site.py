@@ -30,19 +30,3 @@ class SiteSetting(Model):
     default_mail_sender_name = sa.Column(sa.String(78), nullable=False)
     customer_set_password_url = sa.Column(sa.String(255))
     automatically_confirm_all_new_orders = sa.Column(sa.Boolean, nullable=False)
-
-
-class SiteSettingsTranslation(Model):
-    __tablename__ = "site_setting_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "site_settings_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    header_text = sa.Column(sa.String(200), nullable=False)
-    description = sa.Column(sa.String(500), nullable=False)
-    site_settings_id = sa.Column(
-        sa.ForeignKey("site_setting.id"),
-        nullable=False,
-    )
-
-    site_settings = relationship(SiteSetting)

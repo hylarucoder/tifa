@@ -3,7 +3,7 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
-from tifa.models.utils import MetadataMixin
+from tifa.models.utils import MetadataMixin, SortableMixin
 
 
 class Menu(MetadataMixin, Model):
@@ -14,23 +14,13 @@ class Menu(MetadataMixin, Model):
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
 
 
-class MenuItem(MetadataMixin, Model):
+class MenuItem(SortableMixin, MetadataMixin, Model):
     __tablename__ = "menu_item"
-    __table_args__ = (
-        sa.CheckConstraint("level >= 0"),
-        sa.CheckConstraint("lft >= 0"),
-        sa.CheckConstraint("rght >= 0"),
-        sa.CheckConstraint("tree_id >= 0"),
-    )
+    __table_args__ = ()
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(128), nullable=False)
-    sort_order = sa.Column(sa.Integer, index=True)
     url = sa.Column(sa.String(256))
-    lft = sa.Column(sa.Integer, nullable=False)
-    rght = sa.Column(sa.Integer, nullable=False)
-    tree_id = sa.Column(sa.Integer, nullable=False, index=True)
-    level = sa.Column(sa.Integer, nullable=False)
     category_id = sa.Column(
         sa.ForeignKey("product_category.id"),
     )
@@ -50,20 +40,3 @@ class MenuItem(MetadataMixin, Model):
         sa.ForeignKey("menu_item.id"),
     )
     parent = relationship("MenuItem", remote_side=[id])
-
-
-
-class MenuItemTranslation(Model):
-    __tablename__ = "menu_item_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "menu_item_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(128), nullable=False)
-    menu_item_id = sa.Column(
-        sa.ForeignKey("menu_item.id"),
-        nullable=False,
-        index=True,
-    )
-
-    menu_item = relationship(MenuItem)

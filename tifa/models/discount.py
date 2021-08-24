@@ -42,21 +42,6 @@ class DiscountVoucher(TimestampMixin, Model):
     only_for_staff = sa.Column(sa.Boolean, nullable=False)
 
 
-class DiscountVoucherTranslation(Model):
-    __tablename__ = "discount_voucher_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "voucher_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255))
-    voucher_id = sa.Column(
-        sa.ForeignKey("discount_voucher.id"),
-        nullable=False,
-    )
-
-    voucher = relationship(DiscountVoucher)
-
-
 class DiscountSaleCategory(TimestampMixin, Model):
     __tablename__ = "discount_sale_category"
     __table_args__ = (sa.UniqueConstraint("sale_id", "category_id"),)
@@ -130,22 +115,6 @@ class DiscountSaleChannelListing(TimestampMixin, Model):
     )
 
     channel = relationship(Channel)
-    sale = relationship(DiscountSale)
-
-
-class DiscountSaleTranslation(TimestampMixin, Model):
-    __tablename__ = "discount_sale_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "sale_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255))
-    sale_id = sa.Column(
-        sa.ForeignKey("discount_sale.id"),
-        nullable=False,
-        index=True,
-    )
-
     sale = relationship(DiscountSale)
 
 
