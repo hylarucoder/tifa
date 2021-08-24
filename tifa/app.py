@@ -6,8 +6,9 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.staticfiles import StaticFiles
 
 from tifa.contrib.globals import GlobalsMiddleware
-from tifa.settings import settings
+from tifa.conf import setting
 from tifa.utils.pkg import import_submodules
+from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
 
 
 def setup_routers(app: FastAPI):
@@ -42,8 +43,8 @@ def setup_middleware(app: FastAPI):
 
 
 def setup_static_files(app: FastAPI):
-    static_files_app = StaticFiles(directory=settings.STATIC_DIR)
-    app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
+    static_files_app = StaticFiles(directory=setting.STATIC_DIR)
+    app.mount(path=setting.STATIC_PATH, app=static_files_app, name="static")
 
 
 def setup_db_models(app):
@@ -60,9 +61,9 @@ def setup_sentry(app):
 
 def create_app():
     app = FastAPI(
-        debug=settings.DEBUG,
-        title=settings.TITLE,
-        description=settings.DESCRIPTION,
+        debug=setting.DEBUG,
+        title=setting.TITLE,
+        description=setting.DESCRIPTION,
     )
     # thread local just flask like g
     app.add_middleware(GlobalsMiddleware)
@@ -77,8 +78,11 @@ def create_app():
     # 初始化全局 middleware
     setup_logging(app)
     # 初始化 sentry
-    if settings.SENTRY_DSN:
+    if setting.SENTRY_DSN:
         setup_sentry(app)
+
+    # Enable instrumentation
+    AioHttpClientInstrumentor().instrument()
 
     return app
 

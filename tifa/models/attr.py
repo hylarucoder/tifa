@@ -50,7 +50,14 @@ class Attribute(Model):
             MULTISELECT,
         ]
 
-        TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
+        TYPES_WITH_UNIQUE_VALUES = [
+            FILE,
+            REFERENCE,
+            RICH_TEXT,
+            NUMERIC,
+            DATE,
+            DATE_TIME,
+        ]
 
     input_type = sa.Column(sa.String(50), nullable=False)
     available_in_grid = sa.Column(sa.Boolean, nullable=False, default=True)

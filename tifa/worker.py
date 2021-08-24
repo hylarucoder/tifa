@@ -1,9 +1,9 @@
 from raven import Client
 
 from tifa.globals import celery
-from tifa.settings import settings
+from tifa.conf import setting
 
-client_sentry = Client(settings.SENTRY_DSN)
+client_sentry = Client(setting.SENTRY_DSN)
 
 
 @celery.task(name="test_celery")

@@ -8,7 +8,7 @@ from logging.config import fileConfig
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
-from tifa.settings import settings
+from tifa.conf import setting
 
 config = context.config
 
@@ -36,7 +36,7 @@ target_metadata = db.Model.metadata
 
 
 def get_url():
-    return settings.POSTGRES_DATABASE_URI
+    return setting.POSTGRES_DATABASE_URI
 
 
 def run_migrations_offline():

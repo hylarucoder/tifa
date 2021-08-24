@@ -4,6 +4,7 @@ from typing import Optional
 import pydantic as pt
 from fastapi_utils.api_model import APIModel
 
+from tifa.apps.user.local import g
 from tifa.apps.user.router import bp
 from tifa.globals import db
 from tifa.db.adal import AsyncDal
@@ -43,48 +44,41 @@ class TCart(APIModel):
 
 @bp.item("/cart", out=TCart)
 async def cart():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/cart/add_item", out=TCart)
 async def cart_add_item():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/cart/change_item_quantity", out=TCart)
 async def cart_edit_item_quantity():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/cart/change_item_spec", out=TCart)
 async def cart_change_item_spec():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/cart/delete_item", out=TCart)
 async def checkout_clean():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/preview_order", out=TCart)
 async def preview_order():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}
 
 
 @bp.op("/make_order", out=TCart)
 async def make_order():
-    adal = AsyncDal(db.async_session)
-    merchant = await adal.first_or_404(Menu)
+    merchant = await g.adal.first_or_404(Menu)
     return {"item": merchant}

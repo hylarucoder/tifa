@@ -1,12 +1,9 @@
 """
 collectionChannelListingUpdate(...): CollectionChannelListingUpdate
 """
-from fastapi import Depends
 from fastapi_utils.api_model import APIModel
 
-from tifa.apps.admin import bp
-from tifa.apps.deps import get_dal
-from tifa.db.dal import Dal
+from tifa.apps.admin import bp, g
 from tifa.models.product_collection import ProductCategory, ProductCollection
 
 
@@ -25,13 +22,15 @@ class TCategory(APIModel):
 
 
 @bp.page("/categories", out=TCategory, summary="Category", tags=["ProductCategory"])
-def categories_page(dal: Dal = Depends(get_dal)):
-    return dal.page(ProductCategory)
+def categories_page():
+    return g.adal.page(ProductCategory)
 
 
 @bp.item("/category/{id}", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_item(id: str, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCategory, id)
+def category_item(
+    id: str,
+):
+    item = g.adal.get_or_404(ProductCategory, id)
     return {"item": item}
 
 
@@ -40,8 +39,10 @@ class ParamsCategoryCreate(APIModel):
 
 
 @bp.op("/category/create", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_create(params: ParamsCategoryCreate, dal: Dal = Depends(get_dal)):
-    item = dal.add(ProductCategory, **params.dict())
+def category_create(
+    params: ParamsCategoryCreate,
+):
+    item = g.adal.add(ProductCategory, **params.dict())
     return {"item": item}
 
 
@@ -51,10 +52,12 @@ class ParamsCategoryUpdate(APIModel):
 
 
 @bp.op("/category/update", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_update(params: ParamsCategoryUpdate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCategory, params.id)
+def category_update(
+    params: ParamsCategoryUpdate,
+):
+    item = g.adal.get_or_404(ProductCategory, params.id)
     item.name = params.name
-    dal.commit()
+    adal.commit()
     return {"item": item}
 
 
@@ -63,10 +66,12 @@ class ParamsCategoryDelete(APIModel):
 
 
 @bp.op("/category/delete", out=TCategory, summary="Category", tags=["ProductCategory"])
-def category_delete(params: ParamsCategoryDelete, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCategory, params.id)
-    dal.delete(item)
-    dal.commit()
+def category_delete(
+    params: ParamsCategoryDelete,
+):
+    item = g.adal.get_or_404(ProductCategory, params.id)
+    g.adal.delete(item)
+    g.adal.commit()
     return {"item": item}
 
 
@@ -77,11 +82,13 @@ class ParamsCategoryBulkDelete(APIModel):
 @bp.op(
     "/category/bulk_delete", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-def category_bulk_delete(params: ParamsCategoryBulkDelete, dal: Dal = Depends(get_dal)):
-    items = dal.bulk_get(ProductCategory, params.ids)
+def category_bulk_delete(
+    params: ParamsCategoryBulkDelete,
+):
+    items = g.adal.bulk_get(ProductCategory, params.ids)
     for item in items:
-        dal.delete(item)
-    dal.commit()
+        g.adal.delete(item)
+    g.adal.commit()
     return {"items": items}
 
 
@@ -93,8 +100,10 @@ class ParamsCategoryTranslate(APIModel):
 @bp.op(
     "/category/translate", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
-def category_translate(params: ParamsCategoryTranslate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCategory, params.id)
+def category_translate(
+    params: ParamsCategoryTranslate,
+):
+    item = g.adal.get_or_404(ProductCategory, params.id)
     return {"item": item}
 
 
@@ -106,8 +115,8 @@ class TCollection(APIModel):
 @bp.page(
     "/collections", out=TCollection, summary="Collection", tags=["ProductCollection"]
 )
-def collections_page(dal: Dal = Depends(get_dal)):
-    return dal.page(ProductCollection)
+def collections_page():
+    return g.adal.page(ProductCollection)
 
 
 @bp.item(
@@ -116,8 +125,10 @@ def collections_page(dal: Dal = Depends(get_dal)):
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_item(id: str, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(id)
+def collection_item(
+    id: str,
+):
+    item = g.adal.get_or_404(id)
     return {"item": item}
 
 
@@ -131,8 +142,10 @@ class ParamsCollectionCreate(APIModel):
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_create(params: ParamsCollectionCreate, dal: Dal = Depends(get_dal)):
-    item = dal.add(ProductCollection, **params.dict())
+def collection_create(
+    params: ParamsCollectionCreate,
+):
+    item = g.adal.add(ProductCollection, **params.dict())
     return {"item": item}
 
 
@@ -147,8 +160,10 @@ class ParamsCollectionUpdate(APIModel):
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_update(params: ParamsCollectionUpdate, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCollection, params.id)
+def collection_update(
+    params: ParamsCollectionUpdate,
+):
+    item = g.adal.get_or_404(ProductCollection, params.id)
     return {"item": item}
 
 
@@ -162,8 +177,10 @@ class ParamsCollectionDelete(APIModel):
     summary="Collection",
     tags=["ProductCollection"],
 )
-def collection_delete(params: ParamsCollectionDelete, dal: Dal = Depends(get_dal)):
-    item = dal.get_or_404(ProductCollection, params.id)
+def collection_delete(
+    params: ParamsCollectionDelete,
+):
+    item = g.adal.get_or_404(ProductCollection, params.id)
     return {"item": item}
 
 
@@ -178,12 +195,12 @@ class ParamsCollectionBulkDelete(APIModel):
     tags=["ProductCollection"],
 )
 def collection_bulk_delete(
-    params: ParamsCollectionBulkDelete, dal: Dal = Depends(get_dal)
+    params: ParamsCollectionBulkDelete,
 ):
-    items = dal.bulk_get(ProductCollection, params.ids)
+    items = g.adal.bulk_get(ProductCollection, params.ids)
     for item in items:
-        dal.delete(item)
-    dal.commit()
+        g.adal.delete(item)
+    g.adal.commit()
     return {"items": items}
 
 
@@ -193,8 +210,8 @@ def collection_bulk_delete(
     summary="Translate",
     tags=["ProductCollection"],
 )
-def collection_translate(dal: Dal = Depends(get_dal)):
-    item = dal.first_or_404(ProductCollection)
+def collection_translate():
+    item = g.adal.first_or_404(ProductCollection)
     return {"item": item}
 
 
@@ -210,9 +227,9 @@ class ParamsCollectionAddProducts(APIModel):
     tags=["ProductCollection"],
 )
 def collection_add_products(
-    params: ParamsCollectionAddProducts, dal: Dal = Depends(get_dal)
+    params: ParamsCollectionAddProducts,
 ):
-    item = dal.get_or_404(ProductCollection, params.id)
+    item = g.adal.get_or_404(ProductCollection, params.id)
     return {"item": item}
 
 
@@ -228,9 +245,9 @@ class ParamsCollectionRemoveProducts(APIModel):
     tags=["ProductCollection"],
 )
 def collection_remove_products(
-    params: ParamsCollectionRemoveProducts, dal: Dal = Depends(get_dal)
+    params: ParamsCollectionRemoveProducts,
 ):
-    item = dal.get_or_404(ProductCollection, params.id)
+    item = g.adal.get_or_404(ProductCollection, params.id)
     return {"item": item}
 
 
@@ -246,7 +263,7 @@ class ParamsCollectionReorderProducts(APIModel):
     tags=["ProductCollection"],
 )
 def collection_reorder_products(
-    params: ParamsCollectionReorderProducts, dal: Dal = Depends(get_dal)
+    params: ParamsCollectionReorderProducts,
 ):
-    item = dal.get_or_404(ProductCollection, params.id)
+    item = g.adal.get_or_404(ProductCollection, params.id)
     return {"item": item}
