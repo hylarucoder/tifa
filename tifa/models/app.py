@@ -1,18 +1,15 @@
 import sqlalchemy as sa
-from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.system import Permission
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
-class App(Model):
+class App(MetadataMixin, Model):
     __tablename__ = "app"
 
     id = sa.Column(sa.Integer, primary_key=True)
-    metadata_private = sa.Column(JSONB, index=True)
-    metadata_public = sa.Column(JSONB, index=True)
     name = sa.Column(sa.String(60), nullable=False)
     created = sa.Column(sa.DateTime, nullable=False)
     is_active = sa.Column(sa.Boolean, nullable=False)

@@ -4,10 +4,10 @@ from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.address import Address
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
-class User(TimestampMixin, Model):
+class User(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "user"
     __table_args__ = (
         sa.Index("account_username_email", "email", "first_name", "last_name"),
@@ -34,8 +34,6 @@ class User(TimestampMixin, Model):
     first_name = sa.Column(sa.String(256), nullable=False)
     last_name = sa.Column(sa.String(256), nullable=False)
     avatar = sa.Column(sa.String(100))
-    metadata_private = sa.Column(JSONB, index=True)
-    metadata_public = sa.Column(JSONB, index=True)
 
 
 class UserAddressMap(Model):

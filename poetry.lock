@@ -1269,6 +1269,77 @@ url = "https://mirrors.aliyun.com/pypi/simple"
 reference = "aliyun"
 
 [[package]]
+name = "opentelemetry-instrumentation-aiohttp-client"
+version = "0.23b2"
+description = "OpenTelemetry aiohttp client instrumentation"
+category = "main"
+optional = false
+python-versions = ">=3.6.3"
+
+[package.dependencies]
+opentelemetry-api = ">=1.3,<2.0"
+opentelemetry-instrumentation = "0.23b2"
+opentelemetry-semantic-conventions = "0.23b2"
+opentelemetry-util-http = "0.23b2"
+wrapt = ">=1.0.0,<2.0.0"
+
+[package.extras]
+instruments = ["aiohttp (>=3.0,<4.0)"]
+test = ["aiohttp (>=3.0,<4.0)"]
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
+name = "opentelemetry-instrumentation-asgi"
+version = "0.23b2"
+description = "ASGI instrumentation for OpenTelemetry"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+opentelemetry-api = ">=1.3,<2.0"
+opentelemetry-instrumentation = "0.23b2"
+opentelemetry-semantic-conventions = "0.23b2"
+opentelemetry-util-http = "0.23b2"
+
+[package.extras]
+instruments = ["asgiref (>=3.0,<4.0)"]
+test = ["opentelemetry-test (==0.23b2)", "asgiref (>=3.0,<4.0)"]
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
+name = "opentelemetry-instrumentation-fastapi"
+version = "0.23b2"
+description = "OpenTelemetry FastAPI Instrumentation"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+opentelemetry-api = ">=1.3,<2.0"
+opentelemetry-instrumentation = "0.23b2"
+opentelemetry-instrumentation-asgi = "0.23b2"
+opentelemetry-semantic-conventions = "0.23b2"
+opentelemetry-util-http = "0.23b2"
+
+[package.extras]
+instruments = ["fastapi (>=0.58.1,<0.59.0)"]
+test = ["opentelemetry-test (==0.23b2)", "requests (>=2.23.0,<2.24.0)", "fastapi (>=0.58.1,<0.59.0)"]
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
 name = "opentelemetry-sdk"
 version = "1.4.1"
 description = "OpenTelemetry Python SDK"
@@ -1293,6 +1364,27 @@ description = "OpenTelemetry Semantic Conventions"
 category = "main"
 optional = false
 python-versions = ">=3.6"
+
+[package.source]
+type = "legacy"
+url = "https://mirrors.aliyun.com/pypi/simple"
+reference = "aliyun"
+
+[[package]]
+name = "opentelemetry-util-http"
+version = "0.23b2"
+description = "Web util for OpenTelemetry"
+category = "main"
+optional = false
+python-versions = ">=3.6"
+
+[package.dependencies]
+asgiref = ">=3.0,<4.0"
+opentelemetry-api = ">=1.3,<2.0"
+opentelemetry-instrumentation = "0.23b2"
+
+[package.extras]
+test = ["opentelemetry-test (==0.23b2)"]
 
 [package.source]
 type = "legacy"
@@ -2371,7 +2463,7 @@ reference = "aliyun"
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.9"
-content-hash = "53bd10c287722cf20d76fcff93eeaff1d981c94ae3e61948f8768062e85ca482"
+content-hash = "6787c9fc5583b7d9d401ad59980899f54455f93572c2fa1e8c0199382e411e51"
 
 [metadata.files]
 aiofiles = [
@@ -3074,6 +3166,18 @@ opentelemetry-instrumentation = [
     {file = "opentelemetry-instrumentation-0.23b2.tar.gz", hash = "sha256:03f47469f47970e96d69ae65a231c3e3510b160ac19c90b09ab33893876e2b89"},
     {file = "opentelemetry_instrumentation-0.23b2-py3-none-any.whl", hash = "sha256:71878bf774fb4c501d994a9389f5de75915fd2450e4cc4a9898c1b1faf3690ac"},
 ]
+opentelemetry-instrumentation-aiohttp-client = [
+    {file = "opentelemetry-instrumentation-aiohttp-client-0.23b2.tar.gz", hash = "sha256:426ab895966c9cdc9ebf3760e60bbcf6ee8d0edd4f8539d718a02d2e705cad1f"},
+    {file = "opentelemetry_instrumentation_aiohttp_client-0.23b2-py3-none-any.whl", hash = "sha256:4dc704730edd81279896a0bc5f4d05c0a877f589b961e0b85c2ba48d0b0f8fc8"},
+]
+opentelemetry-instrumentation-asgi = [
+    {file = "opentelemetry-instrumentation-asgi-0.23b2.tar.gz", hash = "sha256:55db0ff4dfca8a0d3e61d67b8485f9e257de1fcf63f66c2af1a3f9e9ae126b00"},
+    {file = "opentelemetry_instrumentation_asgi-0.23b2-py3-none-any.whl", hash = "sha256:a5b74db345ff305d4de28f494e4a3eda2420692fc05a2508b4053f11f2670884"},
+]
+opentelemetry-instrumentation-fastapi = [
+    {file = "opentelemetry-instrumentation-fastapi-0.23b2.tar.gz", hash = "sha256:6629926693ebe922859642e69bdf77e5d40777ef5613155aa6f98548a5f7dfaa"},
+    {file = "opentelemetry_instrumentation_fastapi-0.23b2-py3-none-any.whl", hash = "sha256:400bc463327266030f341d03e6da0d5f97f456c32175473ba6a4033675430810"},
+]
 opentelemetry-sdk = [
     {file = "opentelemetry-sdk-1.4.1.tar.gz", hash = "sha256:ef0d6fe69c0e6dffe24114af5dc87f8155347a59e8feba6da81cf96837623b6a"},
     {file = "opentelemetry_sdk-1.4.1-py3-none-any.whl", hash = "sha256:17f3dd6b7dc9015d7ef59f00ad20d78b500d64ae047c11c33fac23359a4a9af9"},
@@ -3081,6 +3185,10 @@ opentelemetry-sdk = [
 opentelemetry-semantic-conventions = [
     {file = "opentelemetry-semantic-conventions-0.23b2.tar.gz", hash = "sha256:f3f1a26afde671e0a80a9bb6e6f2826a034105482e8465497ab798fc72547b5c"},
     {file = "opentelemetry_semantic_conventions-0.23b2-py3-none-any.whl", hash = "sha256:76e65b9b7ec20894fed84c49b40bf1f9a26c7d605c44481ead503dc91876ae94"},
+]
+opentelemetry-util-http = [
+    {file = "opentelemetry-util-http-0.23b2.tar.gz", hash = "sha256:6d8ed8b4249d3d9c6c1d3c1d1e2c3e5e2cd366585acf41e801ea19d27af88a3e"},
+    {file = "opentelemetry_util_http-0.23b2-py3-none-any.whl", hash = "sha256:1a5129bff136018edeba0a857384b7782420e0010048fa469ce52c8466ea4817"},
 ]
 orjson = [
     {file = "orjson-3.6.3-cp310-cp310-manylinux_2_24_aarch64.whl", hash = "sha256:5f78ed46b179585272a5670537f2203dbb7b3e2f8e4db1be72839cc423e2daef"},

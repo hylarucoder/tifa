@@ -51,6 +51,8 @@ raven = "^6.10.0"
 redis = "^3.5.3"
 tenacity = "^7.0.0"
 xlrd = "^2.0.1"
+opentelemetry-instrumentation-fastapi = "^0.23b2"
+opentelemetry-instrumentation-aiohttp-client = "^0.23b2"
 
 [tool.poetry.dev-dependencies]
 black = "*"

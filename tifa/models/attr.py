@@ -6,16 +6,15 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.utils import MetadataMixin, SortableMixin
 
 
-class Attribute(Model):
+class Attribute(MetadataMixin, Model):
     __tablename__ = "attribute"
 
     id = sa.Column(sa.Integer, primary_key=True)
     slug = sa.Column(sa.String(250), nullable=False, unique=True)
     name = sa.Column(sa.String(255), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
     class InputType(StrEnum):
         DROPDOWN = "dropdown"
@@ -50,7 +49,14 @@ class Attribute(Model):
             MULTISELECT,
         ]
 
-        TYPES_WITH_UNIQUE_VALUES = [FILE, REFERENCE, RICH_TEXT, NUMERIC, DATE, DATE_TIME]
+        TYPES_WITH_UNIQUE_VALUES = [
+            FILE,
+            REFERENCE,
+            RICH_TEXT,
+            NUMERIC,
+            DATE,
+            DATE_TIME,
+        ]
 
     input_type = sa.Column(sa.String(50), nullable=False)
     available_in_grid = sa.Column(sa.Boolean, nullable=False, default=True)
@@ -70,23 +76,7 @@ class Attribute(Model):
     unit = sa.Column(sa.String(100))
 
 
-class AttributeTranslation(Model):
-    __tablename__ = "attribute_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "attribute_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(100), nullable=False)
-    attribute_id = sa.Column(
-        sa.ForeignKey("attribute.id"),
-        nullable=False,
-        index=True,
-    )
-
-    attribute = relationship(Attribute)
-
-
-class AttributeValue(Model):
+class AttributeValue(SortableMixin, Model):
     __tablename__ = "attribute_value"
     __table_args__ = (
         sa.UniqueConstraint("slug", "attribute_id"),
@@ -99,21 +89,8 @@ class AttributeValue(Model):
 
     name = sa.Column(sa.String(250), nullable=False)
     slug = sa.Column(sa.String(255), nullable=False, index=True)
-    sort_order = sa.Column(sa.Integer, index=True)
     value = sa.Column(sa.String(100), nullable=False)
     content_type = sa.Column(sa.String(50))
     file_url = sa.Column(sa.String(200))
     rich_text = sa.Column(JSONB)
     boolean = sa.Column(sa.Boolean)
-
-
-class AttributeValueTranslation(Model):
-    __tablename__ = "attribute_value_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "attribute_value_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(100), nullable=False)
-    attribute_value_id = sa.Column(sa.ForeignKey("attribute_value.id"), nullable=False)
-    rich_text = sa.Column(JSONB)
-    attribute_value = relationship(AttributeValue)

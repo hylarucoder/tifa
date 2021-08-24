@@ -20,11 +20,9 @@ staffNotificationRecipientUpdate(...): StaffNotificationRecipientUpdate
 from fastapi_utils.api_model import APIModel
 
 from tifa.apps.admin import bp
-from tifa.auth import get_password_hash
-from tifa.db.adal import AsyncDal
-from tifa.globals import db
-from tifa.models.system import Staff
 from tifa.apps.admin.local import g
+from tifa.auth import get_password_hash
+from tifa.models.system import Staff
 
 
 class TToken(APIModel):
@@ -65,7 +63,7 @@ class TStaff(APIModel):
 
 @bp.page("/staffs", out=TStaff, summary="Staff", tags=["Staff"])
 async def get_staffs():
-    adal = AsyncDal(db.async_session)
+    adal = g.adal
     ...
 
 

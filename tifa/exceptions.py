@@ -35,17 +35,17 @@ class ApiException(Exception):
     status_code = HttpCodeEnum.BAD_REQUEST.value
     biz_code = BizCodeEnum.FAIL
     code: Optional[int]
-    message: Optional[str] = None
+    detail: Optional[str] = None
 
-    def __init__(self, message, status_code=None, biz_code=None, errors=None):
+    def __init__(self, detail, status_code=None, biz_code=None, errors=None):
         self.status_code = status_code or self.status_code
         self.code = self.status_code or self.code
         self.biz_code = biz_code or self.biz_code
-        self.message = message or self.message
+        self.detail = detail or self.detail
         self.errors = errors or []
 
     def to_result(self):
-        rv = {"message": self.message}
+        rv = {"detail": self.detail}
         if self.code:
             rv["code"] = self.code
         if self.biz_code:
@@ -61,7 +61,7 @@ class NotAuthorized(ApiException):
 
 class NotFound(ApiException):
     status_code = HttpCodeEnum.NOT_FOUND.value
-    message = error_message[HttpCodeEnum.NOT_FOUND.name]
+    detail = error_message[HttpCodeEnum.NOT_FOUND.name]
 
 
 class InvalidToken(ApiException):
@@ -80,5 +80,5 @@ class UnicornException(Exception):
 def unicorn_exception_handler(request: Request, exc: UnicornException):
     return ORJSONResponse(
         status_code=418,
-        content={"message": f"Oops! {exc.name} did something. There goes a rainbow..."},
+        content={"detail": f"Oops! {exc.name} did something. There goes a rainbow..."},
     )

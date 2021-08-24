@@ -4,10 +4,10 @@ from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.product_collection import ProductCategory, ProductCollection
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin, SortableMixin
 
 
-class ProductType(TimestampMixin, Model):
+class ProductType(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product_type"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -16,12 +16,10 @@ class ProductType(TimestampMixin, Model):
     is_shipping_required = sa.Column(sa.Boolean, nullable=False)
     weight = sa.Column(sa.Float(53), nullable=False)
     is_digital = sa.Column(sa.Boolean, nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
 
 
-class Product(TimestampMixin, Model):
+class Product(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -41,8 +39,6 @@ class Product(TimestampMixin, Model):
     seo_title = sa.Column(sa.String(70))
     charge_taxes = sa.Column(sa.Boolean, nullable=False)
     weight = sa.Column(sa.Float(53))
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
     default_variant_id = sa.Column(
         sa.ForeignKey(
@@ -59,23 +55,7 @@ class Product(TimestampMixin, Model):
     rating = sa.Column(sa.Float(53))
 
 
-class ProductTranslation(TimestampMixin, Model):
-    __tablename__ = "product_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "product_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    seo_title = sa.Column(sa.String(70))
-    seo_description = sa.Column(sa.String(300))
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(250))
-    description = sa.Column(JSONB)
-    product_id = sa.Column(
-        sa.ForeignKey("product.id"),
-        nullable=False,
-    )
-
-
-class ProductVariant(TimestampMixin, Model):
+class ProductVariant(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product_variant"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -85,27 +65,10 @@ class ProductVariant(TimestampMixin, Model):
     product = relationship("Product", foreign_keys=[product_id])
     track_inventory = sa.Column(sa.Boolean, nullable=False)
     weight = sa.Column(sa.Float(53))
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     sort_order = sa.Column(sa.Integer, index=True)
 
 
-class ProductVariantTranslation(TimestampMixin, Model):
-    __tablename__ = "product_variant_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "product_variant_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255), nullable=False)
-    product_variant_id = sa.Column(
-        sa.ForeignKey("product_variant.id"),
-        nullable=False,
-    )
-
-    product_variant = relationship(ProductVariant)
-
-
-class CollectionProduct(TimestampMixin, Model):
+class CollectionProduct(SortableMixin, TimestampMixin, Model):
     __tablename__ = "collection_product"
     __table_args__ = (sa.UniqueConstraint("collection_id", "product_id"),)
 
@@ -118,12 +81,11 @@ class CollectionProduct(TimestampMixin, Model):
         sa.ForeignKey("product.id"),
         nullable=False,
     )
-    sort_order = sa.Column(sa.Integer, index=True)
     collection = relationship(ProductCollection)
     product = relationship(Product)
 
 
-class ProductDigitalContent(TimestampMixin, Model):
+class ProductDigitalContent(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product_digital_content"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -139,8 +101,6 @@ class ProductDigitalContent(TimestampMixin, Model):
         unique=True,
     )
     product_variant = relationship(ProductVariant, uselist=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
 
 class ProductDigitalContentUrl(Model):

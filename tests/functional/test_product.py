@@ -1,11 +1,8 @@
-from decimal import Decimal
-
 import pytest
 from sqlalchemy.ext.asyncio import AsyncSession
 
 from tifa.db.adal import AsyncDal
-from tifa.models.channel import ProductVariantChannelListing
-from tifa.models.product import ProductVariant, Product, ProductType
+from tifa.models.product import ProductType
 
 
 @pytest.mark.asyncio

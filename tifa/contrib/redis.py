@@ -2,7 +2,7 @@ import logging
 
 import aioredis
 
-from tifa.settings import settings
+from tifa.conf import setting
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +13,7 @@ class MyRedis:
 
     @classmethod
     async def create(cls):
-        _pool = await aioredis.Redis(host=settings.REDIS_CACHE_URI)
+        _pool = await aioredis.Redis(host=setting.REDIS_CACHE_URI)
         return cls(pool=_pool)
 
 

@@ -6,9 +6,10 @@ from tifa.globals import Model
 from tifa.models.app import App
 from tifa.models.order import Order
 from tifa.models.user import User
+from tifa.models.utils import MetadataMixin
 
 
-class Invoice(Model):
+class Invoice(MetadataMixin, Model):
     __tablename__ = "invoice"
 
     id = sa.Column(sa.Integer, primary_key=True)

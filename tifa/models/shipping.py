@@ -5,21 +5,20 @@ from sqlalchemy.orm import relationship
 from tifa.globals import Model
 from tifa.models.channel import Channel
 from tifa.models.product import Product
+from tifa.models.utils import MetadataMixin
 
 
-class ShippingZone(Model):
+class ShippingZone(MetadataMixin, Model):
     __tablename__ = "shipping_zone"
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(100), nullable=False)
     countries = sa.Column(sa.String(749), nullable=False)
     default = sa.Column(sa.Boolean, nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     description = sa.Column(sa.Text, nullable=False)
 
 
-class ShippingMethod(Model):
+class ShippingMethod(MetadataMixin, Model):
     __tablename__ = "shipping_method"
     __table_args__ = (
         sa.CheckConstraint("maximum_delivery_days >= 0"),
@@ -36,8 +35,6 @@ class ShippingMethod(Model):
         nullable=False,
     )
     shipping_zone = relationship(ShippingZone)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     maximum_delivery_days = sa.Column(sa.Integer)
     minimum_delivery_days = sa.Column(sa.Integer)
     description = sa.Column(JSONB)
@@ -108,18 +105,3 @@ class ShippingMethodPostalCodeRule(Model):
     )
     shipping_method = relationship(ShippingMethod)
     inclusion_type = sa.Column(sa.String(32), nullable=False)
-
-
-class ShippingMethodTranslation(Model):
-    __tablename__ = "shipping_method_translation"
-    __table_args__ = (sa.UniqueConstraint("language_code", "shipping_method_id"),)
-
-    id = sa.Column(sa.Integer, primary_key=True)
-    language_code = sa.Column(sa.String(10), nullable=False)
-    name = sa.Column(sa.String(255))
-    shipping_method_id = sa.Column(
-        sa.ForeignKey("shipping_method.id"),
-        nullable=False,
-    )
-    shipping_method = relationship(ShippingMethod)
-    description = sa.Column(JSONB)

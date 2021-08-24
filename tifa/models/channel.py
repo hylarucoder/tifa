@@ -16,7 +16,7 @@ class Channel(TimestampMixin, Model):
     currency_code = sa.Column(sa.String(3), nullable=False)
 
 
-class ProductProductChannelListing(Model):
+class ProductChannelListing(Model):
     __tablename__ = "product_channel_listing"
     __table_args__ = (sa.UniqueConstraint("product_id", "channel_id"),)
 
