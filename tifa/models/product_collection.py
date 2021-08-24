@@ -3,10 +3,10 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
-class ProductCollection(TimestampMixin, Model):
+class ProductCollection(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product_collection"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -17,11 +17,9 @@ class ProductCollection(TimestampMixin, Model):
     seo_title = sa.Column(sa.String(70))
     background_image = sa.Column(sa.String(100))
     background_image_alt = sa.Column(sa.String(128), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
 
-class ProductCategory(TimestampMixin, Model):
+class ProductCategory(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "product_category"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -35,5 +33,3 @@ class ProductCategory(TimestampMixin, Model):
     seo_title = sa.Column(sa.String(70))
     background_image = sa.Column(sa.String(100))
     background_image_alt = sa.Column(sa.String(128), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)

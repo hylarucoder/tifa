@@ -3,19 +3,18 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.utils import MetadataMixin
 
 
-class Menu(Model):
+class Menu(MetadataMixin, Model):
     __tablename__ = "menu"
 
     id = sa.Column(sa.Integer, primary_key=True)
     name = sa.Column(sa.String(250), nullable=False)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
 
-class MenuItem(Model):
+class MenuItem(MetadataMixin, Model):
     __tablename__ = "menu_item"
     __table_args__ = (
         sa.CheckConstraint("level >= 0"),
@@ -52,8 +51,6 @@ class MenuItem(Model):
     )
     parent = relationship("MenuItem", remote_side=[id])
 
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
 
 class MenuItemTranslation(Model):

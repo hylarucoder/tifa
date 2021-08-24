@@ -7,10 +7,10 @@ from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
 from tifa.models.product import ProductVariant
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
-class Order(TimestampMixin, Model):
+class Order(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "order"
 
     id = sa.Column(sa.Integer, primary_key=True)
@@ -45,8 +45,6 @@ class Order(TimestampMixin, Model):
     status = sa.Column(sa.String(32), nullable=False)
     display_gross_prices = sa.Column(sa.Boolean, nullable=False)
     currency = sa.Column(sa.String(3), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     redirect_url = sa.Column(sa.String(200))
     undiscounted_total_gross_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
     undiscounted_total_net_amount = sa.Column(sa.Numeric(12, 3), nullable=False)
@@ -87,7 +85,7 @@ class Order(TimestampMixin, Model):
     channel = relationship("Channel")
 
 
-class OrderFulfillment(TimestampMixin, Model):
+class OrderFulfillment(MetadataMixin,TimestampMixin, Model):
     __tablename__ = "order_fulfillment"
     __table_args__ = (sa.CheckConstraint("fulfillment_order >= 0"),)
 
@@ -110,8 +108,6 @@ class OrderFulfillment(TimestampMixin, Model):
         CANCELED = auto()
 
     status = sa.Column(sa.String(32), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     shipping_refund_amount = sa.Column(sa.Numeric(12, 3))
     total_refund_amount = sa.Column(sa.Numeric(12, 3))
 

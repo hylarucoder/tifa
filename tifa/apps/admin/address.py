@@ -10,9 +10,9 @@ class TAddress(APIModel):
     name: str
 
 
-@bp.list("/addresses", out=TAddress, summary="Address", tags=["Address"])
-async def addresses_list():
-    ins = g.adal.first_or_404(Address)
+@bp.page("/addresses", out=TAddress, summary="Address", tags=["Address"])
+async def addresses_page():
+    ins = g.adal.page(Address)
     return {"items": ins}
 
 

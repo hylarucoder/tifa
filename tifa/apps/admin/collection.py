@@ -104,7 +104,7 @@ async def category_create(
     return {"item": item}
 
 
-class ParamsCategoryUpdate(APIModel):
+class BodyCategoryUpdate(APIModel):
     id: str
     name: str
     slug: str
@@ -119,29 +119,29 @@ class ParamsCategoryUpdate(APIModel):
 
 @bp.op("/category/update", out=TCategory, summary="Category", tags=["ProductCategory"])
 async def category_update(
-    params: ParamsCategoryUpdate,
+    body: BodyCategoryUpdate,
 ):
-    item = await g.adal.get_or_404(ProductCategory, params.id)
-    item.name = params.name
-    g.adal.commit()
+    item = await g.adal.get_or_404(ProductCategory, body.id)
+    item.name = body.name
+    await g.adal.commit()
     return {"item": item}
 
 
-class ParamsCategoryDelete(APIModel):
+class BodyCategoryDelete(APIModel):
     id: str
 
 
 @bp.op("/category/delete", out=TCategory, summary="Category", tags=["ProductCategory"])
 async def category_delete(
-    params: ParamsCategoryDelete,
+    body: BodyCategoryDelete,
 ):
-    item = g.adal.get_or_404(ProductCategory, params.id)
+    item = g.adal.get_or_404(ProductCategory, body.id)
     g.adal.delete(item)
     await g.adal.commit()
     return {"item": item}
 
 
-class ParamsCategoryBulkDelete(APIModel):
+class BodyCategoryBulkDelete(APIModel):
     ids: list[str]
 
 
@@ -149,12 +149,12 @@ class ParamsCategoryBulkDelete(APIModel):
     "/category/bulk_delete", out=TCategory, summary="Category", tags=["ProductCategory"]
 )
 async def category_bulk_delete(
-    params: ParamsCategoryBulkDelete,
+    body: BodyCategoryBulkDelete,
 ):
-    items = g.adal.bulk_get(ProductCategory, params.ids)
+    items = g.adal.bulk_get(ProductCategory, body.ids)
     for item in items:
         g.adal.delete(item)
-    g.adal.commit()
+    await g.adal.commit()
     return {"items": items}
 
 

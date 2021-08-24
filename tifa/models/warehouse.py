@@ -7,9 +7,10 @@ from tifa.models.order import OrderLine
 from tifa.models.product import ProductVariant
 from tifa.models.shipping import ShippingZone
 from tifa.models.address import Address
+from tifa.models.utils import MetadataMixin
 
 
-class Warehouse(Model):
+class Warehouse(MetadataMixin, Model):
     __tablename__ = "warehouse"
 
     id = sa.Column(UUID, primary_key=True)
@@ -18,8 +19,6 @@ class Warehouse(Model):
     address_id = sa.Column(sa.ForeignKey("address.id"), nullable=False)
     address = relationship(Address)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
 
 class WarehouseStock(Model):

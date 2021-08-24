@@ -6,16 +6,15 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.utils import MetadataMixin
 
 
-class Attribute(Model):
+class Attribute(MetadataMixin, Model):
     __tablename__ = "attribute"
 
     id = sa.Column(sa.Integer, primary_key=True)
     slug = sa.Column(sa.String(250), nullable=False, unique=True)
     name = sa.Column(sa.String(255), nullable=False)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
 
     class InputType(StrEnum):
         DROPDOWN = "dropdown"

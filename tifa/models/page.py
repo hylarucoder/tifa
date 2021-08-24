@@ -3,20 +3,19 @@ from sqlalchemy.dialects.postgresql import JSONB
 from sqlalchemy.orm import relationship
 
 from tifa.globals import Model
+from tifa.models.utils import MetadataMixin
 
 
-class PageType(Model):
+class PageType(MetadataMixin, Model):
     __tablename__ = "page_type"
     __table_args__ = (sa.Index("page_type_name_slug", "name", "slug"),)
 
     id = sa.Column(sa.Integer, primary_key=True)
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     name = sa.Column(sa.String(250), nullable=False)
     slug = sa.Column(sa.String(255), nullable=False, unique=True)
 
 
-class Page(Model):
+class Page(MetadataMixin, Model):
     __tablename__ = "page"
     __table_args__ = (sa.Index("page_title_slug", "title", "slug"),)
 
@@ -29,8 +28,6 @@ class Page(Model):
     publication_date = sa.Column(sa.Date)
     seo_description = sa.Column(sa.String(300))
     seo_title = sa.Column(sa.String(70))
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     page_type_id = sa.Column(sa.ForeignKey("page_type.id"), nullable=False)
     page_type = relationship(PageType)
 

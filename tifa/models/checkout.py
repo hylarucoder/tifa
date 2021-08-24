@@ -9,10 +9,10 @@ from tifa.models.product import ProductVariant
 from tifa.models.shipping import ShippingMethod
 from tifa.models.user import User
 from tifa.models.address import Address
-from tifa.models.utils import TimestampMixin
+from tifa.models.utils import TimestampMixin, MetadataMixin
 
 
-class Checkout(TimestampMixin, Model):
+class Checkout(MetadataMixin, TimestampMixin, Model):
     __tablename__ = "checkout"
 
     id = sa.Column(UUID, primary_key=True)
@@ -41,8 +41,6 @@ class Checkout(TimestampMixin, Model):
     shipping_address_id = sa.Column(sa.ForeignKey("address.id"))
     voucher_code = sa.Column(sa.String(12))
     translated_discount_name = sa.Column(sa.String(255))
-    metadata_public = sa.Column(JSONB, index=True)
-    metadata_private = sa.Column(JSONB, index=True)
     currency = sa.Column(sa.String(3), nullable=False)
     country = sa.Column(sa.String(2), nullable=False)
     redirect_url = sa.Column(sa.String(200))
