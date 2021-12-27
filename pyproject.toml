@@ -14,10 +14,10 @@ default = true
 python = "^3.9"
 ipython = "*"
 markdown = "*"
-sqlalchemy = ""
+sqlalchemy = "*"
 xlsxwriter = "*"
 xlwt = "*"
-fastapi = "*"
+fastapi = "^0.70.1"
 uvicorn = "*"
 typer = "*"
 python-jose = {extras = ["cryptography"], version = "^3.1.0"}
