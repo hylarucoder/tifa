@@ -52,16 +52,8 @@ docker-build: ## build and compose up
 docker-build-no-cache: ## build --no-cache
 	docker-compose build --no-cache  && docker-compose up
 
-before-up: ## some deamons
-	docker-compose up -d redis postgres
-
-before-full-up: ## some deamons
-	docker-compose up -d redis postgres
-
 start: ## runserver
-	make before-up
-	docker-compose stop tifa-web
-	docker-compose up --no-deps tifa-web
+	docker-compose run --rm --service-ports tifa-web
 
 beat: ## beat
 	docker-compose up tifa-beat
