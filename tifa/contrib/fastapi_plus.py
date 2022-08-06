@@ -1,5 +1,4 @@
 from typing import Optional, List
-from opentelemetry.instrumentation.fastapi import FastAPIInstrumentor
 
 from fastapi import FastAPI, HTTPException
 from fastapi_utils.api_model import APIModel
@@ -125,6 +124,5 @@ def create_bp(dependencies: list = None) -> FastAPIPlus:
     if not dependencies:
         dependencies = []
     app = FastAPIPlus(dependencies=dependencies)
-    FastAPIInstrumentor.instrument_app(app)
     setup_error_handlers(app)
     return app

@@ -8,7 +8,6 @@ from starlette.staticfiles import StaticFiles
 from tifa.contrib.globals import GlobalsMiddleware
 from tifa.conf import setting
 from tifa.utils.pkg import import_submodules
-from opentelemetry.instrumentation.aiohttp_client import AioHttpClientInstrumentor
 
 
 def setup_routers(app: FastAPI):
@@ -38,8 +37,6 @@ def setup_middleware(app: FastAPI):
         return response
 
     app.add_middleware(BaseHTTPMiddleware, dispatch=add_process_time_header)
-    # from opentelemetry.instrumentation.asgi import OpenTelemetryMiddleware
-    # app.add_middleware(OpenTelemetryMiddleware)
 
 
 def setup_static_files(app: FastAPI):
@@ -80,9 +77,6 @@ def create_app():
     # 初始化 sentry
     if setting.SENTRY_DSN:
         setup_sentry(app)
-
-    # Enable instrumentation
-    AioHttpClientInstrumentor().instrument()
 
     return app
 
