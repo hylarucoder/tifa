@@ -1,4 +1,4 @@
-FROM python:3.9.5-buster
+FROM python:3.10.4-buster
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DEBIAN_FRONTEND=noninteractive
