@@ -4,7 +4,7 @@ from typing import Union, Any
 from jose import jwt
 
 from tifa.exceptions import ApiException
-from tifa.conf import setting
+from tifa.settings import settings
 from passlib.context import CryptContext
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
@@ -14,7 +14,7 @@ ALGORITHM = "HS256"
 
 def decode_jwt(token):
     try:
-        payload = jwt.decode(token, setting.SECRET_KEY, algorithms=[ALGORITHM])
+        payload = jwt.decode(token, settings.SECRET_KEY, algorithms=[ALGORITHM])
         return payload
     except jwt.JWTError:
         raise ApiException(
@@ -26,7 +26,7 @@ def decode_jwt(token):
 def gen_jwt(subject: Union[str, Any], minutes: int) -> str:
     expire = datetime.datetime.now() + datetime.timedelta(minutes=minutes)
     to_encode = {"exp": expire, "sub": str(subject)}
-    encoded_jwt = jwt.encode(to_encode, setting.SECRET_KEY, algorithm=ALGORITHM)
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, algorithm=ALGORITHM)
     return encoded_jwt
 
 

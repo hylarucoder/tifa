@@ -4,7 +4,7 @@ import logging
 
 from aiokafka import AIOKafkaProducer, AIOKafkaConsumer
 
-from tifa.conf import setting
+from tifa.settings import settings
 
 loop = asyncio.get_event_loop()
 
@@ -17,12 +17,12 @@ class MyKafka:
 
     def __init__(self):
         self.producer = AIOKafkaProducer(
-            loop=loop, bootstrap_servers=setting.KAFKA_BOOTSTRAP_SERVERS
+            loop=loop, bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS
         )
         self.consumer = AIOKafkaConsumer(
-            setting.KAFKA_TOPIC,
+            settings.KAFKA_TOPIC,
             loop=loop,
-            bootstrap_servers=setting.KAFKA_BOOTSTRAP_SERVERS,
+            bootstrap_servers=settings.KAFKA_BOOTSTRAP_SERVERS,
         )
 
     async def start_producer(self):
@@ -32,7 +32,7 @@ class MyKafka:
         await self.consumer.start()
 
     async def send(self, data):
-        await self.producer.send(setting.KAFKA_TOPIC, json.dumps(data))
+        await self.producer.send(settings.KAFKA_TOPIC, json.dumps(data))
 
 
 kafka = MyKafka()

@@ -1,4 +1,4 @@
-FROM python:3.10.4-buster
+FROM python:3.10.9-buster
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DEBIAN_FRONTEND=noninteractive
@@ -24,7 +24,7 @@ RUN apt-get update &&\
     unixodbc
 
 
-ENV PYPI=https://mirrors.aliyun.com/pypi/simple/
+ENV PYPI=https://mirrors.cloud.tencent.com/pypi/simple
 ENV PIP_DEFAULT_TIMEOUT=1000
 RUN pip install -U pip -i $PYPI
 RUN pip install -U poetry -i $PYPI

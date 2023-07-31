@@ -6,15 +6,14 @@ authors = ["twocucao <twocucao@gmail.com>"]
 include = ["tifa/templates/", "tifa/static/"]
 
 [[tool.poetry.source]]
-name = "tsinghua"
-url = 'https://pypi.tuna.tsinghua.edu.cn/simple'
-default = true
+name = "tencent"
+url = 'https://mirrors.cloud.tencent.com/pypi/simple'
+priority = 'default'
 
 [tool.poetry.dependencies]
-python = "^3.9"
+python = "^3.10"
 ipython = "*"
 markdown = "*"
-sqlalchemy = "*"
 xlsxwriter = "*"
 xlwt = "*"
 fastapi = "^0.70.1"
@@ -30,18 +29,16 @@ aioredis = "*"
 aiokafka = "*"
 prometheus_client = "*"
 devtools = "*"
-alembic = "^1.7.5"
 python-socketio = {extras = ["asyncio_client"], version = "^5.2.1"}
 jinja2 = "*"
 requests = "^2.25.1"
-elasticsearch = "^7.13.1"
 aiohttp = "^3.7.4"
-celery = "^5.2.2"
+celery = "^5.3.1"
 fastapi-utils = "^0.2.1"
 gunicorn = "*"
 pandas = "*"
 pillow = "*"
-psycopg2-binary = "*"
+psycopg2-binary = "^2.9.6"
 pypinyin = "^0.42.0"
 qrcode = "^7.1"
 raven = "^6.10.0"
@@ -53,6 +50,9 @@ opentelemetry-exporter-jaeger = "^1.4.0"
 opentelemetry-sdk = "^1.4.0"
 opentelemetry-instrumentation-fastapi = "^0.23b2"
 opentelemetry-instrumentation-aiohttp-client = "^0.23b2"
+elasticsearch = "^8.9.0"
+django = "^4.2.3"
+dj-database-url = "^2.0.0"
 
 [tool.poetry.dev-dependencies]
 black = "*"
@@ -63,7 +63,6 @@ mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 pre-commit = "*"
-sqlalchemy2-stubs = "0.0.2a8"
 pytest-asyncio = "^0.15.1"
 
 [tool.black]

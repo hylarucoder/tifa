@@ -41,10 +41,10 @@ db.init:
 	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db init"
 
 db.makemigrations:
-	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db makemigrations"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli makemigrations"
 
 db.migrate:
-	docker-compose run --rm tifa-toolbox bash -c "tifa-cli db migrate"
+	docker-compose run --rm tifa-toolbox bash -c "tifa-cli migrate"
 
 docker-build: ## build and compose up
 	docker-compose build && docker-compose up

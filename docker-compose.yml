@@ -8,7 +8,7 @@ x-tifa-common:
   environment:
     &tifa-common-env
     SECRET_KEY: "ZF8dr8z@L*asd3oR?R/pe1}|l12enem(ppFV=U<!F@lF-k9wE"
-    SETTING_PATH: "/opt/tifa/settings_docker.py"
+    APP_SETTINGS: "/opt/freyja/settings.env.docker"
   depends_on:
     - postgres
     - redis
@@ -42,7 +42,7 @@ services:
 
   tifa-web:
     <<: *tifa-common
-    command: [ "tifa-cli", "web", "start" ]
+    command: uvicorn --host 0.0.0.0 --port 8000 --reload tifa.asgi:application
     ports:
       - "8000:8000"
 

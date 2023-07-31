@@ -5,10 +5,10 @@ from starlette.responses import HTMLResponse
 from starlette.templating import Jinja2Templates
 
 from tifa.contrib.fastapi_plus import create_bp
-from tifa.conf import setting
+from tifa.settings import settings
 
 sio = AsyncServer(
-    client_manager=AsyncRedisManager(setting.WHITEBOARD_URI),
+    client_manager=AsyncRedisManager(settings.WHITEBOARD_URI),
     async_mode="asgi",
     cors_allowed_origins=["*"],
 )
@@ -31,7 +31,7 @@ async def on_drawing(sid, data):
     await sio.emit("drawing", data, broadcast=True)
 
 
-templates = Jinja2Templates(directory=setting.TEMPLATE_PATH)
+templates = Jinja2Templates(directory=settings.TEMPLATE_PATH)
 
 
 @bp.get("/", response_class=HTMLResponse)

@@ -6,7 +6,7 @@ from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.staticfiles import StaticFiles
 
 from tifa.contrib.globals import GlobalsMiddleware
-from tifa.conf import setting
+from tifa.settings import settings
 from tifa.utils.pkg import import_submodules
 
 
@@ -14,7 +14,7 @@ def setup_routers(app: FastAPI):
     from tifa.apps import user, health, whiteboard, admin
 
     app.mount("/health", health.bp)
-    app.mount("/admin", admin.bp)
+    # app.mount("/admin", admin.bp)
     app.mount("/user", user.bp)
     app.mount("/whiteboard", whiteboard.bp)
     app.mount("/metrics", make_asgi_app())
@@ -40,8 +40,8 @@ def setup_middleware(app: FastAPI):
 
 
 def setup_static_files(app: FastAPI):
-    static_files_app = StaticFiles(directory=setting.STATIC_DIR)
-    app.mount(path=setting.STATIC_PATH, app=static_files_app, name="static")
+    static_files_app = StaticFiles(directory=settings.STATIC_DIR)
+    app.mount(path=settings.STATIC_PATH, app=static_files_app, name="static")
 
 
 def setup_db_models(app):
@@ -58,9 +58,9 @@ def setup_sentry(app):
 
 def create_app():
     app = FastAPI(
-        debug=setting.DEBUG,
-        title=setting.TITLE,
-        description=setting.DESCRIPTION,
+        debug=settings.DEBUG,
+        title=settings.TITLE,
+        description=settings.DESCRIPTION,
     )
     # thread local just flask like g
     app.add_middleware(GlobalsMiddleware)
@@ -75,7 +75,7 @@ def create_app():
     # 初始化全局 middleware
     setup_logging(app)
     # 初始化 sentry
-    if setting.SENTRY_DSN:
+    if settings.SENTRY_DSN:
         setup_sentry(app)
 
     return app
