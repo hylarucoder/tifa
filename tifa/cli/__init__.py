@@ -1,8 +1,5 @@
-from tifa.cli.auth import group_auth
-from tifa.cli.db import group_db
-from tifa.cli.worker import group_worker
-from tifa.cli.web import group_web
-from .base import cli
+import os
+import sys
 
 banner = """
   _______   _    __         
@@ -16,9 +13,13 @@ banner = """
                      by @twocucao
 """
 
-cli.add_typer(group_auth, name="auth")
-cli.add_typer(group_db, name="db")
-cli.add_typer(group_worker, name="worker")
-cli.add_typer(group_web, name="web")
 
-from .shell_plus import *  # noqa
+def cli():
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tifa.settings")
+    from django.core.management import execute_from_command_line
+
+    execute_from_command_line(sys.argv)
+
+
+if __name__ == "__main__":
+    cli()

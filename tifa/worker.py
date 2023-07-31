@@ -4,9 +4,9 @@ from asgiref.sync import async_to_sync
 from raven import Client
 
 from tifa.globals import celery
-from tifa.conf import setting
+from tifa.settings import settings
 
-client_sentry = Client(setting.SENTRY_DSN)
+client_sentry = Client(settings.SENTRY_DSN)
 
 
 @celery.task(name="test_celery")

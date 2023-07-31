@@ -1,8 +1,5 @@
 import importlib
 import pkgutil
-from inspect import isclass
-
-from pathlib import Path
 
 
 def import_submodules(package, recursive=True):

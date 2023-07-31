@@ -11,10 +11,10 @@ for my goddess -- Tifa
 1. Async! Async! Async!
 	- async web framework by fastapi
 	- socket.io by python-socketio
-	- async and sync orm supported by sqlalchemy/alembic migration, use async when io bound need
+	- async and sync orm supported by django orm migration, use async when io bound need
 2. Much Less History Burden
 	- newer sdk
-	- newer python (3.9+)
+	- newer python (3.10+)
 	- newer docker compose way for developing experience
 3. Best Practice
 	- try automate every boring stuff with makefile/docker
