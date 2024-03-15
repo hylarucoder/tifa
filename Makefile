@@ -67,22 +67,8 @@ monitor: ## flower
 # docker images
 
 build-tifa: ## > tifa
-	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' .
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' .
 
 build-tifa-no-cache: ## > tifa
-	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' --no-cache .
-
-build-elasticsearch: ## > elasticsearch
-	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' .
-
-build-elasticsearch-no-cache: ## > elasticsearch
-	docker build -t 'elasticsearch:local' -f 'compose/elasticsearch/Dockerfile' . --no-cache
-
-publish-tifa-image: ## > build and publish tifa image
-	echo ${DOCKER_PASS} | docker login -u twocucao --password-stdin
-	docker pull twocucao/tifa:latest || true
-	docker build -t 'tifa:latest' -f 'compose/app/Dockerfile' . --cache-from=twocucao/tifa:latest
-	docker tag 'tifa:latest' twocucao/tifa:latest
-	docker push twocucao/tifa:latest || true
-
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' --no-cache .
 
