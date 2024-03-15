@@ -105,3 +105,4 @@ config.yaml
 .volume
 elasticsearch-analysis-ik
 .pytest_cache
+.venv

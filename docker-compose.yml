@@ -2,7 +2,7 @@ version: "3.7"
 
 x-tifa-common:
   &tifa-common
-  image: twocucao/tifa:latest
+  image: tifa:local
   volumes:
     - .:/opt/tifa
   environment:

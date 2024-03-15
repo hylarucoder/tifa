@@ -1,0 +1,92 @@
+project = { dependencies = [
+    "fastapi>=0.110.0",
+] , requires-python = ">= 3.11" }
+[tool.poetry]
+name = "tifa"
+version = "0.1.0"
+description = ""
+authors = ["twocucao <twocucao@gmail.com>"]
+include = ["tifa/templates/", "tifa/static/"]
+
+[[tool.poetry.source]]
+name = "tencent"
+url = 'https://mirrors.cloud.tencent.com/pypi/simple'
+priority = 'default'
+
+[tool.poetry.dependencies]
+python = "^3.10"
+ipython = "*"
+markdown = "*"
+xlsxwriter = "*"
+xlwt = "*"
+fastapi = "^0.70.1"
+uvicorn = "*"
+typer = "*"
+python-jose = {extras = ["cryptography"], version = "^3.1.0"}
+passlib = {extras = ["bcrypt"], version = "^1.7.2"}
+aiofiles = "*"
+orjson = "*"
+python-dotenv = "^0.12.0"
+asyncpg = "*"
+aioredis = "*"
+aiokafka = "*"
+prometheus_client = "*"
+devtools = "*"
+python-socketio = {extras = ["asyncio_client"], version = "^5.2.1"}
+jinja2 = "*"
+requests = "^2.25.1"
+aiohttp = "^3.7.4"
+celery = "^5.3.1"
+fastapi-utils = "^0.2.1"
+gunicorn = "*"
+pandas = "*"
+pillow = "*"
+psycopg2-binary = "^2.9.6"
+pypinyin = "^0.42.0"
+qrcode = "^7.1"
+raven = "^6.10.0"
+redis = "^3.5.3"
+tenacity = "^7.0.0"
+xlrd = "^2.0.1"
+opentelemetry-api = "^1.4.0"
+opentelemetry-exporter-jaeger = "^1.4.0"
+opentelemetry-sdk = "^1.4.0"
+opentelemetry-instrumentation-fastapi = "^0.23b2"
+opentelemetry-instrumentation-aiohttp-client = "^0.23b2"
+elasticsearch = "^8.9.0"
+django = "^4.2.3"
+dj-database-url = "^2.0.0"
+
+[tool.poetry.dev-dependencies]
+black = "*"
+autoflake = "*"
+coverage = "*"
+"flake8" = "*"
+mypy = "*"
+pytest = "*"
+pytest-cov = "*"
+pre-commit = "*"
+pytest-asyncio = "^0.15.1"
+
+[tool.black]
+exclude = '''
+/(
+    \.git
+  | \.hg
+  | \.mypy_cache
+  | \.tox
+  | \.venv
+  | _build
+  | buck-out
+  | build
+  | dist
+)/
+'''
+[tool.poetry.scripts]
+fastcli = 'tifa.cli:cli'
+tifa-cli = 'tifa.cli:cli'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
