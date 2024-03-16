@@ -25,4 +25,4 @@ class Command(BaseCommand):
                 "cProfile": cProfile,
             }
         )
-        embed(user_ns=ctx, banner2="", colors="neutral", using='asyncio')
+        embed(user_ns=ctx, banner2="", colors="neutral", using="asyncio")

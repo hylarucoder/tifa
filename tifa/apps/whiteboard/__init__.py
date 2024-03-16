@@ -22,8 +22,7 @@ bp.mount(
 
 
 @sio.on("connect")
-async def on_connect(sid, environ, auth):
-    ...
+async def on_connect(sid, environ, auth): ...
 
 
 @sio.on("drawing")

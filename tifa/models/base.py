@@ -17,8 +17,7 @@ def get_object_or_404(queryset, *filter_args, **filter_kwargs) -> Model:
         raise Http404()
 
 
-class BaseManager(models.Manager):
-    ...
+class BaseManager(models.Manager): ...
 
 
 class Model(models.Model):
@@ -36,8 +35,6 @@ class Model(models.Model):
     @classmethod
     def all(cls) -> QuerySet[Self] | list[Self]:
         return cls.objects.all()
-
-
 
     @classmethod
     def get(cls, pk) -> Self:
@@ -86,7 +83,11 @@ class Model(models.Model):
                 setattr(self, field, obj[field])
 
     def incr(self, field, value=1):
-        return self.__class__.objects.filter(id=self.id).update(**{field: F(field) + value})
+        return self.__class__.objects.filter(id=self.id).update(
+            **{field: F(field) + value}
+        )
 
     def decr(self, field, value=1):
-        return self.__class__.objects.filter(id=self.id).update(**{field: F(field) - value})
+        return self.__class__.objects.filter(id=self.id).update(
+            **{field: F(field) - value}
+        )

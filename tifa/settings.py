@@ -49,10 +49,7 @@ django settings, only orm and cache
 
 SECRET_KEY = settings.SECRET_KEY
 DEBUG = False
-INSTALLED_APPS = [
-    "tifa",
-    "django.contrib.postgres"
-]
+INSTALLED_APPS = ["tifa", "django.contrib.postgres"]
 
 MIDDLEWARE = []
 ROOT_URLCONF = "tifa.asgi.urls"
@@ -73,7 +70,7 @@ DATABASES["default"]["OPTIONS"] = {}
 CACHES = {
     "default": {
         "BACKEND": "django.core.cache.backends.redis.RedisCache",
-        "LOCATION": settings.REDIS_CACHE_URI
+        "LOCATION": settings.REDIS_CACHE_URI,
     }
 }
 

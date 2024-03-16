@@ -56,7 +56,11 @@ class FastAPIPlus(FastAPI):
         return self.get(path, response_model=page_schema, tags=tags, summary=summary)
 
     def op(
-        self, path: str, out=None, summary: str = "操作", tags: Optional[List[str]] = None
+        self,
+        path: str,
+        out=None,
+        summary: str = "操作",
+        tags: Optional[List[str]] = None,
     ):
         summary = suffix_summary(path, summary)
         cls_name = "Item" + path_to_cls_name(path)
