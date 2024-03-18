@@ -17,7 +17,7 @@ markdown = "*"
 xlsxwriter = "*"
 xlwt = "*"
 fastapi = "^0.110.0"
-uvicorn = "*"
+uvicorn = "^0.28.0"
 typer = "*"
 python-jose = {extras = ["cryptography"], version = "^3.1.0"}
 passlib = {extras = ["bcrypt"], version = "^1.7.2"}
@@ -41,6 +41,9 @@ tenacity = "^7.0.0"
 xlrd = "^2.0.1"
 pymysql = "^1.1.0"
 aiobotocore = "^2.12.1"
+pydantic-settings = "^2.2.1"
+sqlalchemy = {extras = ["asyncio"], version = "^2.0.28"}
+aiomysql = "^0.2.0"
 
 [tool.poetry.dev-dependencies]
 coverage = "*"

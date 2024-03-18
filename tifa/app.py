@@ -1,23 +1,19 @@
 import time
 
 from fastapi import FastAPI, Request
-from prometheus_client import make_asgi_app  # type: ignore
 from starlette.middleware.base import BaseHTTPMiddleware
 from starlette.staticfiles import StaticFiles
 
-from tifa.contrib.globals import GlobalsMiddleware
 from tifa.settings import settings
 from tifa.utils.pkg import import_submodules
 
 
 def setup_routers(app: FastAPI):
-    from tifa.apps import user, health, whiteboard, admin
+    from tifa.apps import user, health, admin
 
     app.mount("/health", health.bp)
-    # app.mount("/admin", admin.bp)
+    app.mount("/admin", admin.bp)
     app.mount("/user", user.bp)
-    app.mount("/whiteboard", whiteboard.bp)
-    app.mount("/metrics", make_asgi_app())
 
 
 def setup_cli(app: FastAPI):
@@ -62,8 +58,6 @@ def create_app():
         title=settings.TITLE,
         description=settings.DESCRIPTION,
     )
-    # thread local just flask like g
-    app.add_middleware(GlobalsMiddleware)
     # 注册 db models
     setup_db_models(app)
     # 初始化路由

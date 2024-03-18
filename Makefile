@@ -66,7 +66,7 @@ monitor: ## flower
 # docker images
 
 build-tifa: ## > tifa
-	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' .
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' .
 
 build-tifa-no-cache: ## > tifa
-	docker build -t 'twocucao/tifa:latest' -f 'compose/app/Dockerfile' --no-cache .
+	docker build -t 'tifa:local' -f 'compose/app/Dockerfile' --no-cache .
