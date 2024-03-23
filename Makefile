@@ -63,6 +63,9 @@ worker: ## worker
 monitor: ## flower
 	docker-compose up tifa-monitor
 
+watch-css: ## flower
+	npx tailwindcss -i ./tifa/static/css/input.css -o ./tifa/static/css/main.css --watch
+
 # docker images
 
 build-tifa: ## > tifa

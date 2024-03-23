@@ -1,5 +1,3 @@
-import json
-
 from fastapi import Depends
 from starlette.requests import Request
 

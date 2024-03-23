@@ -26,11 +26,21 @@ class GlobalSetting(BaseSettings):
     DEBUG: bool = False
     ENV: str = "LOCAL"
     SECRET_KEY: str = "change me"
+    SENTRY_DSN: Optional[str] = ""
 
-    DATABASE_URL: str = "postgresql://tifa:tifa%26123@postgres:5432/tifa"
-    ASYNC_DATABASE_URL: str = "postgresql://tifa:tifa%26123@postgres:5432/tifa"
+    ASYNC_DATABASE_URL: str = "mysql://root:@mysql:3306/tifa?charset=utf8mb4"
     REDIS_CACHE_URI: str = "redis://localhost:6379"
     REDIS_CELERY_URL: str = "redis://redis:6379/6"
 
 
 settings = GlobalSetting(_env_file=APP_SETTINGS)
+
+tortoise_config = {
+    "connections": {"default": settings.ASYNC_DATABASE_URL},
+    "apps": {
+        "models": {
+            "models": ["tifa.models", "aerich.models"],
+            "default_connection": "default",
+        },
+    },
+}

@@ -1,7 +1,129 @@
 <!doctype html>
-<title>Hello from FastApi</title>
-{% if name %}
-  <h1>Hello {{ name }}!</h1>
-{% else %}
-  <h1>Hello, World!</h1>
-{% endif %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://unpkg.com/htmx.org@1.9.11"></script>
+    <link href="/static/css/main.css" rel="stylesheet">
+    <title>Document</title>
+</head>
+<body>
+<div class="min-h-screen bg-gradient-to-b from-[#ffe0e9] to-[#ffcad4] px-8 py-12">
+    <header class="flex justify-between items-center">
+        <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-3xl"
+        >
+            <path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"></path>
+            <line x1="4" x2="4" y1="22" y2="15"></line>
+        </svg>
+        <nav class="flex space-x-4">
+            <a class="text-lg" href="#" rel="ugc">
+                Home
+            </a>
+            <a class="text-lg" href="#" rel="ugc">
+                Tab1
+            </a>
+            <a class="text-lg" href="#" rel="ugc">
+                Tab2
+            </a>
+            <a class="text-lg" href="#" rel="ugc">
+                Tab3
+            </a>
+        </nav>
+    </header>
+    <main class="mt-12 text-center">
+        <h1 class="text-4xl font-bold">????????????????</h1>
+        <p class="mt-4 text-xl">????????????????</p>
+        <p class="mt-4 text-lg">???????????????? | ???????????????? | ???????????????? </p>
+        <button class="inline-flex items-center justify-center whitespace-nowrap text-sm font-medium ring-offset-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50 hover:bg-primary/90 h-10 mt-8 bg-red-500 text-white py-3 px-8 rounded-full">
+            立即使用
+        </button>
+    </main>
+    <section class="mt-12 grid grid-cols-3 gap-4">
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+            <div class="p-6">
+                <img
+                        src="https://generated.vusercontent.net/placeholder.svg"
+                        alt="Model 1"
+                        class="rounded-t-lg"
+                        width="300"
+                        height="200"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;"
+                />
+                <div class="flex justify-between items-center px-4 py-2">
+                    <span class="text-sm">feat01</span>
+                    <div class="inline-flex items-center rounded-full whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                        生态圈
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+            <div class="p-6">
+                <img
+                        src="https://generated.vusercontent.net/placeholder.svg"
+                        alt="Model 2"
+                        class="rounded-t-lg"
+                        width="300"
+                        height="200"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;"
+                />
+                <div class="flex justify-between items-center px-4 py-2">
+                    <span class="text-sm">feat01</span>
+                    <div class="inline-flex items-center rounded-full whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                        生态圈
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="rounded-lg border bg-card text-card-foreground shadow-sm w-[300px]" data-v0-t="card">
+            <div class="p-6">
+                <img
+                        src="https://generated.vusercontent.net/placeholder.svg"
+                        alt="Model 3"
+                        class="rounded-t-lg"
+                        width="300"
+                        height="200"
+                        style="aspect-ratio: 300 / 200; object-fit: cover;"
+                />
+                <div class="flex justify-between items-center px-4 py-2">
+                    <span class="text-sm">feat01</span>
+                    <div class="inline-flex items-center rounded-full whitespace-nowrap border px-2.5 py-0.5 w-fit text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80">
+                        生态圈
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+<button hx-post="/clicked" hx-swap="outerHTML">
+    Login
+</button>
+
+<button hx-get="/modal" hx-target="body" hx-swap="beforeend">Open a Modal</button>
+
+
+{#<div id="modal" _="on closeModal add .closing then wait for animationend then remove me">#}
+{#    <div class="modal-underlay" _="on click trigger closeModal"></div>#}
+{#    <div class="modal-content">#}
+{#        <h1>Modal Dialog</h1>#}
+{#        This is the modal content.#}
+{#        You can put anything here, like text, or a form, or an image.#}
+{#        <br>#}
+{#        <button _="on click trigger closeModal">Close</button>#}
+{#    </div>#}
+{#</div>#}
+
+</body>
+</html>

@@ -2,7 +2,6 @@ from fastapi.responses import ORJSONResponse
 from starlette.exceptions import HTTPException
 
 from tifa.contrib.fastapi_plus import create_bp
-from tifa.globals import celery
 
 bp = create_bp()
 
@@ -15,24 +14,6 @@ async def http_exception_handler(request, exc):
         },
         status_code=exc.status_code,
     )
-
-
-@bp.get("/test_celery_sync")
-def test_celery():
-    celery.send_task("test_celery", args=("words????",))
-    return "ok"
-
-
-@bp.get("/test_celery_asyncio_io_bound")
-async def test_celery_async():
-    celery.send_task("test_celery_asyncio_io_bound", args=())
-    return "ok"
-
-
-@bp.get("/test_celery_asyncio_cpu_bound")
-async def test_celery_async():
-    celery.send_task("test_celery_asyncio_cpu_bound", args=())
-    return "ok"
 
 
 @bp.get("/test_sentry")
