@@ -18,8 +18,8 @@ def decode_jwt(token):
         return payload
     except jwt.JWTError:
         raise ApiException(
-            status_code=403,
             message="Could not validate credentials",
+            status_code=403,
         )
 
 

@@ -1,28 +1,40 @@
-FROM python:3.10.9-buster
+FROM python:3.11.8-bullseye
 ENV TZ=Asia/Shanghai
 RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update &&\
     apt-get upgrade -y &&\
     apt-get install -y \
-    vim \
-    git \
-    gcc \
+		liblzma-dev \
     build-essential \
-    libffi-dev \
+    cmake \
+    curl \
     freetds-bin \
+    gcc \
+    git \
     krb5-user \
     ldap-utils \
-    libffi6 \
+    libbz2-dev \
+    libffi-dev \
+    libncurses5-dev \
+    libncursesw5-dev \
+    libreadline-dev \
     libsasl2-2 \
     libsasl2-modules \
+    libsqlite3-dev \
+    libssl-dev \
     libssl1.1 \
+    llvm \
     locales  \
     lsb-release \
     sasl2-bin \
     sqlite3 \
-    unixodbc
-
+    unixodbc \
+    vim \
+    wget \
+    xz-utils \
+    zlib1g-dev \
+    tk-dev
 
 ENV PYPI=https://mirrors.cloud.tencent.com/pypi/simple
 ENV PIP_DEFAULT_TIMEOUT=1000

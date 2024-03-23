@@ -6,7 +6,7 @@ def test_channel_curd(staff_client):
             "isActive": True,
             "slug": "test_channel_slug",
             "currencyCode": "usa",
-        }
+        },
     )
     assert channel["id"]
     assert channel["isActive"]
@@ -19,6 +19,6 @@ def test_channel_curd(staff_client):
             "isActive": False,
             "slug": "test_channel_slug",
             "currencyCode": "usa",
-        }
+        },
     )
     assert not channel["isActive"]

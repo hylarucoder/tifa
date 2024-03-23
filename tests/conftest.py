@@ -36,7 +36,7 @@ class ApiClient(TestClient):
 app = create_app()
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def event_loop():
     loop = asyncio.get_event_loop_policy().new_event_loop()
     yield loop
@@ -88,10 +88,8 @@ async def user(session: AsyncSession):
 @pytest.fixture(scope="session")
 def staff_client(staff: Staff):
     client = ApiClient(app, staff)
-    token = gen_jwt("{\"admin\":1}", 60 * 24)
-    client.headers.update({
-        "Authorization": f"Bearer {token}"
-    })
+    token = gen_jwt('{"admin":1}', 60 * 24)
+    client.headers.update({"Authorization": f"Bearer {token}"})
     return client
 
 
@@ -119,7 +117,9 @@ async def color_attribute(session: AsyncSession):
         available_in_grid=True,
     )
     adal.add(AttributeValue, attribute=attribute, name="Red", slug="red", value="red")
-    adal.add(AttributeValue, attribute=attribute, name="Blue", slug="blue", value="blue")
+    adal.add(
+        AttributeValue, attribute=attribute, name="Blue", slug="blue", value="blue"
+    )
     await adal.commit()
     return attribute
 

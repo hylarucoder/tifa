@@ -16,9 +16,9 @@ class HttpCodeEnum(enum.Enum):
 
 class BizCodeEnum(enum.Enum):
     # 业务状态码
-    OK = "100200"
-    FAIL = "100500"
-    NOT_EXISTS = "100404"
+    OK = "200"
+    FAIL = "500"
+    NOT_EXISTS = "404"
 
 
 error_message = {
@@ -32,24 +32,20 @@ error_message = {
 
 
 class ApiException(Exception):
-    status_code = HttpCodeEnum.BAD_REQUEST.value
-    biz_code = BizCodeEnum.FAIL
+    status_code: int = 400
     code: Optional[int]
-    detail: Optional[str] = None
+    message: Optional[str] = None
 
-    def __init__(self, detail, status_code=None, biz_code=None, errors=None):
+    def __init__(self, message, biz_code=None, status_code=400, errors=None):
         self.status_code = status_code or self.status_code
         self.code = self.status_code or self.code
-        self.biz_code = biz_code or self.biz_code
-        self.detail = detail or self.detail
+        self.message = message or self.message
         self.errors = errors or []
 
     def to_result(self):
-        rv = {"detail": self.detail}
+        rv = {"message": self.message}
         if self.code:
             rv["code"] = self.code
-        if self.biz_code:
-            rv["biz_code"] = self.biz_code
         if self.errors:
             rv["errors"] = self.errors
         return ORJSONResponse(rv, status_code=self.status_code)
@@ -77,8 +73,3 @@ class UnicornException(Exception):
         self.name = name
 
 
-def unicorn_exception_handler(request: Request, exc: UnicornException):
-    return ORJSONResponse(
-        status_code=418,
-        content={"detail": f"Oops! {exc.name} did something. There goes a rainbow..."},
-    )

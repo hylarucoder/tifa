@@ -8,62 +8,66 @@ include = ["tifa/templates/", "tifa/static/"]
 [[tool.poetry.source]]
 name = "tencent"
 url = 'https://mirrors.cloud.tencent.com/pypi/simple'
-priority = 'default'
+priority = 'primary'
 
 [tool.poetry.dependencies]
-python = "^3.10"
-ipython = "*"
-markdown = "*"
-xlsxwriter = "*"
-xlwt = "*"
-fastapi = "^0.70.1"
-uvicorn = "*"
-typer = "*"
-python-jose = {extras = ["cryptography"], version = "^3.1.0"}
-passlib = {extras = ["bcrypt"], version = "^1.7.2"}
-aiofiles = "*"
-orjson = "*"
-python-dotenv = "^0.12.0"
-asyncpg = "*"
-aioredis = "*"
-aiokafka = "*"
-prometheus_client = "*"
-devtools = "*"
-python-socketio = {extras = ["asyncio_client"], version = "^5.2.1"}
-jinja2 = "*"
-requests = "^2.25.1"
-aiohttp = "^3.7.4"
-celery = "^5.3.1"
-fastapi-utils = "^0.2.1"
-gunicorn = "*"
-pandas = "*"
-pillow = "*"
-psycopg2-binary = "^2.9.6"
-pypinyin = "^0.42.0"
-qrcode = "^7.1"
+python = "^3.11"
+aiobotocore = "^2.12.1"
+aiofiles = "^23.2.1"
+aiohttp = "^3.9.3"
+aiomysql = "^0.2.0"
+aioredis = "^2.0.1"
+alembic = "^1.13.1"
+asyncer = "^0.0.5"
+attrs = "^23.2.0"
+celery = "^5.3.6"
+devtools = "^0.12.2"
+fabric = "^3.2.2"
+fastapi = "^0.110.0"
+greenlet = "^3.0.3"
+gunicorn = "^21.2.0"
+httpx = "^0.27.0"
+invoke = "^2.2.0"
+ipython = "^8.22.2"
+jinja2 = "^3.1.3"
+loguru = "^0.7.2"
+markdown = "^3.5.2"
+orjson = "^3.9.15"
+pandas = "^2.2.1"
+passlib = "^1.7.4"
+pillow = "^10.2.0"
+pydantic = "^2.6.4"
+pydantic-core = "^2.16.3"
+pydantic-settings = "^2.2.1"
+pymysql = "^1.1.0"
+python-dotenv = "^1.0.1"
+python-jose = "^3.3.0"
+qrcode = "^7.4.2"
 raven = "^6.10.0"
-redis = "^3.5.3"
-tenacity = "^7.0.0"
+redis = { extras = ["hiredis"], version = "^5.0.3" }
+requests = "^2.31.0"
+rich = "^13.7.1"
+tenacity = "^8.2.3"
+typer = "^0.9.0"
+uvicorn = {extras = ["standard"], version = "^0.29.0"}
 xlrd = "^2.0.1"
-opentelemetry-api = "^1.4.0"
-opentelemetry-exporter-jaeger = "^1.4.0"
-opentelemetry-sdk = "^1.4.0"
-opentelemetry-instrumentation-fastapi = "^0.23b2"
-opentelemetry-instrumentation-aiohttp-client = "^0.23b2"
-elasticsearch = "^8.9.0"
-django = "^4.2.3"
-dj-database-url = "^2.0.0"
+xlsxwriter = "^3.2.0"
+xlwt = "^1.3.0"
+arq = "^0.25.0"
+aerich = "^0.7.2"
+tortoise-orm = { extras = ["asyncmy"], version = "^0.20.0" }
+ruff = "^0.3.4"
 
 [tool.poetry.dev-dependencies]
-black = "*"
-autoflake = "*"
 coverage = "*"
-"flake8" = "*"
 mypy = "*"
 pytest = "*"
 pytest-cov = "*"
 pre-commit = "*"
 pytest-asyncio = "^0.15.1"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.3.3"
 
 [tool.black]
 exclude = '''
@@ -86,4 +90,3 @@ tifa-cli = 'tifa.cli:cli'
 [build-system]
 requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
-
